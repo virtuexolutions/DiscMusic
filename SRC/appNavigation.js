@@ -39,7 +39,7 @@ const AppNavigator = () => {
           screenOptions={{headerShown: false}}>
           <RootNav.Screen name="Walkthrough" component={Walkthrough} />
           <RootNav.Screen name="LoginScreen" component={LoginScreen} />
-          <RootNav.Screen name="TabNavigation" component={TabNavigation} />
+          {/* <RootNav.Screen name="TabNavigation" component={TabNavigation} /> */}
           <RootNav.Screen name="Signup" component={Signup} />
         </RootNav.Navigator>
       </NavigationContainer>
