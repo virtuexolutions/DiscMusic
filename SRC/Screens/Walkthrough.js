@@ -30,25 +30,25 @@ const Walkthrough = props => {
       key: '1',
       title: 'What Is Qbid',
       text: 'A "State of the art" revolutionary app designed to conquer escalating inflationary costs that are depleting income. QBID is quick but effective was of ensuring the best possible outcome of any given project that qbid represents.\nwe work to get you best possible deal',
-      logo: require('../Assets/Images/walkthrough1.jpg'),
+      // logo: require('../Assets/Images/walkthrough1.jpg'),
     },
     {
       key: '2',
       title: 'How QBID Delivers you great value',
       text: 'Qbid welcomes your qoutes and get you the best negotiator accordingly who work hard to negotiate until best value comes',
-      logo: require('../Assets/Images/walkthrough2.jpg'),
+      // logo: require('../Assets/Images/walkthrough2.jpg'),
     },
     {
       key: '3',
       title: 'Why To Become QBID Member',
       text: '1. Quick and easy to use \n2. you are incharge from beginning to end \n3. various expertise holding negotiator at your service \n4. save your money as well as avoid get mug with expert negotiator advice',
-      logo: require('../Assets/Images/walkthrough3.jpg'),
+      // logo: require('../Assets/Images/walkthrough3.jpg'),
     },
     {
       key: '4',
       title: 'Why To Become QBID Negotiator',
       text: '1. remote work opportunity without any hesitation \n2. Secure Earning platform \n3. Earn your bread with the best you know \n4. Soul rights holder with no one to interfare ',
-      logo: require('../Assets/Images/walkthrough1.jpg'),
+      // logo: require('../Assets/Images/walkthrough1.jpg'),
     },
   ];
 

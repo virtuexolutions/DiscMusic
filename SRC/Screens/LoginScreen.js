@@ -4,6 +4,7 @@ import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import { windowHeight, windowWidth } from '../Utillity/utils';
+import CustomText from '../Components/CustomText';
 
 const LoginScreen = () => {
   return (
@@ -27,6 +28,7 @@ const LoginScreen = () => {
             width: '100%',
             flexGrow: 0,
           }}>
+            <CustomText>hello welcome to discapp</CustomText>
        
         </ScrollView>
     </>

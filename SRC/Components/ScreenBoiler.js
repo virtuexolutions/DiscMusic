@@ -2,7 +2,6 @@ import React from 'react';
 import {View} from 'react-native';
 import {windowHeight} from '../Utillity/utils';
 import CustomStatusBar from './CustomStatusBar';
-import Header from './Header';
 
 const ScreenBoiler = props => {
   const {
@@ -35,7 +34,7 @@ const ScreenBoiler = props => {
         backgroundColor={statusBarBackgroundColor}
         barStyle={statusBarContentStyle}
       />
-      {showHeader && (
+      {/* {showHeader && (
         <Header
           navigation={navigation}
           title={title}
@@ -53,7 +52,7 @@ const ScreenBoiler = props => {
           Notify={Notify}
           hideUser={hideUser}
         />
-      )}
+      )} */}
       {children}
     </>
   );
