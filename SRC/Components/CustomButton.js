@@ -58,16 +58,17 @@ const CustomButton = (props) => {
           marginTop: marginTop || 0,
           marginBottom: marginBottom || 0,
         },
-        elevation &&{
+        elevation && {
           shadowColor: Color.themeColor,
-shadowOffset: {
-	width: 0,
-	height: 4,
-},
-shadowOpacity: 0.32,
-shadowRadius: 5.46,
+          shadowOffset: {
+            width: 0,
+            height: 4,
+          },
+          shadowOpacity: 0.32,
+          shadowRadius: 5.46,
 
-elevation: 9,},
+          elevation: 9,
+        },
         alignSelf && {
           alignSelf: alignSelf,
         },
@@ -97,10 +98,17 @@ elevation: 9,},
             alignItems: "center",
             justifyContent: "center",
             borderRadius: moderateScale(30, 0.3),
+            shadowColor: '#FFFFFF',
+            shadowOffset: {
+              width: 0,
+              height: 10,
+            }, shadowOpacity: 0.15,
+            shadowRadius: 8,
+            elevation: 6,
           }}
+          colors={['#2A2E35', '#1D2025', '#171A1F']}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          colors={[Color.white, Color.white]}
+          end={{ x: 0, y: 1 }}
         >
           {loader && (
             <ActivityIndicator
@@ -183,8 +191,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    paddingHorizontal : moderateScale(10,0.3),
-    paddingVertical : moderateScale(2,0.3),
+    paddingHorizontal: moderateScale(10, 0.3),
+    paddingVertical: moderateScale(2, 0.3),
   },
   text: {
     color: "white",
@@ -198,7 +206,7 @@ const styles = StyleSheet.create({
   },
   iconCustom: {
     color: "#C0C0C0",
-    fontSize: moderateScale(20,0.6),
+    fontSize: moderateScale(20, 0.6),
     paddingRight: 20,
     paddingLeft: I18nManager.isRTL ? 20 : 0,
   },

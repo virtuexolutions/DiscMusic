@@ -1,19 +1,18 @@
-import React, {useRef, useState} from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import Color from '../Assets/Utilities/Color';
 import MultiSelect from 'react-native-multiple-select';
-import {moderateScale} from 'react-native-size-matters';
-import {useSelector} from 'react-redux';
-import { windowWidth } from '../Utillity/utils';
+import { moderateScale } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 
-const CustomDropDownMultiSelect = ({min, max, item, setItem, array, title , maxHeight , marginTop , containerStyle}) => {
-  const userRole = useSelector(state => state.commonReducer.selectedRole); 
+const CustomDropDownMultiSelect = ({ min, max, item, setItem, array, title, maxHeight, marginTop, containerStyle }) => {
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
   // const {min, max, item, setItem, array, title} = props;
   return (
     <View style={{
       // padding : 5,
-      width : containerStyle?.width,
-      marginTop : moderateScale(10,0.3)
+      width: containerStyle?.width,
+      marginTop: moderateScale(10, 0.3)
     }}>
       <MultiSelect
         items={array}
@@ -24,24 +23,24 @@ const CustomDropDownMultiSelect = ({min, max, item, setItem, array, title , maxH
         selectedItems={item}
         selectText={title}
         searchInputPlaceholderText={'Search items ...'}
-        textInputProps={{autoFocus: false}}
+        textInputProps={{ autoFocus: false }}
         hideDropdown
-        tagRemoveIconColor={  userRole == 'Qbid Member'
-        ? Color.blue
-        : userRole == 'Qbid Negotiator'
-        ? Color.white
-        : Color.black}
-        tagBorderColor={   userRole == 'Qbid Member'
-        ? Color.blue
-        : userRole == 'Qbid Negotiator'
-        ? Color.white
-        : Color.black}
-        tagTextColor={   userRole == 'Qbid Member'
-        ? Color.blue
-        : userRole == 'Qbid Negotiator'
-        ? Color.white
-        : Color.black}
-        
+        tagRemoveIconColor={userRole == 'Qbid Member'
+          ? Color.blue
+          : userRole == 'Qbid Negotiator'
+            ? Color.white
+            : Color.black}
+        tagBorderColor={userRole == 'Qbid Member'
+          ? Color.blue
+          : userRole == 'Qbid Negotiator'
+            ? Color.white
+            : Color.black}
+        tagTextColor={userRole == 'Qbid Member'
+          ? Color.blue
+          : userRole == 'Qbid Negotiator'
+            ? Color.white
+            : Color.black}
+
         displayKey="name"
         uniqueKey="id"
         // hideSubmitButton
@@ -53,7 +52,7 @@ const CustomDropDownMultiSelect = ({min, max, item, setItem, array, title , maxH
           // backgroundColor :'red',
           flexWrap: 'wrap',
           flexDirection: 'row',
-          borderRadius: moderateScale(10,0.6),
+          borderRadius: moderateScale(10, 0.6),
         }}
         styleInputGroup={{
           borderColor: Color.lightGrey,
@@ -72,11 +71,11 @@ const CustomDropDownMultiSelect = ({min, max, item, setItem, array, title , maxH
           width: Dimensions.get('window').width * 0.9,
           paddingHorizontal: 10,
           height: Dimensions.get('window').height * 0.07,
-          borderRadius: moderateScale(30,0.3),
-          backgroundColor : Color.white,
-          overflow : 'hidden',
-          marginTop : marginTop
-        },containerStyle]}
+          borderRadius: moderateScale(30, 0.3),
+          backgroundColor: Color.white,
+          overflow: 'hidden',
+          marginTop: marginTop
+        }, containerStyle]}
         styleItemsContainer={{
           backgroundColor: Color.white,
           width: containerStyle?.width,
@@ -85,7 +84,7 @@ const CustomDropDownMultiSelect = ({min, max, item, setItem, array, title , maxH
           maxHeight: maxHeight,
         }}
         styleTextDropdownSelected={{
-          fontSize: moderateScale(16,0.3),
+          fontSize: moderateScale(16, 0.3),
           color: Color.gray,
           fontFamily: 'Inter-Medium',
         }}
@@ -117,8 +116,8 @@ const CustomDropDownMultiSelect = ({min, max, item, setItem, array, title , maxH
 const styles = StyleSheet.create({
   container: {
     marginTop: Dimensions.get('window').height * 0.01,
-    backgroundColor : 'red',
-   },
+    backgroundColor: 'red',
+  },
   text: {
     fontWeight: 'bold',
     fontSize: 20,

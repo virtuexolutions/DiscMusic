@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 
 export default Color = {
-  
+
   // Basic Colors
   white: '#FFFFFF',
   black: '#000000',
@@ -17,23 +17,23 @@ export default Color = {
   lightGreen: '#11A44C',
   themeGreen: '#72A131',
   // themeRed: '#FFCCCB',
-  red : 'red',
-  blue : '#00ADEF',
+  red: 'red',
+  blue: '#00ADEF',
 
   purple: '#0D668E',
 
   // theme colors
   themeColor: '#8DC73F',
-  themePink : '#F84569',
+  themePink: '#F84569',
   themeColor1: '#52C4BF',
 
   themeDarkGray: '#535353',
   themeLightGray: '#8D8D8D',
   themeBlack: '#3A3838',
-  themebgBusinessQbidder:['#CD5C5C', '#7E191B'],
+  themebgBusinessQbidder: ['#CD5C5C', '#7E191B'],
   //gradientColors
-  themeBgColor: ['#8DC73F', '#83D475','#ABE098'],
-  themeBgColorNegotiator : ['#0D668E' , '#00ADEF'],
+  themeBgColor: ['#2F353A', '#1C1F22',],
+  themeBgColorNegotiator: ['#0D668E', '#00ADEF'],
   statusBarColor: ['#297FAD', '#297FAD'],
 };
 

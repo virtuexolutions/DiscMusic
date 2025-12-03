@@ -12,30 +12,30 @@ const SplashScreen = () => {
   // const backgroundImage = require("../Assets/Images/logoSplash.png");
   return (
     <ScreenBoiler
-     
+
       statusBarBackgroundColor={Color.themeColor}
       statusBarContentStyle={"light-content"}
     >
- <ImageBackground
+      <ImageBackground
         style={{
           flex: 1,
-          justifyContent : 'center',
-          alignItems : 'center',
+          justifyContent: 'center',
+          alignItems: 'center',
           // width: windowWidth,
           // height: windowHeight,
-         
+
         }}
         resizeMode={'stretch'}
-        // source={require('../Assets/Images/backgroundImage.png')}
-        >
-     
+      // source={require('../Assets/Images/backgroundImage.png')}
+      >
+
         <Animatable.View
           animation="zoomInUp"
           duration={2500}
           useNativeDriver
           style={[styles?.textContainer]}
-        
-          
+
+
         >
           <CustomImage
             // source={backgroundImage}
@@ -43,7 +43,7 @@ const SplashScreen = () => {
             style={[styles.bottomImage]}
           />
         </Animatable.View>
-    </ImageBackground>
+      </ImageBackground>
     </ScreenBoiler>
   );
 };
@@ -55,28 +55,28 @@ const styles = ScaledSheet.create({
     justifyContent: "center",
     height: windowHeight,
     width: windowWidth,
-    backgroundColor : Color.themeColor
+    backgroundColor: Color.themeColor
   },
   bottomImage: {
-    width : windowWidth * 0.65
+    width: windowWidth * 0.65
   },
   textContainer: {
     flexDirection: "row",
-    alignSelf :'center',
-    width : windowWidth * 0.5,
-    height :windowWidth * 0.5,
-    borderRadius : moderateScale(windowWidth* 0.7 / 2 , 0.3),
-    justifyContent : 'center',
-    alignItems : 'center',
+    alignSelf: 'center',
+    width: windowWidth * 0.5,
+    height: windowWidth * 0.5,
+    borderRadius: moderateScale(windowWidth * 0.7 / 2, 0.3),
+    justifyContent: 'center',
+    alignItems: 'center',
     // backgroundColor : Color.white,
-    
+
 
   },
   LogoText: {
     fontSize: moderateScale(35, 0.3),
     fontWeight: "bold",
   },
- 
+
 });
 
 export default SplashScreen;
