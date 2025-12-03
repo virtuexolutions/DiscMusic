@@ -4,10 +4,22 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import navigationService from './navigationService';
 import LoginScreen from './Screens/LoginScreen';
-
-
-import Signup from './Screens/Signup';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Walkthrough from './Screens/Walkthrough';
+import SignupScreen from './Screens/Signup';
+import HomeScreen from './Screens/HomeScreen';
+import { windowHeight, windowWidth } from './Utillity/utils';
+import LinearGradient from 'react-native-linear-gradient';
+import { View } from 'react-native';
+import Color from './Assets/Utilities/Color';
+import { moderateScale } from 'react-native-size-matters';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import Octicons from 'react-native-vector-icons/Octicons'
+import SearchScreen from './Screens/SearchScreen';
+import YourLibrary from './Screens/YourLibrary';
+import PremiumScreen from './Screens/PremiumScreen';
 
 const AppNavigator = () => {
   const isGoalCreated = useSelector(state => state.authReducer.isGoalCreated);
@@ -27,20 +39,20 @@ const AppNavigator = () => {
         : token != null &&
           selectedRole == 'Business Qbidder' &&
           isMileage == false
-        ? 'MileRange'
-        : token != null
-        ? 'TabNavigation'
-        : 'LoginScreen';
+          ? 'MileRange'
+          : token != null
+            ? 'TabNavigation'
+            : 'LoginScreen';
 
     return (
       <NavigationContainer ref={navigationService.navigationRef}>
         <RootNav.Navigator
-          initialRouteName={'LoginScreen'}
-          screenOptions={{headerShown: false}}>
+          initialRouteName={'TabNavigation'}
+          screenOptions={{ headerShown: false }}>
           <RootNav.Screen name="Walkthrough" component={Walkthrough} />
           <RootNav.Screen name="LoginScreen" component={LoginScreen} />
-          {/* <RootNav.Screen name="TabNavigation" component={TabNavigation} /> */}
-          <RootNav.Screen name="Signup" component={Signup} />
+          <RootNav.Screen name="SignupScreen" component={SignupScreen} />
+          <RootNav.Screen name="TabNavigation" component={TabNavigation} />
         </RootNav.Navigator>
       </NavigationContainer>
     );
@@ -49,122 +61,87 @@ const AppNavigator = () => {
   return <AppNavigatorContainer />;
 };
 
-// export const TabNavigation = () => {
-//   const userRole = useSelector(state => state.commonReducer.selectedRole);
+export const TabNavigation = () => {
+  const userRole = useSelector(state => state.commonReducer.selectedRole);
 
-//   const Tabs = createBottomTabNavigator();
-//   return (
-//     <Tabs.Navigator
-//       screenOptions={({route}) => ({
-//         headerShown: false,
-//         tabBarIcon: ({focused}) => {
-//           let iconName;
-//           let color = Color.themeColor;
-//           let size = moderateScale(20, 0.3);
-//           let type = Ionicons;
+  const Tabs = createBottomTabNavigator();
+  return (
+    <Tabs.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarStyle: {
+          width: windowWidth * 0.95,
+          alignSelf: 'center',
+          height: windowWidth * 0.18,
+          marginBottom: 10,
+          borderRadius: windowWidth / 2,
+          backgroundColor: 'transparent',
+          position: 'absolute',
+          elevation: 0,
+          borderWidth: 0,
+          borderTopWidth: 0,
+          marginLeft: moderateScale(10, 0.6),
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: moderateScale(10, 0.6),
+          paddingTop: moderateScale(6, 0.6)
+        },
+        tabBarBackground: () => (
+          <LinearGradient
+            colors={['#2A2E35', '#1D2025', '#171A1F']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={{
+              flex: 1,
+              borderRadius: windowWidth / 2,
+              overflow: 'hidden',
+              borderWidth: 2,
+              borderColor: Color.darkGray,
+            }}
+          />
+        ),
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          let IconType = Ionicons;
 
-//           if (
-//             route.name === 'HomeScreen' ||
-//             route.name === 'NegotiatorHomeScreen'
-//           ) {
-//             iconName = focused ? 'home' : 'home-outline';
-//             color = focused
-//               ? userRole == 'Qbid Member'
-//                 ? Color.blue
-//                 : userRole == 'Qbid Negotiator'
-//                 ? Color.themeColor
-//                 : Color.black
-//               : Color.themeLightGray;
-//             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
-//           } else if (route.name === 'ChatScreen') {
-//             iconName = focused
-//               ? 'ios-chatbubble-ellipses-sharp'
-//               : 'ios-chatbubble-ellipses-outline';
-//             color = focused
-//               ? userRole == 'Qbid Member'
-//                 ? Color.blue
-//                 : userRole == 'Qbid Negotiator'
-//                 ? Color.themeColor
-//                 : Color.black
-//               : Color.themeLightGray;
-//             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
-//           } else if (route.name === 'NotificationScreen') {
-//             type = FontAwesome;
-//             iconName = focused ? 'bell' : 'bell-o';
-
-//             color = focused
-//               ? userRole == 'Qbid Member'
-//                 ? Color.blue
-//                 : userRole == 'Qbid Negotiator'
-//                 ? Color.themeColor
-//                 : Color.black
-//               : Color.themeLightGray;
-//             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
-//           } else if (route.name === 'CreateNew') {
-//             type = AntDesign;
-//             iconName = focused ? 'Plus' : 'Plus';
-
-//             color = focused
-//               ? userRole == 'Qbid Member'
-//                 ? Color.blue
-//                 : userRole == 'Qbid Negotiator'
-//                 ? Color.themeColor
-//                 : Color.black
-//               : Color.themeLightGray;
-//             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
-//           } else {
-//             iconName = focused ? 'settings-outline' : 'settings-sharp';
-//             color = focused
-//               ? userRole == 'Qbid Member'
-//                 ? Color.blue
-//                 : userRole == 'Qbid Negotiator'
-//                 ? Color.themeColor
-//                 : Color.black
-//               : Color.themeLightGray;
-//             size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
-//           }
-//           return route.name == 'CreateNew' ? (
-//             <View
-//               style={{
-//                 borderWidth: 5,
-//                 borderColor: Color.lightGrey,
-//                 height: moderateScale(60, 0.3),
-//                 width: moderateScale(60, 0.3),
-//                 borderRadius: moderateScale(30, 0.3),
-//                 backgroundColor: Color.themeColor,
-//                 justifyContent: 'center',
-//                 alignItems: 'center',
-//                 marginTop: moderateScale(-30, 0.3),
-//               }}>
-//               <Icon
-//                 name={'plus'}
-//                 as={type}
-//                 color={Color.white}
-//                 size={moderateScale(30, 0.3)}
-//               />
-//             </View>
-//           ) : (
-//             <Icon name={iconName} as={type} color={color} size={size} />
-//           );
-//         },
-//         tabBarShowLabel: false,
-//       })}>
-//       {userRole == 'Qbid Member' ? (
-//         <Tabs.Screen name={'HomeScreen'} component={HomeScreen} />
-//       ) : (
-//         <Tabs.Screen
-//           name={'NegotiatorHomeScreen'}
-//           component={NegotiatorHomeScreen}
-//         />
-//       )}
-//       <Tabs.Screen name={'NotificationScreen'} component={NotificationScreen} />
-//       {userRole == 'Qbid Member' && (
-//         <Tabs.Screen name={'CreateNew'} component={CreateNew} />
-//       )}
-//       <Tabs.Screen name={'ChatScreen'} component={ChatScreen} />
-//       <Tabs.Screen name={'Settings'} component={Settings} />
-//     </Tabs.Navigator>
-//   );
-// };
+          if (route.name === 'HomeScreen') {
+            iconName = 'home';
+            size = focused ? moderateScale(20, 0.3) : moderateScale(18, 0.3);
+            color = focused ? Color.white : Color.veryLightGray;
+            IconType = Octicons;
+          } else if (route.name === 'SearchScreen') {
+            iconName = 'search';
+            IconType = Ionicons;
+            size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
+            color = focused ? Color.white : Color.veryLightGray;
+          } else if (route.name === 'YourLibrary') {
+            iconName = 'layers-outline';
+            IconType = Ionicons;
+            size = focused ? moderateScale(30, 0.3) : moderateScale(25, 0.3);
+            color = focused ? Color.white : Color.veryLightGray;
+          } else if (route.name === 'PremiumScreen') {
+            iconName = 'shapes';
+            IconType = Ionicons;
+            size = focused ? moderateScale(30, 0.3) : moderateScale(20, 0.3);
+            color = focused ? Color.white : Color.veryLightGray;
+          }
+          return <IconType name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: Color.white,
+        tabBarInactiveTintColor: Color.veryLightGray,
+        tabBarShowLabel: true,
+        tabBarLabelStyle: {
+          fontSize: moderateScale(12, 0.3),
+          marginBottom: 5,
+        },
+      })}
+    >
+      <Tabs.Screen name="HomeScreen" component={HomeScreen} options={{ title: 'Home' }} />
+      <Tabs.Screen name="SearchScreen" component={SearchScreen} options={{ title: 'Search' }} />
+      <Tabs.Screen name="YourLibrary" component={YourLibrary} options={{ title: 'Your Library' }} />
+      <Tabs.Screen name="PremiumScreen" component={PremiumScreen} options={{ title: 'Premium' }} />
+    </Tabs.Navigator>
+  );
+};
 
 export default AppNavigator;

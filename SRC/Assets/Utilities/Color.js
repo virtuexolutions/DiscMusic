@@ -9,7 +9,7 @@ export default Color = {
   // Basic Colors
   white: '#FFFFFF',
   black: '#000000',
-  darkGray: '#4B4242',
+  darkGray: '#2C3036',
   mediumGray: '#9B9B9B',
   lightGrey: '#EBEBEB',
   veryLightGray: '#A8A8A8',
