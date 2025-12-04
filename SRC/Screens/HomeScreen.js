@@ -34,10 +34,11 @@ const HomeScreen = () => {
                     style={{
                         width: '100%',
                         flexGrow: 0,
-                    }}>
+                    }}> 
                     <CustomHeader leftIcon RightIcon />
                     <View style={styles.container}>
                         <TrendingView />
+                        <CustomText></CustomText>
                     </View>
                 </ScrollView>
             </ImageBackground>
