@@ -90,57 +90,60 @@ const CustomButton = (props) => {
       disabled={disabled}
     >
       {disabled == false && isGradient ? (
-        <LinearGradient
-          style={{
-            flexDirection: "row",
-            width: width,
-            height: height,
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: moderateScale(30, 0.3),
-            shadowColor: '#FFFFFF',
-            shadowOffset: {
-              width: 0,
-              height: 10,
-            }, shadowOpacity: 0.15,
-            shadowRadius: 8,
-            elevation: 6,
-          }}
-          colors={['#2A2E35', '#1D2025', '#171A1F']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-        >
-          {loader && (
-            <ActivityIndicator
-              style={styles.indicatorStyle}
-              size="small"
-              color={loaderColor ? loaderColor : Color.white}
-            />
-          )}
-          {iconName && (
-            <Icon
-              name={iconName}
-              as={iconType}
-              style={[styles.iconCustom, iconStyle && iconStyle]}
-            />
-          )}
-          <CustomText
-            style={[
-              styles.text,
-              {
-                color: textColor,
-                fontSize: fontSize ? fontSize : moderateScale(15, 0.3),
-              },
-              textTransform && {
-                textTransform: textTransform,
-              },
-            ]}
-            isRegular={isBold ? false : true}
-            isBold={isBold ? true : false}
+        <View style={{ width: width, height: height, position: "relative" }}>
+          <LinearGradient
+            style={{
+              flexDirection: "row",
+              width: width,
+              height: height,
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              borderRadius: width / 2,
+              shadowColor: '#FFFFFF',
+              shadowOffset: {
+                width: 0,
+                height: 10,
+              }, shadowOpacity: 0.15,
+              shadowRadius: 8,
+              elevation: 6,
+            }}
+            colors={['#2A2E35', '#1D2025', '#171A1F']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
           >
-            {text}
-          </CustomText>
-        </LinearGradient>
+            {loader && (
+              <ActivityIndicator
+                style={styles.indicatorStyle}
+                size="small"
+                color={loaderColor ? loaderColor : Color.white}
+              />
+            )}
+            {iconName && (
+              <Icon
+                name={iconName}
+                as={iconType}
+                style={[styles.iconCustom, iconStyle && iconStyle]}
+              />
+            )}
+            <CustomText
+              style={[
+                styles.text,
+                {
+                  color: textColor,
+                  fontSize: fontSize ? fontSize : moderateScale(15, 0.3),
+                },
+                textTransform && {
+                  textTransform: textTransform,
+                },
+              ]}
+              isRegular={isBold ? false : true}
+              isBold={isBold ? true : false}
+            >
+              {text}
+            </CustomText>
+          </LinearGradient>
+        </View>
       ) : (
         <>
           {loader && (

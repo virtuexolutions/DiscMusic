@@ -24,9 +24,11 @@ const TextInputWithTitle = props => {
   return (
     <>
       {props?.title &&
-        <CustomText style={{
+        <CustomText
+        isBold={props?.isBold}
+        style={{
           color: Color.white,
-          fontSize: moderateScale(12, 0.3),
+          fontSize: props?.titleFontSize ? props.titleFontSize : moderateScale(12, 0.3),
           marginBottom: moderateScale(5, 0.3),
           width: windowWidth * props.viewWidth,
           marginTop: props.marginTop,

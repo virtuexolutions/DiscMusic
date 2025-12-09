@@ -5,7 +5,7 @@ const CustomImage = (props) => {
   const {
     resizeMode,
     source,
-    // errorImageSource = require(`../Assets/Images/dummyman1.jpg`),
+    errorImageSource = require(`../Assets/Images/dummyman1.png`),
     style,
     onPress,
   } = props;
@@ -17,7 +17,7 @@ const CustomImage = (props) => {
       
         resizeMode={resizeMode}
         style={style}
-        // source={errorLoadingProfileImage ? errorImageSource : source}
+        source={errorLoadingProfileImage ? errorImageSource : source}
         onError={(p) => {
 // console.log('errorrrrrrrrr',p);
           setErrorLoadingProfileImage(true);

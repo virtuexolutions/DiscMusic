@@ -1,33 +1,30 @@
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import { windowHeight, windowWidth } from '../Utillity/utils';
-import { moderateScale } from 'react-native-size-matters';
+import {windowHeight, windowWidth} from '../Utillity/utils';
+import {moderateScale} from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import CustomText from './CustomText';
-import { Icon } from 'native-base';
+import {Icon} from 'native-base';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import navigationService from '../navigationService';
-import { useNavigation } from '@react-navigation/native';
-import { setUserLogOut } from '../Store/slices/common';
-import { useDispatch } from 'react-redux';
-import { setUserLogoutAuth } from '../Store/slices/auth';
+import {useNavigation} from '@react-navigation/native';
+import {setUserLogOut} from '../Store/slices/common';
+import {useDispatch} from 'react-redux';
+import {setUserLogoutAuth} from '../Store/slices/auth';
 import LinearGradient from 'react-native-linear-gradient';
 
-
-const CustomHeader = ({ leftIcon, RightIcon, text, style }) => {
-  const dispatch = useDispatch()
+const CustomHeader = ({leftIcon, RightIcon, text, style, text1, subtext}) => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
-
 
   return (
     <View style={[styles.header, style && style]}>
-
-      {leftIcon &&
+      {leftIcon && (
         <LinearGradient
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
           colors={Color.themeBgColor}
           style={{
             width: windowWidth * 0.12,
@@ -35,30 +32,39 @@ const CustomHeader = ({ leftIcon, RightIcon, text, style }) => {
             borderRadius: windowWidth / 2,
             justifyContent: 'ceneter',
             alignItems: 'center',
-          }}
-        >
+          }}>
           <Icon
-            name='arrow-left'
+            name="arrow-left"
             as={Feather}
             size={moderateScale(25, 0.3)}
             color={Color.white}
             onPress={() => {
-              navigation.goBack()
+              navigation.goBack();
             }}
             style={{
               position: 'absolute',
               top: moderateScale(10, 0.3),
-              alignSelf: 'center'
+              alignSelf: 'center',
             }}
           />
         </LinearGradient>
-      }
+      )}
       <CustomText style={styles.text}>{text}</CustomText>
+      {subtext && (
+        <View
+          style={{
+            alignSelf: 'center',
+            marginTop: moderateScale(15, 0.3),
+          }}>
+          <CustomText style={styles.text1}>{text1}</CustomText>
+          <CustomText style={styles.sub_text}>{subtext}</CustomText>
+        </View>
+      )}
 
-      {RightIcon &&
+      {RightIcon && (
         <LinearGradient
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
           colors={Color.themeBgColor}
           style={{
             width: windowWidth * 0.12,
@@ -66,10 +72,9 @@ const CustomHeader = ({ leftIcon, RightIcon, text, style }) => {
             borderRadius: windowWidth / 2,
             justifyContent: 'ceneter',
             alignItems: 'center',
-          }}
-        >
+          }}>
           <Icon
-            name='dots-three-vertical'
+            name="dots-three-vertical"
             as={Entypo}
             size={moderateScale(20, 0.3)}
             color={Color.white}
@@ -78,13 +83,12 @@ const CustomHeader = ({ leftIcon, RightIcon, text, style }) => {
               top: moderateScale(12, 0.3),
             }}
             onPress={() => {
-              dispatch(setUserLogOut())
-              dispatch(setUserLogoutAuth())
-
+              dispatch(setUserLogOut());
+              dispatch(setUserLogoutAuth());
             }}
           />
         </LinearGradient>
-      }
+      )}
     </View>
   );
 };
@@ -97,13 +101,22 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.07,
     alignSelf: 'center',
     marginTop: windowWidth * 0.1,
-    flexDirection: "row",
-    justifyContent: 'space-between'
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   text: {
     color: Color.themeColor,
     fontSize: moderateScale(15, 0.6),
     alignSelf: 'center',
     fontWeight: 'bold',
+  },
+  sub_text: {
+    color: Color.white,
+    fontSize: moderateScale(12, 0.6),
+    alignSelf: 'center',
+  },
+  text1: {
+    color: Color.mediumGray,
+    fontSize: moderateScale(10, 0.6),
   },
 });
