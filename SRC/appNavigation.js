@@ -47,12 +47,13 @@ const AppNavigator = () => {
     return (
       <NavigationContainer ref={navigationService.navigationRef}>
         <RootNav.Navigator
-          initialRouteName={'TabNavigation'}
+          initialRouteName={'HomeScreen'}
           screenOptions={{ headerShown: false }}>
           <RootNav.Screen name="Walkthrough" component={Walkthrough} />
           <RootNav.Screen name="LoginScreen" component={LoginScreen} />
           <RootNav.Screen name="SignupScreen" component={SignupScreen} />
           <RootNav.Screen name="TabNavigation" component={TabNavigation} />
+          <RootNav.Screen name="HomeScreen" component={HomeScreen} />
         </RootNav.Navigator>
       </NavigationContainer>
     );

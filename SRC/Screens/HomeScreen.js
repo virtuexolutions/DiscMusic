@@ -1,20 +1,66 @@
-import { Icon, ScrollView, View } from 'native-base';
+import { ScrollView, View } from 'native-base';
 import React from 'react';
+import { FlatList, ImageBackground } from 'react-native';
 import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
-import CustomStatusBar from '../Components/CustomStatusBar';
-import { windowHeight, windowWidth } from '../Utillity/utils';
-import CustomText from '../Components/CustomText';
-import { ImageBackground, TouchableOpacity } from 'react-native';
 import CustomHeader from '../Components/CustomHeader';
-import TextInputWithTitle from '../Components/TextInputWithTitle';
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import Fontisto from 'react-native-vector-icons/Fontisto'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import CustomButton from '../Components/CustomButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import CustomStatusBar from '../Components/CustomStatusBar';
+import CustomText from '../Components/CustomText';
 import TrendingView from '../Components/TrendingView';
+import { windowHeight, windowWidth } from '../Utillity/utils';
+import EventCard from '../Components/EventCard';
+import CarouselView from '../Components/CarouselView';
+
+
 const HomeScreen = () => {
+    const events = [
+        {
+            id: 1,
+            name: 'Miss You',
+            text: 'oliver tree, robin schulz',
+            image: require('../Assets/Images/event_1.png'),
+        },
+        {
+            id: 2,
+            name: 'Miss You',
+            text: 'oliver tree, robin schulz',
+            image: require('../Assets/Images/event_2.png'),
+        }, {
+            id: 3,
+            name: 'Miss You',
+            text: 'oliver tree, robin schulz',
+            image: require('../Assets/Images/event_3.png'),
+        },
+    ]
+
+    const musicCategories = [
+        "Classic",
+        "Pop",
+        "Jazz",
+        "Hip-Hop",
+        "R&B",
+        "Rock",
+        "Anime",
+        "K-pop",
+        "Indie",
+        "Instrumental",
+        "Dance",
+    ];
+
+    const artist = [
+        {
+            id: 1,
+            image: require('../Assets/Images/event_1.png'),
+        },
+        {
+            id: 2,
+            image: require('../Assets/Images/event_2.png'),
+        }, {
+            id: 3,
+            image: require('../Assets/Images/event_3.png'),
+        },
+    ]
+
     return (
         <>
             <CustomStatusBar
@@ -34,11 +80,36 @@ const HomeScreen = () => {
                     style={{
                         width: '100%',
                         flexGrow: 0,
-                    }}> 
+                    }}>
                     <CustomHeader leftIcon RightIcon />
                     <View style={styles.container}>
                         <TrendingView />
-                        <CustomText></CustomText>
+                        <View style={styles.main_view}>
+                            <CustomText style={styles.heading}>Events</CustomText>
+                            <FlatList
+                                horizontal
+                                data={events}
+                                renderItem={(({ item, index }) => {
+                                    return (
+                                        <EventCard data={item} />
+                                    )
+                                })}
+                            />
+                            <CustomText style={styles.heading}>Genre</CustomText>
+                            <FlatList
+                                numColumns={4}
+                                data={musicCategories}
+                                renderItem={(({ item, index }) => {
+                                    return (
+                                        <View style={styles.category_view}>
+                                            <CustomText numberOfLines={1} style={styles.category_text}>{item}</CustomText>
+                                        </View>
+                                    )
+                                })}
+                            />
+                            <CustomText style={[styles.heading, { width: windowWidth * 0.8, textAlign: 'center' }]}>Artist</CustomText>
+                            <CarouselView data={artist} />
+                        </View>
                     </View>
                 </ScrollView>
             </ImageBackground>
@@ -131,6 +202,29 @@ const styles = ScaledSheet.create({
         fontSize: moderateScale(14, 0.6),
         color: Color.white,
         marginLeft: moderateScale(6, 0.6)
+    },
+    main_view: {
+        marginVertical: moderateScale(40, 0.6)
+    },
+    heading: {
+        fontSize: moderateScale(16, 0.6),
+        color: Color.white,
+        paddingVertical: moderateScale(10, 0.6)
+    },
+    category_view: {
+        width: windowWidth * 0.2,
+        padding: moderateScale(10, 0.6),
+        borderWidth: 1,
+        borderColor: Color.veryLightGray,
+        marginRight: moderateScale(10, 0.6),
+        marginBottom: moderateScale(10, 0.6),
+        borderRadius: moderateScale(10, 0.6),
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    category_text: {
+        fontSize: moderateScale(11, 0.6),
+        color: Color.veryLightGray,
     }
 });
 
