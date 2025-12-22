@@ -1,482 +1,223 @@
-import {Icon, ScrollView} from 'native-base';
-import React, {useState} from 'react';
-import {
-  ActivityIndicator,
-  ImageBackground,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Fontisto from 'react-native-vector-icons/Fontisto';
+import { Icon, ScrollView, View } from 'native-base';
+import React, { useState } from 'react';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
-import CustomButton from '../Components/CustomButton';
-import CustomImage from '../Components/CustomImage';
 import CustomStatusBar from '../Components/CustomStatusBar';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
+import { ImageBackground, TouchableOpacity } from 'react-native';
+import CustomHeader from '../Components/CustomHeader';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import Fontisto from 'react-native-vector-icons/Fontisto'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import CustomButton from '../Components/CustomButton';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import Checkbox from '../Components/CustomCheckbox';
+const SignupScreen = () => {
 
-import {useDispatch, useSelector} from 'react-redux';
-import CustomDropDownMultiSelect from '../Components/CustomDropDownMultiSelect';
-import DropDownSingleSelect from '../Components/DropDownSingleSelect';
-import ImagePickerModal from '../Components/ImagePickerModal';
-import navigationService from '../navigationService';
-
-const Signup = () => {
-  const fcmToken = useSelector(state => state.authReducer.fcmToken);
-  console.log('🚀 ~ Signup ~ fcmToken:', fcmToken);
-  const servicesArray = useSelector(state => state.commonReducer.servicesArray);
-  const userRole = useSelector(state => state.commonReducer.selectedRole);
-  const dispatch = useDispatch();
-
-  const [image, setImage] = useState({});
-  const [selectedRole, setselectedRole] = useState(
-    userRole ? userRole : 'Qbid Member',
-  );
-  console.log('hfjsdhfjsdjkf', selectedRole);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [email, setEmail] = useState('');
-  const [contact, setContact] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [zipCode, setZipCode] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState(false);
-  const [services, setServices] = useState([]);
-  const [language, setLanguage] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [checked, setChecked] = useState(false);
-
-  const formData = new FormData();
+  const [agree, setAgree] = useState(false);
 
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={
+          Color.black
+        }
         barStyle={'light-content'}
       />
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          alignSelf: 'center',
-          alignItems: 'center',
-          paddingTop: windowHeight * 0.1,
-          paddingBottom: moderateScale(20, 0.3),
-        }}
-        style={{
-          width: '100%',
-          flexGrow: 0,
-        }}>
-        <View>
-          {Object.keys(image).length > 0 ? (
-            <CustomImage source={{uri: image?.uri}} style={styles.image} />
-          ) : (
-            <CustomImage
-              style={styles.image}
-              // source={require('../Assets/Images/user3.jpg')}
-            />
-          )}
-          <TouchableOpacity
-            onPress={() => {
-              setShowModal(true);
-            }}
-            style={[
-              styles.edit,
-              {
-                backgroundColor: Color.black,
-              },
-            ]}>
-            <Icon
-              name="pencil"
-              as={FontAwesome}
-              style={styles.icon2}
-              color={Color.white}
-              size={moderateScale(16, 0.3)}
-            />
-          </TouchableOpacity>
-        </View>
-        <DropDownSingleSelect
-          array={UserRoleArray}
-          item={userRole}
-          setItem={setselectedRole}
-          placeholder={userRole}
-          width={windowWidth * 0.9}
-          dropDownHeight={windowHeight * 0.06}
-          dropdownStyle={{
-            // backgroundColor : 'red',
-            width: windowWidth * 0.9,
-            borderBottomWidth: 0,
-            marginTop: moderateScale(20, 0.3),
-          }}
-        />
-        <TextInputWithTitle
-          titleText={'First Name'}
-          secureText={false}
-          placeholder={'First Name'}
-          setText={setFirstName}
-          value={firstName}
-          viewHeight={0.07}
-          viewWidth={0.9}
-          inputWidth={0.86}
-          borderColor={'#ffffff'}
-          backgroundColor={'#FFFFFF'}
-          marginTop={moderateScale(15, 0.3)}
-          color={Color.themeColor}
-          placeholderColor={Color.themeLightGray}
-          borderRadius={moderateScale(25, 0.3)}
-        />
-        <TextInputWithTitle
-          titleText={'Last Name'}
-          secureText={false}
-          placeholder={'Last Name'}
-          setText={setLastName}
-          value={lastName}
-          viewHeight={0.07}
-          viewWidth={0.9}
-          inputWidth={0.86}
-          borderColor={'#ffffff'}
-          backgroundColor={'#FFFFFF'}
-          marginTop={moderateScale(15, 0.3)}
-          color={Color.themeColor}
-          placeholderColor={Color.themeLightGray}
-          borderRadius={moderateScale(25, 0.3)}
-        />
-        {userRole == 'Qbid Negotiator' ||
-          (userRole == 'Business Qbidder' && (
-            <>
-              <TextInputWithTitle
-                titleText={'Company Name'}
-                secureText={false}
-                placeholder={'Company Name'}
-                setText={setCompanyName}
-                value={companyName}
-                viewHeight={0.07}
-                viewWidth={0.9}
-                inputWidth={0.86}
-                borderColor={'#ffffff'}
-                backgroundColor={'#FFFFFF'}
-                marginTop={moderateScale(15, 0.3)}
-                color={Color.themeColor}
-                placeholderColor={Color.themeLightGray}
-                borderRadius={moderateScale(25, 0.3)}
-              />
-            </>
-          ))}
-        <TextInputWithTitle
-          titleText={'Email'}
-          secureText={false}
-          placeholder={'Email'}
-          setText={setEmail}
-          value={email}
-          viewHeight={0.07}
-          viewWidth={0.9}
-          inputWidth={0.86}
-          borderColor={'#ffffff'}
-          backgroundColor={'#FFFFFF'}
-          marginTop={moderateScale(15, 0.3)}
-          color={Color.themeColor}
-          placeholderColor={Color.themeLightGray}
-          borderRadius={moderateScale(25, 0.3)}
-        />
-        <TextInputWithTitle
-          titleText={'Contact'}
-          secureText={false}
-          placeholder={'Contact'}
-          setText={setContact}
-          value={contact}
-          viewHeight={0.07}
-          viewWidth={0.9}
-          inputWidth={0.86}
-          borderColor={'#ffffff'}
-          backgroundColor={'#FFFFFF'}
-          marginTop={moderateScale(15, 0.3)}
-          color={Color.themeColor}
-          placeholderColor={Color.themeLightGray}
-          borderRadius={moderateScale(25, 0.3)}
-          keyboardType={'numeric'}
-        />
-        <TextInputWithTitle
-          titleText={'Address'}
-          secureText={false}
-          placeholder={'Address'}
-          setText={setAddress}
-          value={address}
-          viewHeight={0.07}
-          viewWidth={0.9}
-          inputWidth={0.86}
-          borderColor={'#ffffff'}
-          backgroundColor={'#FFFFFF'}
-          marginTop={moderateScale(15, 0.3)}
-          color={Color.themeColor}
-          placeholderColor={Color.themeLightGray}
-          borderRadius={moderateScale(25, 0.3)}
-        />
-        <TextInputWithTitle
-          titleText={'City'}
-          secureText={false}
-          placeholder={'City'}
-          setText={setCity}
-          value={city}
-          viewHeight={0.07}
-          viewWidth={0.9}
-          inputWidth={0.86}
-          borderColor={'#ffffff'}
-          backgroundColor={'#FFFFFF'}
-          marginTop={moderateScale(15, 0.3)}
-          color={Color.themeColor}
-          placeholderColor={Color.themeLightGray}
-          borderRadius={moderateScale(25, 0.3)}
-        />
-        <TextInputWithTitle
-          titleText={'State'}
-          secureText={false}
-          placeholder={'State'}
-          setText={setState}
-          value={state}
-          viewHeight={0.07}
-          viewWidth={0.9}
-          inputWidth={0.86}
-          backgroundColor={'#FFFFFF'}
-          marginTop={moderateScale(15, 0.3)}
-          color={Color.themeColor}
-          placeholderColor={Color.themeLightGray}
-          borderRadius={moderateScale(25, 0.3)}
-        />
-        <TextInputWithTitle
-          titleText={'Zip code'}
-          secureText={false}
-          placeholder={'Zip code'}
-          setText={setZipCode}
-          value={zipCode}
-          viewHeight={0.07}
-          viewWidth={0.9}
-          inputWidth={0.86}
-          backgroundColor={'#FFFFFF'}
-          marginTop={moderateScale(15, 0.3)}
-          color={Color.themeColor}
-          placeholderColor={Color.themeLightGray}
-          borderRadius={moderateScale(25, 0.3)}
-          keyboardType={'numeric'}
-        />
-        <TextInputWithTitle
-          titleText={'Password'}
-          secureText={true}
-          placeholder={'Password'}
-          setText={setPassword}
-          value={password}
-          viewHeight={0.07}
-          viewWidth={0.9}
-          inputWidth={0.86}
-          backgroundColor={'#FFFFFF'}
-          marginTop={moderateScale(15, 0.3)}
-          color={Color.themeColor}
-          placeholderColor={Color.themeLightGray}
-          borderRadius={moderateScale(25, 0.3)}
-        />
-        <TextInputWithTitle
-          titleText={'Confirm Password'}
-          secureText={true}
-          placeholder={'Confirm Password'}
-          setText={setConfirmPassword}
-          value={confirmPassword}
-          viewHeight={0.07}
-          viewWidth={0.9}
-          inputWidth={0.86}
-          backgroundColor={'#FFFFFF'}
-          marginTop={moderateScale(15, 0.3)}
-          color={Color.themeColor}
-          placeholderColor={Color.themeLightGray}
-          borderRadius={moderateScale(25, 0.3)}
-        />
-
-        <View
-          style={{
-            flexDirection: 'row',
-            width: windowWidth * 0.85,
-            marginTop: moderateScale(20, 0.3),
+      <ImageBackground source={require('../Assets/Images/bg.png')} style={styles.bg_container} imageStyle={styles.image}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          removeClippedSubviews={true}
+          contentContainerStyle={{
+            alignSelf: 'center',
             alignItems: 'center',
-          }}>
-          <Icon
-            name={checked ? 'check-square-o' : 'checkbox-passive'}
-            as={checked ? FontAwesome : Fontisto}
-            color={Color.purple}
-            onPress={() => {
-              setChecked(!checked);
-            }}
-            size={moderateScale(13, 0.3)}
-          />
-          <CustomText
-            onPress={() => {}}
-            style={[
-              styles.txt3,
-              {
-                color: Color.white,
-                marginHorizontal: moderateScale(10, 0.3),
-              },
-            ]}>
-            I Accept{' '}
-            {
-              <CustomText
-                isBold
-                style={[
-                  styles.txt3,
-                  {
-                    color: Color.black,
-                  },
-                ]}>
-                Terms And Conditions
-              </CustomText>
-            }
-          </CustomText>
-        </View>
-        <CustomButton
-          text={
-            isLoading ? (
-              <ActivityIndicator color={'#FFFFFF'} size={'small'} />
-            ) : (
-              'Register'
-            )
-          }
-          textColor={Color.white}
-          width={windowWidth * 0.9}
-          height={windowHeight * 0.07}
-          marginTop={moderateScale(10, 0.3)}
-          onPress={() => {
-            Register();
           }}
-          bgColor={Color.black}
-          borderRadius={moderateScale(30, 0.3)}
-        />
-        <View style={styles.container2}>
-          <CustomText style={styles.txt5}>
-            {'Already have an account? '}
-          </CustomText>
-
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={{marginLeft: windowWidth * 0.01}}
-            onPress={() => navigationService.navigate('LoginScreen')}>
-            <CustomText
-              style={[
-                styles.txt4,
-                {
-                  color: Color.black,
-                },
-              ]}>
-              {'Sign In'}
-            </CustomText>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      <ImagePickerModal
-        show={showModal}
-        setShow={setShowModal}
-        setFileObject={setImage}
-      />
+          style={{
+            width: '100%',
+            flexGrow: 0,
+          }}>
+          <View style={styles.container}>
+            <CustomHeader leftIcon RightIcon />
+            <View style={styles.text_view}>
+              <CustomText isBold style={styles.Heading}>Join The D.I.S.</CustomText>
+              <CustomText style={styles.txt3}>Sign up and discover new songs, personalized playlists, and exclusive content</CustomText>
+            </View>
+            <TextInputWithTitle
+              iconName={'mail'}
+              iconType={Ionicons}
+              iconColor={Color.lightGrey}
+              color={Color.lightGrey}
+              titleText={'First Name'}
+              secureText={false}
+              placeholder={' aidenparker@gm   ail.com'}
+              // setText={setFirstName}
+              // value={firstName}
+              border
+              viewHeight={0.07}
+              viewWidth={0.9}
+              inputWidth={0.86}
+              borderColor={'#ffffff'}
+              marginTop={moderateScale(30, 0.3)}
+              placeholderColor={Color.lightGrey}
+              borderRadius={moderateScale(25, 0.3)}
+            />
+            <TextInputWithTitle
+              iconName={'locked'}
+              iconType={Fontisto}
+              iconColor={Color.lightGrey}
+              color={Color.lightGrey}
+              titleText={'First Name'}
+              secureText={true}
+              placeholder={' aidenparker@gmail.com'}
+              // setText={setFirstName}
+              // value={firstName}
+              border
+              viewHeight={0.07}
+              viewWidth={0.9}
+              inputWidth={0.86}
+              borderColor={'#ffffff'}
+              marginTop={moderateScale(10, 0.3)}
+              placeholderColor={Color.lightGrey}
+              borderRadius={moderateScale(25, 0.3)}
+            />
+            <View style={[styles.row_view, { marginTop: moderateScale(12, 0.6), justifyContent: 'flex-start', alignItems: 'flex-end', marginLeft: moderateScale(10, 0.6) }]}>
+              <Checkbox checked={agree} onChange={setAgree} size={20} />
+              <CustomText style={{
+                fontSize: moderateScale(12, 0.6),
+                marginLeft: moderateScale(7, 0.6),
+                color: Color.lightGrey
+              }}>Join Now</CustomText>
+              <CustomText style={{
+                fontSize: moderateScale(12, 0.6),
+                marginLeft: moderateScale(8, 0.6),
+                color: Color.veryLightGray
+              }}>Terms & conditions</CustomText>
+            </View>
+            <CustomButton
+              isGradient
+              text={'Join Now'}
+              textColor={Color.white}
+              width={windowWidth * 0.9}
+              height={windowHeight * 0.07}
+              onPress={() => { setIsVisible(false) }}
+              marginTop={moderateScale(20, 0.3)}
+              borderRadius={windowWidth / 2}
+              fontSize={moderateScale(16, 0.3)}
+            />
+            <View style={[styles.row_view, { marginTop: windowWidth * 0.12 }]}>
+              <View style={styles.line} />
+              <CustomText style={styles.text_1}>Or Sign in with</CustomText>
+              <View style={styles.line} />
+            </View>
+            <View style={[styles.row_view, { marginTop: moderateScale(20, 0.6), justifyContent: 'space-between', }]}>
+              <TouchableOpacity style={[styles.row_view, { width: '45%', borderWidth: 1, borderColor: Color.white, height: windowWidth * 0.12, borderRadius: moderateScale(10, 0.6), justifyContent: 'center' }]}>
+                <Icon name='google' as={AntDesign} size={moderateScale(18, 0.6)} color={Color.white} />
+                <CustomText isBold style={styles.btn_txt}>Google</CustomText>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.row_view, { width: '45%', borderWidth: 1, borderColor: Color.white, height: windowWidth * 0.12, borderRadius: moderateScale(10, 0.6), justifyContent: 'center' }]}>
+                <Icon name='facebook-f' as={FontAwesome} size={moderateScale(18, 0.6)} color={Color.white} />
+                <CustomText isBold style={styles.btn_txt}>facebook</CustomText>
+              </TouchableOpacity>
+            </View>
+            <View style={[styles.row_view, { marginTop: windowWidth * 0.12, justifyContent: 'center', width: windowWidth * 0.9, alignSelf: 'center' }]}>
+              <CustomText style={[styles.text_1, { textAlign: 'right', width: '80%' }]}>Already Have an account?</CustomText>
+              <CustomText style={[styles.text_1, { color: Color.veryLightGray, textAlign: 'left' }]}> Sign In</CustomText>
+            </View>
+          </View>
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };
 
-export default Signup;
 
 const styles = ScaledSheet.create({
   bottomImage: {
     width: windowWidth * 0.4,
   },
-
+  row_view: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: moderateScale(20, 0.6),
+    width: windowWidth * 0.9,
+  },
+  line: {
+    width: windowWidth * 0.25,
+    height: moderateScale(2, 0.6),
+    backgroundColor: Color.veryLightGray
+  },
   textContainer: {
     marginTop: moderateScale(20, 0.3),
   },
+  bg_container: {
+    width: windowWidth,
+    height: windowHeight,
+  },
+  text_view: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: moderateScale(20, 0.6)
+  },
 
   Heading: {
-    fontSize: moderateScale(20, 0.3),
-    // fontWeight: 'bold',
+    fontSize: moderateScale(24, 0.3),
     color: '#ffffff',
-
-    alignSelf: 'flex-start',
   },
 
   txt3: {
-    color: Color.blue,
-    fontSize: moderateScale(12, 0.6),
+    fontSize: moderateScale(14, 0.6),
     alignSelf: 'center',
-    fontWeight: '600',
+    color: Color.lightGrey,
+    textAlign: 'center',
+    marginTop: moderateScale(10, 0.6)
+  },
+  container: {
+    width: windowWidth,
+    height: windowHeight,
+    paddingHorizontal: moderateScale(20, 0.6)
+  },
+  image: {
+    width: '100%',
+    height: '100%',
   },
   container2: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    width: windowWidth * 0.9,
-    // marginTop: moderateScale(10,0.3),
   },
   txt4: {
-    color: Color.blue,
-    fontSize: moderateScale(15, 0.6),
+    color: Color.veryLightGray,
+    fontSize: moderateScale(12, 0.6),
     marginTop: moderateScale(8, 0.3),
-    fontWeight: 'bold',
+    width: '100%',
+    textAlign: 'right',
+    marginTop: moderateScale(10, 0.6),
   },
   txt5: {
     color: Color.white,
     marginTop: moderateScale(10, 0.3),
-    fontSize: moderateScale(13, 0.6),
+    fontSize: moderateScale(15, 0.6),
   },
   dropDown: {
     backgroundColor: Color.red,
   },
-  edit: {
-    backgroundColor: Color.blue,
-    width: moderateScale(25, 0.3),
-    height: moderateScale(25, 0.3),
-    position: 'absolute',
-    bottom: moderateScale(5, 0.3),
-    right: moderateScale(1, 0.3),
-    borderRadius: moderateScale(12.5, 0.3),
-    elevation: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+  text_1: {
+    width: '40%',
+    marginTop: 0,
+    textAlign: 'center',
+    color: Color.white,
+    fontSize: moderateScale(14, 0.6),
+    fontWeight: '700'
   },
-  image: {
-    width: moderateScale(100, 0.3),
-    height: moderateScale(100, 0.3),
-    borderRadius: moderateScale(50, 0.3),
-    // marginLeft: moderateScale(2.5, 0.3),
-    // marginTop: moderateScale(2.5, 0.3),
-  },
-  userTypeContainer: {
-    width: windowWidth * 0.7,
-    // backgroundColor : Color.red,
-    paddingTop: moderateScale(20, 0.3),
-    paddingBottom: moderateScale(10, 0.3),
-    // marginTop: moderateScale(10, 0.3),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  innerContainer: {
-    width: '48%',
-    // backgroundColor : 'green',
-    // paddingVertical : moderateScale(5,0.3),
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  circle: {
-    height: moderateScale(14, 0.3),
-    width: moderateScale(14, 0.3),
-    borderRadius: moderateScale(7, 0.3),
-    borderWidth: 1,
-    backgroundColor: Color.white,
-    borderColor: Color.themeColor,
-    marginLeft: moderateScale(15, 0.3),
-  },
-  txt2: {
-    fontSize: moderateScale(14, 0.3),
-    color: Color.black,
-    // fontWeight : 'bold'
-    // backgroundColor : 'red'
-  },
+  btn_txt: {
+    fontSize: moderateScale(14, 0.6),
+    color: Color.white,
+    marginLeft: moderateScale(6, 0.6)
+  }
 });
+
+export default SignupScreen;

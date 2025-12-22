@@ -11,21 +11,20 @@ const AudioSlider = () => {
     const seconds = Math.floor(sec % 60);
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
+
   return (
     <View
       style={{
-        width:windowWidth * 0.9,
+        width: '100%',
         alignItems: 'center',
-        marginTop : moderateScale 
-        // backgroundColor :
       }}
     >
       <Slider
-        style={{ width:windowWidth *0.99, height: 30  ,marginTop : moderateScale(10,0.6)}}
+        style={{ width: '100%', height: 30 }}
         minimumValue={0}
         maximumValue={duration}
         value={value}
-        minimumTrackTintColor="#3432ccff"
+        minimumTrackTintColor="#fff"
         maximumTrackTintColor="#999"
         thumbTintColor="#fff"
         onValueChange={(val) => setValue(val)}
@@ -35,11 +34,11 @@ const AudioSlider = () => {
           width: '100%',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginTop: moderateScale(-5,0.6),
+          marginTop: -10,
         }}
       >
-        <Text style={{ color: '#fff', fontSize: moderateScale(13,0.6) }}>{formatTime(value)}</Text>
-        <Text style={{ color: '#fff', fontSize: moderateScale(13,0.6) }}>{formatTime(duration)}</Text>
+        <Text style={{ color: '#fff', fontSize: 10 }}>{formatTime(value)}</Text>
+        <Text style={{ color: '#fff', fontSize: 10 }}>{formatTime(duration)}</Text>
       </View>
     </View>
   );
