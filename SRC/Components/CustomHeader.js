@@ -49,7 +49,7 @@ const CustomHeader = ({leftIcon, RightIcon, text, style, text1, subtext}) => {
           />
         </LinearGradient>
       )}
-      <CustomText style={styles.text}>{text}</CustomText>
+      <CustomText style={styles.title}>{text}</CustomText>
       {subtext && (
         <View
           style={{
@@ -102,12 +102,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: windowWidth * 0.1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
   },
-  text: {
-    color: Color.themeColor,
+  title: {
+    color: Color.white,
     fontSize: moderateScale(15, 0.6),
     alignSelf: 'center',
+    textAlign : 'center',
+    width : windowWidth *0.7,
     fontWeight: 'bold',
   },
   sub_text: {

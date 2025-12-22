@@ -19,6 +19,8 @@ import CustomText from '../Components/CustomText';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import {windowHeight, windowWidth} from '../Utillity/utils';
 import AudioSlider from '../Components/AudioSlider';
+import LinearGradient from 'react-native-linear-gradient';
+import Card from '../Components/Card';
 
 const PlaylistScreen = () => {
   const [countryCode, setCountryCode] = useState('ID'); // For flag
@@ -46,6 +48,7 @@ const PlaylistScreen = () => {
           contentContainerStyle={{
             alignSelf: 'center',
             alignItems: 'center',
+            paddingBottom : moderateScale(15,.6)
           }}
           style={{
             width: '100%',
@@ -84,15 +87,7 @@ const PlaylistScreen = () => {
             </View>
             <AudioSlider />
             <View
-              style={{
-                marginTop: moderateScale(10, 0.3),
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-
-                // backgroundColor: 'red',
-              }}>
+              style={styles.player_btn}>
               <TouchableOpacity style={styles.btn}>
                 <Icon
                   name="shuffle"
@@ -234,31 +229,10 @@ const PlaylistScreen = () => {
                 </CustomText>
               </View>
             </View>
-            <View
-              style={[
-                styles.lyrics_con,
-                {
-                  height: windowWidth * 0.8,
-                },
-              ]}>
-              <CustomText
-                style={{
-                  fontSize: moderateScale(15, 0.6),
-                  color: Color.white,
-                  paddingBottom: moderateScale(10, 0.6),
-                }}>
-                about the artist
-              </CustomText>
-              <View style={styles.artist_image}>
-                <CustomImage
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                  }}
-                />
-              </View>
-            </View>
-            <View style={styles.lyrics_con}></View>
+          <Card/>
+          <Card fromEvent={true}/>
+
+            {/* <View style={styles.lyrics_con}></View> */}
 
             {/* <CustomButton
               isGradient
@@ -397,18 +371,14 @@ const styles = ScaledSheet.create({
     height: windowWidth * 0.08,
     alignContent: 'center',
     justifyContent: 'center',
-    // marginTop: moderateScale(20, 0.3),
     borderRadius: (windowWidth * 0.08) / 2,
     marginRight: moderateScale(10, 0.3),
     backgroundColor: '#2c2c2cff',
-    // backgroundColor: 'red',
-
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#afafafff',
     shadowOffset: {
       width: 60,
-
       height: -10,
     },
     shadowOpacity: 0.4,
@@ -433,12 +403,48 @@ const styles = ScaledSheet.create({
     textTransform: 'none',
   },
   text3: {},
+
   artist_image: {
-    height: windowHeight * 0.17,
-    width: windowWidth * 0.75,
+    height: windowHeight * 0.2,
+    width: windowWidth * 0.8,
     backgroundColor: 'red',
     borderRadius: moderateScale(20, 0.6),
+    overflow: 'hidden',
   },
+  title: {
+    color: Color.white,
+    fontSize: moderateScale(16, 0.6),
+  },
+
+  sub_text: {
+    color: '#7F8489',
+    fontSize: moderateScale(12, 0.6),
+  },
+  follow_btn: {
+    width: windowWidth * 0.22,
+    height: windowHeight * 0.03,
+    backgroundColor: '#2F353A',
+  },
+  row_con: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+  },
+  text_container: {
+    width: windowWidth * 0.6,
+    // backgroundColor :'red',
+    paddingHorizontal: moderateScale(20, 0.6),
+    paddingVertical: moderateScale(10, 0.6),
+  },
+  player_btn :{
+                marginTop: moderateScale(10, 0.3),
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+
+                // backgroundColor: 'red',
+              }
 });
 
 export default PlaylistScreen;

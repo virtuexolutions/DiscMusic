@@ -10,6 +10,7 @@ import Signup from './Screens/Signup';
 import Walkthrough from './Screens/Walkthrough';
 import Profile from './Screens/Profile';
 import PlaylistScreen from './Screens/PlaylistScreen';
+import AboutArtist from './Screens/AboutArtist';
 
 const AppNavigator = () => {
   const isGoalCreated = useSelector(state => state.authReducer.isGoalCreated);
@@ -37,7 +38,7 @@ const AppNavigator = () => {
     return (
       <NavigationContainer ref={navigationService.navigationRef}>
         <RootNav.Navigator
-          initialRouteName={'PlaylistScreen'}
+          initialRouteName={'AboutArtist'}
           screenOptions={{headerShown: false}}>
           <RootNav.Screen name="Walkthrough" component={Walkthrough} />
           <RootNav.Screen name="LoginScreen" component={LoginScreen} />
@@ -45,6 +46,8 @@ const AppNavigator = () => {
           <RootNav.Screen name="Signup" component={Signup} />
           <RootNav.Screen name="Profile" component={Profile} />
           <RootNav.Screen name="PlaylistScreen" component={PlaylistScreen} />
+          <RootNav.Screen name="AboutArtist" component={AboutArtist} />
+
 
         </RootNav.Navigator>
       </NavigationContainer>
