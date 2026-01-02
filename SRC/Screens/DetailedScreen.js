@@ -1,7 +1,7 @@
-import { ScrollView, View } from 'native-base';
-import React, { useState } from 'react';
-import { ImageBackground } from 'react-native';
-import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import {ScrollView, View} from 'native-base';
+import React, {useState} from 'react';
+import {ImageBackground} from 'react-native';
+import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 
 import Color from '../Assets/Utilities/Color';
 import CustomHeader from '../Components/CustomHeader';
@@ -10,9 +10,9 @@ import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 
 import LinearGradient from 'react-native-linear-gradient';
-import { windowHeight, windowWidth } from '../Utillity/utils';
+import {windowHeight, windowWidth} from '../Utillity/utils';
 
-const AboutArtist = () => {
+const DetailedScreen = () => {
   const [countryCode, setCountryCode] = useState('ID'); // For flag
   const [callingCode, setCallingCode] = useState('62'); // For +62
   const [visible, setVisible] = useState(false);
@@ -61,12 +61,7 @@ const AboutArtist = () => {
             width: '100%',
             flexGrow: 0,
           }}>
-          <CustomHeader
-            leftIcon
-            //   RightIcon
-            text={'oliver tree'}
-            subtext={''}
-          />
+          <CustomHeader leftIcon  text={'Oliver tree'} subtext={''} />
           <ImageBackground
             source={require('../Assets/Images/texturebgc.png')}
             style={styles.container}
@@ -86,18 +81,19 @@ const AboutArtist = () => {
               </CustomText>
               <CustomText style={styles.sub_text}>monthly listeners</CustomText>
             </View>
-              <LinearGradient
-                style={styles.btn_Con}
-                colors={['#333333', '#636363']}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 1}}>
-                    <CustomText style={{
-                        fontSize : moderateScale(13,.6),
-                        color :Color.white
-                    }}>
-                        181st in the world
-                    </CustomText>
-                </LinearGradient>
+            <LinearGradient
+              style={styles.btn_Con}
+              colors={['#333333', '#636363']}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}>
+              <CustomText
+                style={{
+                  fontSize: moderateScale(13, 0.6),
+                  color: Color.white,
+                }}>
+                181st in the world
+              </CustomText>
+            </LinearGradient>
             <View style={styles.details}>
               <CustomText
                 style={[
@@ -243,7 +239,7 @@ const styles = ScaledSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-      borderRadius:25,
+    borderRadius: 25,
     shadowColor: '#FFFFFF',
     shadowOffset: {
       width: 0,
@@ -252,10 +248,9 @@ const styles = ScaledSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 8,
     // elevation: 6,
-    alignSelf :'center',
-    marginTop : moderateScale(10,.6)
-
-},
+    alignSelf: 'center',
+    marginTop: moderateScale(10, 0.6),
+  },
 });
 
-export default AboutArtist;
+export default DetailedScreen;

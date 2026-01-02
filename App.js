@@ -54,6 +54,8 @@ const MainContainer = () => {
     GetPermission();
   }, []);
 
+
+
   const [isloading] = useloader(true);
   if (isloading == true) {
     return <SplashScreen />;

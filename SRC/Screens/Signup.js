@@ -1,32 +1,32 @@
-import { Icon, ScrollView, View } from 'native-base';
-import React, { useState } from 'react';
-import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import {Icon, ScrollView, View} from 'native-base';
+import React, {useState} from 'react';
+import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import CustomStatusBar from '../Components/CustomStatusBar';
-import { windowHeight, windowWidth } from '../Utillity/utils';
+import {windowHeight, windowWidth} from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
-import { ImageBackground, TouchableOpacity } from 'react-native';
+import {ImageBackground, TouchableOpacity} from 'react-native';
 import CustomHeader from '../Components/CustomHeader';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import Fontisto from 'react-native-vector-icons/Fontisto'
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import CustomButton from '../Components/CustomButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Checkbox from '../Components/CustomCheckbox';
 const SignupScreen = () => {
-
   const [agree, setAgree] = useState(false);
 
   return (
     <>
       <CustomStatusBar
-        backgroundColor={
-          Color.black
-        }
+        backgroundColor={Color.black}
         barStyle={'light-content'}
       />
-      <ImageBackground source={require('../Assets/Images/bg.png')} style={styles.bg_container} imageStyle={styles.image}>
+      <ImageBackground
+        source={require('../Assets/Images/bg.png')}
+        style={styles.bg_container}
+        imageStyle={styles.image}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
@@ -41,8 +41,13 @@ const SignupScreen = () => {
           <View style={styles.container}>
             <CustomHeader leftIcon RightIcon />
             <View style={styles.text_view}>
-              <CustomText isBold style={styles.Heading}>Join The D.I.S.</CustomText>
-              <CustomText style={styles.txt3}>Sign up and discover new songs, personalized playlists, and exclusive content</CustomText>
+              <CustomText isBold style={styles.Heading}>
+                Join The D.I.S.
+              </CustomText>
+              <CustomText style={styles.txt3}>
+                Sign up and discover new songs, personalized playlists, and
+                exclusive content
+              </CustomText>
             </View>
             <TextInputWithTitle
               iconName={'mail'}
@@ -82,18 +87,33 @@ const SignupScreen = () => {
               placeholderColor={Color.lightGrey}
               borderRadius={moderateScale(25, 0.3)}
             />
-            <View style={[styles.row_view, { marginTop: moderateScale(12, 0.6), justifyContent: 'flex-start', alignItems: 'flex-end', marginLeft: moderateScale(10, 0.6) }]}>
+            <View
+              style={[
+                styles.row_view,
+                {
+                  marginTop: moderateScale(12, 0.6),
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                  marginLeft: moderateScale(10, 0.6),
+                },
+              ]}>
               <Checkbox checked={agree} onChange={setAgree} size={20} />
-              <CustomText style={{
-                fontSize: moderateScale(12, 0.6),
-                marginLeft: moderateScale(7, 0.6),
-                color: Color.lightGrey
-              }}>Join Now</CustomText>
-              <CustomText style={{
-                fontSize: moderateScale(12, 0.6),
-                marginLeft: moderateScale(8, 0.6),
-                color: Color.veryLightGray
-              }}>Terms & conditions</CustomText>
+              <CustomText
+                style={{
+                  fontSize: moderateScale(12, 0.6),
+                  marginLeft: moderateScale(7, 0.6),
+                  color: Color.lightGrey,
+                }}>
+                Join Now
+              </CustomText>
+              <CustomText
+                style={{
+                  fontSize: moderateScale(12, 0.6),
+                  marginLeft: moderateScale(8, 0.6),
+                  color: Color.veryLightGray,
+                }}>
+                Terms & conditions
+              </CustomText>
             </View>
             <CustomButton
               isGradient
@@ -101,29 +121,92 @@ const SignupScreen = () => {
               textColor={Color.white}
               width={windowWidth * 0.9}
               height={windowHeight * 0.07}
-              onPress={() => { setIsVisible(false) }}
+              // onPress={() => { setIsVisible(false) }}
+              onPress={() => navigationService.navigate('TabNavigation')}
               marginTop={moderateScale(20, 0.3)}
               borderRadius={windowWidth / 2}
               fontSize={moderateScale(16, 0.3)}
             />
-            <View style={[styles.row_view, { marginTop: windowWidth * 0.12 }]}>
+            <View style={[styles.row_view, {marginTop: windowWidth * 0.12}]}>
               <View style={styles.line} />
               <CustomText style={styles.text_1}>Or Sign in with</CustomText>
               <View style={styles.line} />
             </View>
-            <View style={[styles.row_view, { marginTop: moderateScale(20, 0.6), justifyContent: 'space-between', }]}>
-              <TouchableOpacity style={[styles.row_view, { width: '45%', borderWidth: 1, borderColor: Color.white, height: windowWidth * 0.12, borderRadius: moderateScale(10, 0.6), justifyContent: 'center' }]}>
-                <Icon name='google' as={AntDesign} size={moderateScale(18, 0.6)} color={Color.white} />
-                <CustomText isBold style={styles.btn_txt}>Google</CustomText>
+            <View
+              style={[
+                styles.row_view,
+                {
+                  marginTop: moderateScale(20, 0.6),
+                  justifyContent: 'space-between',
+                },
+              ]}>
+              <TouchableOpacity
+                style={[
+                  styles.row_view,
+                  {
+                    width: '45%',
+                    borderWidth: 1,
+                    borderColor: Color.white,
+                    height: windowWidth * 0.12,
+                    borderRadius: moderateScale(10, 0.6),
+                    justifyContent: 'center',
+                  },
+                ]}>
+                <Icon
+                  name="google"
+                  as={AntDesign}
+                  size={moderateScale(18, 0.6)}
+                  color={Color.white}
+                />
+                <CustomText isBold style={styles.btn_txt}>
+                  Google
+                </CustomText>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.row_view, { width: '45%', borderWidth: 1, borderColor: Color.white, height: windowWidth * 0.12, borderRadius: moderateScale(10, 0.6), justifyContent: 'center' }]}>
-                <Icon name='facebook-f' as={FontAwesome} size={moderateScale(18, 0.6)} color={Color.white} />
-                <CustomText isBold style={styles.btn_txt}>facebook</CustomText>
+              <TouchableOpacity
+                style={[
+                  styles.row_view,
+                  {
+                    width: '45%',
+                    borderWidth: 1,
+                    borderColor: Color.white,
+                    height: windowWidth * 0.12,
+                    borderRadius: moderateScale(10, 0.6),
+                    justifyContent: 'center',
+                  },
+                ]}>
+                <Icon
+                  name="facebook-f"
+                  as={FontAwesome}
+                  size={moderateScale(18, 0.6)}
+                  color={Color.white}
+                />
+                <CustomText isBold style={styles.btn_txt}>
+                  facebook
+                </CustomText>
               </TouchableOpacity>
             </View>
-            <View style={[styles.row_view, { marginTop: windowWidth * 0.12, justifyContent: 'center', width: windowWidth * 0.9, alignSelf: 'center' }]}>
-              <CustomText style={[styles.text_1, { textAlign: 'right', width: '80%' }]}>Already Have an account?</CustomText>
-              <CustomText style={[styles.text_1, { color: Color.veryLightGray, textAlign: 'left' }]}> Sign In</CustomText>
+            <View
+              style={[
+                styles.row_view,
+                {
+                  marginTop: windowWidth * 0.12,
+                  justifyContent: 'center',
+                  width: windowWidth * 0.9,
+                  alignSelf: 'center',
+                },
+              ]}>
+              <CustomText
+                style={[styles.text_1, {textAlign: 'right', width: '80%'}]}>
+                Already Have an account?
+              </CustomText>
+              <CustomText
+                style={[
+                  styles.text_1,
+                  {color: Color.veryLightGray, textAlign: 'left'},
+                ]}>
+                {' '}
+                Sign In
+              </CustomText>
             </View>
           </View>
         </ScrollView>
@@ -131,7 +214,6 @@ const SignupScreen = () => {
     </>
   );
 };
-
 
 const styles = ScaledSheet.create({
   bottomImage: {
@@ -147,7 +229,7 @@ const styles = ScaledSheet.create({
   line: {
     width: windowWidth * 0.25,
     height: moderateScale(2, 0.6),
-    backgroundColor: Color.veryLightGray
+    backgroundColor: Color.veryLightGray,
   },
   textContainer: {
     marginTop: moderateScale(20, 0.3),
@@ -160,7 +242,7 @@ const styles = ScaledSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: moderateScale(20, 0.6)
+    marginTop: moderateScale(20, 0.6),
   },
 
   Heading: {
@@ -173,12 +255,12 @@ const styles = ScaledSheet.create({
     alignSelf: 'center',
     color: Color.lightGrey,
     textAlign: 'center',
-    marginTop: moderateScale(10, 0.6)
+    marginTop: moderateScale(10, 0.6),
   },
   container: {
     width: windowWidth,
     height: windowHeight,
-    paddingHorizontal: moderateScale(20, 0.6)
+    paddingHorizontal: moderateScale(20, 0.6),
   },
   image: {
     width: '100%',
@@ -211,13 +293,13 @@ const styles = ScaledSheet.create({
     textAlign: 'center',
     color: Color.white,
     fontSize: moderateScale(14, 0.6),
-    fontWeight: '700'
+    fontWeight: '700',
   },
   btn_txt: {
     fontSize: moderateScale(14, 0.6),
     color: Color.white,
-    marginLeft: moderateScale(6, 0.6)
-  }
+    marginLeft: moderateScale(6, 0.6),
+  },
 });
 
 export default SignupScreen;

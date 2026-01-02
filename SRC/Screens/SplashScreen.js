@@ -69,9 +69,8 @@ const SplashScreen = () => {
             height={windowHeight * 0.08}
             marginTop={moderateScale(40, 0.3)}
             onPress={() => {}}
-            isGradient={true}
             borderRadius={moderateScale(30, 0.3)}
-            elevation
+            isGradient
           />
         </View>
       </ImageBackground>

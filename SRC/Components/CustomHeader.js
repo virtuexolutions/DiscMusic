@@ -53,15 +53,16 @@ const CustomHeader = ({leftIcon, RightIcon, text, style, text1, subtext}) => {
       {subtext && (
         <View
           style={{
-            alignSelf: 'center',
-            marginTop: moderateScale(15, 0.3),
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginRight: moderateScale(40, 0.6),
           }}>
           <CustomText style={styles.text1}>{text1}</CustomText>
           <CustomText style={styles.sub_text}>{subtext}</CustomText>
         </View>
       )}
 
-      {RightIcon && (
+      {RightIcon ? (
         <LinearGradient
           start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
@@ -88,6 +89,15 @@ const CustomHeader = ({leftIcon, RightIcon, text, style, text1, subtext}) => {
             }}
           />
         </LinearGradient>
+      ) : (
+        <View
+          style={{
+            width: windowWidth * 0.12,
+            height: windowWidth * 0.12,
+            borderRadius: windowWidth / 2,
+            justifyContent: 'ceneter',
+            alignItems: 'center',
+          }}></View>
       )}
     </View>
   );
@@ -102,14 +112,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: windowWidth * 0.1,
     flexDirection: 'row',
-    // justifyContent: 'space-between',
+    // backgroundColor :'red',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   title: {
     color: Color.white,
     fontSize: moderateScale(15, 0.6),
-    alignSelf: 'center',
-    textAlign : 'center',
-    width : windowWidth *0.7,
+    // alignSelf: 'center',
+    // textAlign: 'center',
+    // backgroundColor: 'red',
+    // width: '100%',
     fontWeight: 'bold',
   },
   sub_text: {

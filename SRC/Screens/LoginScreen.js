@@ -1,28 +1,30 @@
-import { Icon, ScrollView, View } from 'native-base';
+import {Icon, ScrollView, View} from 'native-base';
 import React from 'react';
-import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import CustomStatusBar from '../Components/CustomStatusBar';
-import { windowHeight, windowWidth } from '../Utillity/utils';
+import {windowHeight, windowWidth} from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
-import { ImageBackground, TouchableOpacity } from 'react-native';
+import {ImageBackground, TouchableOpacity} from 'react-native';
 import CustomHeader from '../Components/CustomHeader';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import Fontisto from 'react-native-vector-icons/Fontisto'
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import CustomButton from '../Components/CustomButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import navigationService from '../navigationService';
 const LoginScreen = () => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={
-          Color.black
-        }
+        backgroundColor={Color.black}
         barStyle={'light-content'}
       />
-      <ImageBackground source={require('../Assets/Images/bg.png')} style={styles.bg_container} imageStyle={styles.image}>
+      <ImageBackground
+        source={require('../Assets/Images/bg.png')}
+        style={styles.bg_container}
+        imageStyle={styles.image}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
@@ -37,8 +39,13 @@ const LoginScreen = () => {
           <View style={styles.container}>
             <CustomHeader leftIcon RightIcon />
             <View style={styles.text_view}>
-              <CustomText isBold style={styles.Heading}>Hello Again!</CustomText>
-              <CustomText style={styles.txt3}>Sign in to your account and dive back into your personalized playlists and top tracks</CustomText>
+              <CustomText isBold style={styles.Heading}>
+                Hello Again!
+              </CustomText>
+              <CustomText style={styles.txt3}>
+                Sign in to your account and dive back into your personalized
+                playlists and top tracks
+              </CustomText>
             </View>
             <TextInputWithTitle
               iconName={'mail'}
@@ -85,29 +92,93 @@ const LoginScreen = () => {
               textColor={Color.white}
               width={windowWidth * 0.9}
               height={windowHeight * 0.07}
-              onPress={() => { setIsVisible(false) }}
+              // onPress={() => { setIsVisible(false) }}
+              onPress={() => navigationService.navigate('TabNavigation')}
               marginTop={moderateScale(20, 0.3)}
               borderRadius={windowWidth / 2}
               fontSize={moderateScale(16, 0.3)}
             />
-            <View style={[styles.row_view, { marginTop: windowWidth * 0.12 }]}>
+            <View style={[styles.row_view, {marginTop: windowWidth * 0.12}]}>
               <View style={styles.line} />
               <CustomText style={styles.text_1}>Or Sign in with</CustomText>
               <View style={styles.line} />
             </View>
-            <View style={[styles.row_view, { marginTop: moderateScale(20, 0.6), justifyContent: 'space-between', }]}>
-              <TouchableOpacity style={[styles.row_view, { width: '45%', borderWidth: 1, borderColor: Color.white, height: windowWidth * 0.12, borderRadius: moderateScale(10, 0.6), justifyContent: 'center' }]}>
-                <Icon name='google' as={AntDesign} size={moderateScale(18, 0.6)} color={Color.white} />
-                <CustomText isBold style={styles.btn_txt}>Google</CustomText>
+            <View
+              style={[
+                styles.row_view,
+                {
+                  marginTop: moderateScale(20, 0.6),
+                  justifyContent: 'space-between',
+                },
+              ]}>
+              <TouchableOpacity
+                style={[
+                  styles.row_view,
+                  {
+                    width: '45%',
+                    borderWidth: 1,
+                    borderColor: Color.white,
+                    height: windowWidth * 0.12,
+                    borderRadius: moderateScale(10, 0.6),
+                    justifyContent: 'center',
+                  },
+                ]}>
+                <Icon
+                  name="google"
+                  as={AntDesign}
+                  size={moderateScale(18, 0.6)}
+                  color={Color.white}
+                />
+                <CustomText isBold style={styles.btn_txt}>
+                  Google
+                </CustomText>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.row_view, { width: '45%', borderWidth: 1, borderColor: Color.white, height: windowWidth * 0.12, borderRadius: moderateScale(10, 0.6), justifyContent: 'center' }]}>
-                <Icon name='facebook-f' as={FontAwesome} size={moderateScale(18, 0.6)} color={Color.white} />
-                <CustomText isBold style={styles.btn_txt}>facebook</CustomText>
+              <TouchableOpacity
+                style={[
+                  styles.row_view,
+                  {
+                    width: '45%',
+                    borderWidth: 1,
+                    borderColor: Color.white,
+                    height: windowWidth * 0.12,
+                    borderRadius: moderateScale(10, 0.6),
+                    justifyContent: 'center',
+                  },
+                ]}>
+                <Icon
+                  name="facebook-f"
+                  as={FontAwesome}
+                  size={moderateScale(18, 0.6)}
+                  color={Color.white}
+                />
+                <CustomText isBold style={styles.btn_txt}>
+                  facebook
+                </CustomText>
               </TouchableOpacity>
             </View>
-            <View style={[styles.row_view, { marginTop: windowWidth * 0.12, justifyContent: 'center', width: '100%', alignSelf: 'center' }]}>
-              <CustomText style={[styles.text_1, { width: '60%', textAlign: 'right' }]}>Don't Have account?</CustomText>
-              <CustomText style={[styles.text_1, { color: Color.veryLightGray, textAlign: 'left' }]}> Sign up</CustomText>
+            <View
+              style={[
+                styles.row_view,
+                {
+                  marginTop: windowWidth * 0.12,
+                  justifyContent: 'center',
+                  width: '100%',
+                  alignSelf: 'center',
+                },
+              ]}>
+              <CustomText
+                style={[styles.text_1, {width: '60%', textAlign: 'right'}]}>
+                Don't Have account?
+              </CustomText>
+              <CustomText
+                onPress={() => navigationService.navigate('SignupScreen')}
+                style={[
+                  styles.text_1,
+                  {color: Color.veryLightGray, textAlign: 'left'},
+                ]}>
+                {' '}
+                Sign up
+              </CustomText>
             </View>
           </View>
         </ScrollView>
@@ -115,7 +186,6 @@ const LoginScreen = () => {
     </>
   );
 };
-
 
 const styles = ScaledSheet.create({
   bottomImage: {
@@ -131,7 +201,7 @@ const styles = ScaledSheet.create({
   line: {
     width: windowWidth * 0.25,
     height: moderateScale(2, 0.6),
-    backgroundColor: Color.veryLightGray
+    backgroundColor: Color.veryLightGray,
   },
   textContainer: {
     marginTop: moderateScale(20, 0.3),
@@ -144,7 +214,7 @@ const styles = ScaledSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: moderateScale(20, 0.6)
+    marginTop: moderateScale(20, 0.6),
   },
 
   Heading: {
@@ -157,12 +227,12 @@ const styles = ScaledSheet.create({
     alignSelf: 'center',
     color: Color.lightGrey,
     textAlign: 'center',
-    marginTop: moderateScale(10, 0.6)
+    marginTop: moderateScale(10, 0.6),
   },
   container: {
     width: windowWidth,
     height: windowHeight,
-    paddingHorizontal: moderateScale(20, 0.6)
+    paddingHorizontal: moderateScale(20, 0.6),
   },
   image: {
     width: '100%',
@@ -195,13 +265,13 @@ const styles = ScaledSheet.create({
     textAlign: 'center',
     color: Color.white,
     fontSize: moderateScale(14, 0.6),
-    fontWeight: '700'
+    fontWeight: '700',
   },
   btn_txt: {
     fontSize: moderateScale(14, 0.6),
     color: Color.white,
-    marginLeft: moderateScale(6, 0.6)
-  }
+    marginLeft: moderateScale(6, 0.6),
+  },
 });
 
 export default LoginScreen;

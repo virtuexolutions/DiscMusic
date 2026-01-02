@@ -1,21 +1,24 @@
-import { View } from 'native-base';
+import {View} from 'native-base';
 import React from 'react';
-import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 
 import Color from '../Assets/Utilities/Color';
 import CustomButton from '../Components/CustomButton';
 import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
 
-import { windowHeight, windowWidth } from '../Utillity/utils';
+import {windowHeight, windowWidth} from '../Utillity/utils';
+import {TouchableOpacity} from 'react-native';
+import navigationService from '../navigationService';
 
 const Card = ({fromEvent}) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => navigationService.navigate('AboutArtist')}
       style={[
         styles.lyrics_con,
         {
-          height: fromEvent ? windowWidth * 0.72 :windowWidth * 0.82,
+          height: fromEvent ? windowWidth * 0.72 : windowWidth * 0.82,
         },
       ]}>
       <CustomText
@@ -52,7 +55,7 @@ const Card = ({fromEvent}) => {
         </View>
         <CustomButton
           isGradient
-          text={fromEvent ?'find tickets'  :'follow'}
+          text={fromEvent ? 'find tickets' : 'follow'}
           textColor={Color.white}
           width={windowWidth * 0.24}
           height={windowHeight * 0.04}
@@ -77,7 +80,7 @@ const Card = ({fromEvent}) => {
           </CustomText>
         </CustomText>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 
