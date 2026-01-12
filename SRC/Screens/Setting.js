@@ -286,7 +286,7 @@ const DetailedScreen = () => {
             {musicData?.map((item, index) => {
               return (
                 <TouchableOpacity onPress={() =>{
-                    // rbRef.current.open()
+                    rbRef.current.open()
                 }}   style={styles.card_con}>
                   <View style={styles.card_image}>
                     <CustomImage
