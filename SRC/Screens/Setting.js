@@ -24,6 +24,8 @@ import InfoText from '../Components/InfoText';
 import TitleWithDescription from '../Components/TitleWithDescription';
 import StorageSettings from '../Components/StorageSettings';
 import AboutInfo from '../Components/AboutInfo';
+import MinimisedPlayer from '../Components/MinimisedPlayer';
+import navigationService from '../navigationService';
 
 const Settings = () => {
   const [audioQuality, setAudioQuality] = useState(false)
@@ -94,14 +96,16 @@ const Settings = () => {
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}
         imageStyle={styles.image}>
-          <CustomHeader leftIcon text={'Settings'} subtext={''} />
+          <CustomHeader 
+          showBack
+          leftIcon text={'Settings'} subtext={''} />
         <ScrollView
           scrollEnabled={true}
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
             paddingTop:moderateScale(10,0.2),
-            paddingBottom: moderateScale(50, 0.6),
+            paddingBottom: moderateScale(80, 0.6),
             alignItems:"center"
           }}
           style={styles.container}>
@@ -113,7 +117,9 @@ const Settings = () => {
               width={windowWidth * 0.5}
               height={windowHeight * 0.05}
               // onPress={() => { setIsVisible(false) }}
-              onPress={() => {}}
+              onPress={() => {
+                // navigation.navigate("PremiumScreen")
+              }}
               marginTop={moderateScale(20, 0.3)}
               borderRadius={windowWidth / 2}
               fontSize={moderateScale(16, 0.3)}
@@ -236,6 +242,9 @@ const Settings = () => {
             />
             </View>
 </ScrollView>
+<MinimisedPlayer
+style={styles.player}
+/>
       </ImageBackground>
     </>
   );
@@ -379,6 +388,10 @@ const styles = ScaledSheet.create({
     paddingVertical:verticalScale(10),
     backgroundColor:"#282C30",
     borderRadius:moderateScale(20)
+   },
+   player:{
+    bottom:scale(30),
+    paddingBottom:verticalScale(30)
    },
   label: {marginTop:moderateScale(12,0.2)}
 });

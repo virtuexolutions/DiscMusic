@@ -37,7 +37,10 @@ const LoginScreen = () => {
             flexGrow: 0,
           }}>
           <View style={styles.container}>
-            <CustomHeader leftIcon RightIcon />
+            <CustomHeader 
+            showBack={true}
+            dots={true}
+            leftIcon RightIcon />
             <View style={styles.text_view}>
               <CustomText isBold style={styles.Heading}>
                 Hello Again!

@@ -15,10 +15,12 @@ const TitleWithDescription = ({
   return (
     <View style={[styles.container, style]}>
        <CustomText
+       ellipsizeMode={"tail"}
        style={[styles.text1, titleStyle]}
        children={title}
        />
        <CustomText
+       ellipsizeMode={"tail"}
        style={[styles.text2, descriptionStyle]}
        children={description}
        />
@@ -38,7 +40,8 @@ const styles = StyleSheet.create({
     },
     text1:{
         fontSize:moderateScale(12,0.2),
-        color:Color.white
+        color:Color.white,
+        textTransform:"capitalize"
     },
     text2:{
 

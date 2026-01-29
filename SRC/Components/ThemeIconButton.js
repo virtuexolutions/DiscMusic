@@ -16,10 +16,11 @@ const ThemeIconButton = ({
   onPress,
   iconSize,
   style,
+  iconColor,
   isGradient,
   gradientColors
 }) => {
-  console.log("====> ", isGradient);
+  console.log("====> ", onPress);
   const icon = iconName 
   ? iconName 
   : arrowRight 
@@ -29,15 +30,17 @@ const ThemeIconButton = ({
   const type = iconType 
   ? iconType 
   : Entypo;
-  
   let iconComponent;
   
   if (iconSource) {
-    iconComponent = <CustomImage source={iconSource} style={{ width: iconSize ?? scale(20), height: iconSize ?? scale(20) }} />
+    iconComponent = <CustomImage 
+    onPress={onPress}
+    source={iconSource} style={[{ width: iconSize ?? scale(20), height: iconSize ?? scale(20) }, iconColor && {tintColor:iconColor}]} />
   } else {
     iconComponent = <Icon
       as={type}
       name={icon}
+      onPress={onPress}
       size={moderateScale(20, 0.6)}
       color={Color.white}
     />
@@ -45,9 +48,14 @@ const ThemeIconButton = ({
   
   return (
     <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.4}
-      style={isGradient ? {} : [styles.button, style]}>
+      onPress={()=>{
+        console.log("first")
+      }}
+      // activeOpacity={0.4}
+      style={isGradient ? {
+        width:"auto",
+        height:"auto"
+      } : [styles.button, style]}>
       {
         isGradient ? <LinearGradient
           style={[styles.button, style]}

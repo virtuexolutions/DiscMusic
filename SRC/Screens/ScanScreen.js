@@ -20,6 +20,7 @@ const ScanScreen = () => {
         style={styles.bg_container}>
           <CustomHeader 
           leftIcon={true}
+          showBack={true}
           text={"Search"} />
           <View style={styles.main}>
             <View style={styles.container}>

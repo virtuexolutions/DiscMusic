@@ -15,6 +15,7 @@ import PopularReleases from '../Components/PopularReleases'
 import FeaturingList from '../Components/FeaturingList'
 import FansLikedList from '../Components/FansLikedList'
 import ArtistAboutInfo from '../Components/ArtistAboutInfo'
+import MinimisedPlayer from '../Components/MinimisedPlayer'
 
 const ViewArtistLibrary = () => {
   return (
@@ -26,7 +27,10 @@ const ViewArtistLibrary = () => {
       <ImageBackground
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}>
-        <CustomHeader text={"Abhijeet"}
+        <CustomHeader 
+        leftIcon={true}
+        showBack={true}
+        text={"Abhijeet"}
           RightIcon={true}
           dots={true} />
         <ScrollView
@@ -90,6 +94,9 @@ const ViewArtistLibrary = () => {
           <ArtistAboutInfo/>
           <FansLikedList/>
         </ScrollView>
+        <MinimisedPlayer 
+        style={styles.player}
+        />
       </ImageBackground>
     </>
   )
@@ -125,6 +132,11 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent:"center",
     gap: scale(10)
+  },
+  player:{
+    paddingBottom:scale(20),
+    bottom:scale(30)
   }
 })

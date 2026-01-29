@@ -17,6 +17,7 @@ const SearchContainer = ({
   text,
   input,
   onPress,
+  placeholder,
   data='',
   setData=()=>{},
   style,
@@ -64,7 +65,7 @@ const SearchContainer = ({
             />
 
             <TextInput
-              placeholder="Search here"
+              placeholder= {placeholder ?? "Search here"}
               placeholderTextColor={Color.themeLightGray}
               numberOfLines={1}
               value={data}

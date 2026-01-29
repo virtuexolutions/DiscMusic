@@ -1,7 +1,7 @@
 import { StyleSheet, View, Animated } from 'react-native';
 import React from 'react';
 import Carousel from "react-native-reanimated-carousel";
-import { windowWidth } from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import CustomImage from './CustomImage';
 
 const ITEM_SIZE = 140;
@@ -11,7 +11,7 @@ const CarouselView = ({ data }) => {
         <View style={{ alignItems: "center" }}>
             <Carousel
                 width={windowWidth}
-                height={180}
+                height={windowHeight * 0.6}
                 data={data}
                 mode="parallax"
                 loop

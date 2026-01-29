@@ -72,18 +72,22 @@ const HomeScreen = () => {
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}
         imageStyle={styles.image}>
+          <CustomHeader leftIcon RightIcon 
+          dots
+          showBack={true}
+          />
         <ScrollView
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
-            alignSelf: 'center',
+            // alignSelf: 'center',
             alignItems: 'center',
+            paddingBottom:moderateScale(80,0.2)
           }}
           style={{
             width: '100%',
             flexGrow: 0,
           }}>
-          <CustomHeader leftIcon RightIcon />
           <View style={styles.container}>
             <TrendingView />
             <View style={styles.main_view}>
@@ -118,8 +122,11 @@ const HomeScreen = () => {
                 ]}>
                 Artist
               </CustomText>
+              
               <CarouselView data={artist} />
             </View>
+           
+        
           </View>
         </ScrollView>
       </ImageBackground>
@@ -213,6 +220,7 @@ const styles = ScaledSheet.create({
     marginLeft: moderateScale(6, 0.6),
   },
   main_view: {
+
     marginVertical: moderateScale(40, 0.6),
   },
   heading: {

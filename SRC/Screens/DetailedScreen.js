@@ -16,6 +16,7 @@ import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components
 import OtherLocation from '../Components/OtherLocation';
 import {mode} from 'native-base/lib/typescript/theme/tools';
 import MusicModal from '../Components/MusicModal';
+import MinimisedPlayer from '../Components/MinimisedPlayer';
 
 const DetailedScreen = () => {
     const rbRef = useRef(null)
@@ -69,7 +70,7 @@ const DetailedScreen = () => {
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
-            paddingBottom: moderateScale(50, 0.6),
+            paddingBottom: moderateScale(80, 0.6),
           }}
           style={styles.container}>
           <CustomHeader leftIcon text={''} subtext={''} />
@@ -329,6 +330,7 @@ const DetailedScreen = () => {
           </View>
         </ScrollView>
         <MusicModal rbRef={rbRef} />
+        <MinimisedPlayer/>
       </ImageBackground>
     </>
   );

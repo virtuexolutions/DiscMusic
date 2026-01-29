@@ -24,6 +24,8 @@ const CustomHeader = ({ leftIcon, RightIcon,
   search,
   dots,
   add,
+  premium,
+  rightIconComponent,
   titlStyle,
   text, style, text1, subtext }) => {
   const dispatch = useDispatch();
@@ -46,9 +48,15 @@ const CustomHeader = ({ leftIcon, RightIcon,
                 gradientColors={Color.themeBgColor}
                 iconSource={require("../Assets/Images/user-icon.png")}
               />
-              :
-              null
-
+              : premium ? <ThemeIconButton
+              onPress={() => {
+                // navigation.goBack();
+              }}
+              style={styles.premium}
+              iconColor={Color.black}
+              iconSource={require("../Assets/Images/shapes.png")}
+            />
+            : null
         )}
       <CustomText style={[styles.title, titlStyle]}>{text}</CustomText>
       {subtext && (
@@ -68,6 +76,10 @@ const CustomHeader = ({ leftIcon, RightIcon,
         {camera && (<ThemeIconButton
             iconSource={require("../Assets/Images/camera.png")}
             iconSize={scale(14)}
+            onPress={()=>{
+              console.log("first")
+              navigation.navigate("MusicCodeScreen")
+            }}
           />)}
            {search && <ThemeIconButton
             iconSource={require("../Assets/Images/search.png")}
@@ -99,12 +111,15 @@ const CustomHeader = ({ leftIcon, RightIcon,
         top: moderateScale(12, 0.3),
       }}
       onPress={() => {
-        dispatch(setUserLogOut());
-        dispatch(setUserLogoutAuth());
+        navigationService.navigate("Settings")
+        // dispatch(setUserLogOut());
+        // dispatch(setUserLogoutAuth());
       }}
     />
   </LinearGradient>
+
   }
+  { rightIconComponent && rightIconComponent }
         </View>
 
         : (
@@ -152,4 +167,9 @@ const styles = StyleSheet.create({
     color: Color.mediumGray,
     fontSize: moderateScale(10, 0.6),
   },
+  premium:{
+     backgroundColor:Color.white,
+     width:scale(30),
+     height:scale(30)
+  }
 });

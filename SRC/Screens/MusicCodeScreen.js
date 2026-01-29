@@ -8,7 +8,7 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import CustomText from '../Components/CustomText'
 import CustomButton from '../Components/CustomButton'
 
-const MusicCodeScreen = () => {
+const MusicCodeScreen = ({navigation}) => {
   return (
     <>
       <CustomStatusBar
@@ -55,7 +55,7 @@ const MusicCodeScreen = () => {
               width={windowWidth * 0.3}
               height={windowHeight * 0.065}
               // onPress={() => { setIsVisible(false) }}
-            //   onPress={() => navigationService.navigate('TabNavigation')}
+              onPress={() => navigation.goBack()}
               marginTop={moderateScale(20, 0.3)}
               borderRadius={windowWidth / 2}
               fontSize={moderateScale(16, 0.3)}
@@ -65,6 +65,9 @@ const MusicCodeScreen = () => {
                 gradientColors={["#016BB8", "#11A8FD"]}
                 shadowColor={Color.black}
               text={'Scan'}
+              onPress={()=>{
+                navigation.navigate("ScanScreen")
+              }}
               textColor={Color.white}
               width={windowWidth * 0.3}
               height={windowHeight * 0.065}

@@ -13,6 +13,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { moderateScale, scale } from "react-native-size-matters";
 import CustomText from "./CustomText";
 import Color from "../Assets/Utilities/Color";
+import CustomImage from "./CustomImage";
 
 const CustomButton = ({
   activeOpacity,
@@ -37,13 +38,17 @@ const CustomButton = ({
   textColor,
   textTransform,
   text,
+  iconComponent,
+  iconSource,
+  iconSize,
+  iconIsImage,
   isBold,
   disabled = false,
   alignSelf,
   elevation,
   shadowColor,
   gradientColors,
-
+  //  style,
   // value
 }) => {
   // const  = props;
@@ -96,7 +101,7 @@ const CustomButton = ({
       {disabled == false && isGradient ? (
         <View style={{ width: width, height: height, position: "relative" }}>
           <LinearGradient
-            style={{
+            style={[{
               flexDirection: "row",
               width: width,
               height: height,
@@ -111,7 +116,7 @@ const CustomButton = ({
               }, shadowOpacity: 0.15,
               shadowRadius: 8,
               elevation: 6,
-            }}
+            }, style]}
             colors={ gradientColors ??['#2A2E35', '#1D2025', '#171A1F']}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
@@ -123,6 +128,11 @@ const CustomButton = ({
                 color={loaderColor ? loaderColor : Color.white}
               />
             )}
+            {iconComponent && iconComponent}
+            {iconIsImage && <CustomImage
+            source={iconSource}
+            style={{width: iconSize, height: iconSize}}
+            /> }
             {iconName && (
               <Icon
                 name={iconName}

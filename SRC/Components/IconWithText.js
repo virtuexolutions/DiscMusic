@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Icon } from 'native-base'
 import CustomText from './CustomText'
@@ -8,7 +8,8 @@ import CustomImage from './CustomImage'
 
 const IconWithText = ({text="", 
     textStyle,
-    iconColor,iconName, iconType, iconSize, iconSource}) => {
+    iconColor,iconName, iconType, iconSize, iconSource,
+}) => {
    var icon;
    
    if(iconSource) {
@@ -25,13 +26,13 @@ const IconWithText = ({text="",
      />
    }
     return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container}>
     {icon}
         <CustomText
         style={[styles.text, textStyle]}
         children={text}
         />
-    </View>
+    </TouchableOpacity>
   )
 }
 

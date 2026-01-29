@@ -8,6 +8,7 @@ import { windowHeight, windowWidth } from '../Utillity/utils'
 import CustomImage from '../Components/CustomImage'
 import CustomText from '../Components/CustomText'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
+import MinimisedPlayer from '../Components/MinimisedPlayer'
 
 const SearchScreen = () => {
   const [search, setSearch] = useState("");
@@ -144,6 +145,7 @@ const SearchScreen = () => {
         style={styles.bg_container}>
           <CustomHeader text={"Search"} RightIcon={true} camera={true}/>
           <SearchContainer
+          placeholder={"What do you want to listen to?"}
           data={search}
           setData={setSearch}
           input/>
@@ -163,6 +165,7 @@ const SearchScreen = () => {
             );
           }}
           />
+          <MinimisedPlayer/>
         </ImageBackground>
         </>
   )

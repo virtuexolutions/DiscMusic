@@ -13,6 +13,8 @@ import { Avatar } from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient'
 import ThemeIconButton from '../Components/ThemeIconButton'
+import MinimisedPlayer from '../Components/MinimisedPlayer'
+import { useNavigation } from '@react-navigation/native'
 
 const YourLibrary = () => {
   const array = [
@@ -51,6 +53,7 @@ const YourLibrary = () => {
           RightIcon={true}
           search={true}
           add={true} />
+
 <View style={styles.row}>
         <CustomButton
           isGradient
@@ -80,7 +83,7 @@ const YourLibrary = () => {
         data={[...array, ...actions]}
         keyExtractor={item => item}
         contentContainerStyle={{
-          marginTop:verticalScale(20),
+          marginTop:verticalScale(5),
           paddingBottom:scale(50),
           gap:verticalScale(10)
         }}
@@ -92,6 +95,7 @@ const YourLibrary = () => {
           );
         }}
         />
+        <MinimisedPlayer/>
       </ImageBackground>
     </>
   )
@@ -100,11 +104,14 @@ const YourLibrary = () => {
 const ArtistCard = ({
   item
 }) =>{
+  const navigation=useNavigation();
   const isCreate = ['add'].includes(item.id);
   return (
     <TouchableOpacity
     style={[styles.card, isCreate && {overflow:"visible"}]}
-    onPress={isCreate ? item?.onPress : ()=>{}}
+    onPress={isCreate ? item?.onPress : ()=>{
+      navigation.navigate("ViewArtistLibrary")
+    }}
   >
 {isCreate ? <ThemeIconButton
  isGradient={true}
@@ -170,7 +177,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: scale(20),
     width: windowWidth,
-    paddingVertical: verticalScale(18)
+    paddingVertical: verticalScale(10)
   },
   text1: {
     fontSize: moderateScale(14, 0.2),

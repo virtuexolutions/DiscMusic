@@ -12,6 +12,7 @@ import {windowHeight, windowWidth} from '../Utillity/utils';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
+import MinimisedPlayer from '../Components/MinimisedPlayer';
 
 const Notification = () => {
   const rbRef = useRef(null);
@@ -93,7 +94,7 @@ const Notification = () => {
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
-            paddingBottom: moderateScale(50, 0.6),
+            paddingBottom: moderateScale(80, 0.6),
           }}
           style={styles.container}>
 
@@ -214,6 +215,7 @@ const Notification = () => {
             }}
           />
         </ScrollView>
+        <MinimisedPlayer/>
       </ImageBackground>
     </>
   );
