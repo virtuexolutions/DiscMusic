@@ -87,6 +87,7 @@ const Notification = () => {
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}
         imageStyle={styles.image}>
+          <CustomHeader leftIcon text={'notifications'} subtext={''} />
         <ScrollView
           scrollEnabled={true}
           showsVerticalScrollIndicator={false}
@@ -95,7 +96,6 @@ const Notification = () => {
             paddingBottom: moderateScale(50, 0.6),
           }}
           style={styles.container}>
-          <CustomHeader leftIcon text={'notifications'} subtext={''} />
 
           <CustomText isBold style={[styles.title]}>
             what’s new

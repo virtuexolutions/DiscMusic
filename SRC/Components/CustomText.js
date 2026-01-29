@@ -2,8 +2,8 @@ import React from "react";
 import { Text } from "react-native";
 import Color from "../Assets/Utilities/Color";
 
-const CustomText = (props) => {
-  const { children, numberOfLines, style, isBold, onPress } = props;
+const CustomText = ({ children, numberOfLines, style, isBold, onPress }) => {
+  
   return (
     <Text
       onPress={onPress}

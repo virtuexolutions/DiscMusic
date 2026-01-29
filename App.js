@@ -21,10 +21,12 @@ import {
   requestWritePermission,
 } from './SRC/Utillity/utils';
 import AppNavigator from './SRC/appNavigation';
+
 const App = () => {
   LogBox.ignoreLogs([
     'Warning: ...',
     'VirtualizedLists should never be nested',
+    'NativeBase:'
   ]);
   LogBox.ignoreAllLogs();
   return (
@@ -58,7 +60,7 @@ const MainContainer = () => {
 
   const [isloading] = useloader(true);
   if (isloading == true) {
-    return <SplashScreen />;
+    // return <SplashScreen 
   }
 
   return <AppNavigator />;
