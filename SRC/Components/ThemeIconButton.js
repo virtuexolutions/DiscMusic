@@ -48,9 +48,7 @@ const ThemeIconButton = ({
   
   return (
     <TouchableOpacity
-      onPress={()=>{
-        console.log("first")
-      }}
+      onPress={onPress}
       // activeOpacity={0.4}
       style={isGradient ? {
         width:"auto",

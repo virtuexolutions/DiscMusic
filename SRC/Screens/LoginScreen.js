@@ -96,7 +96,7 @@ const LoginScreen = () => {
               width={windowWidth * 0.9}
               height={windowHeight * 0.07}
               // onPress={() => { setIsVisible(false) }}
-              onPress={() => navigationService.navigate('TabNavigation')}
+              onPress={() => navigationService.navigate('Profile')}
               marginTop={moderateScale(20, 0.3)}
               borderRadius={windowWidth / 2}
               fontSize={moderateScale(16, 0.3)}

@@ -10,6 +10,7 @@ import { windowWidth } from '../Utillity/utils';
 import CustomText from './CustomText';
 import SongListTile from './SongListTile';
 import SearchContainer from './SearchContainer';
+import navigationService from '../navigationService';
 
 const PlayList = ({ data }) => {
     const [search, setSearch] = useState("");
@@ -83,6 +84,9 @@ placeholder={"Find in Playlist"}
             renderItem={({ item, index }) => {
                 return (
                     <SongListTile
+                    onPress={()=>{
+                        navigationService.navigate("PlaylistScreen")
+                    }}
                     image={item?.image}
                     title={item?.title}
                     subtitle={item?.type}

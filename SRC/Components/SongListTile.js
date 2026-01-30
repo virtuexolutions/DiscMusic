@@ -11,10 +11,13 @@ const SongListTile = ({
     showMoreOption=false,
     image,
     title,
-    subtitle
+    subtitle,
+    onPress
 }) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity 
+    onPress={onPress}
+    style={styles.container}>
     <View style={styles.imageContainer}>
       <CustomImage 
       source={image}

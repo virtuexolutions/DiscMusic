@@ -156,7 +156,9 @@ const RecentlyPlayed = () => {
             paddingBottom: moderateScale(80, 0.6),
           }}
           style={styles.container}>
-          <CustomHeader leftIcon text={'Recently Played'} subtext={''} />
+          <CustomHeader leftIcon 
+          showBack
+          text={'Recently Played'} subtext={''} />
           <CustomText isBold style={[styles.title]}>
             yesterday
           </CustomText>

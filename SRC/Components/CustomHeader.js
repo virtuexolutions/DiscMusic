@@ -8,6 +8,7 @@ import { Icon } from 'native-base';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import navigationService from '../navigationService';
 import { useNavigation } from '@react-navigation/native';
 import { setUserLogOut } from '../Store/slices/common';
@@ -24,6 +25,7 @@ const CustomHeader = ({ leftIcon, RightIcon,
   search,
   dots,
   add,
+  notifications,
   premium,
   rightIconComponent,
   titlStyle,
@@ -77,8 +79,8 @@ const CustomHeader = ({ leftIcon, RightIcon,
             iconSource={require("../Assets/Images/camera.png")}
             iconSize={scale(14)}
             onPress={()=>{
-              console.log("first")
               navigation.navigate("MusicCodeScreen")
+              console.log("first")
             }}
           />)}
            {search && <ThemeIconButton
@@ -88,6 +90,14 @@ const CustomHeader = ({ leftIcon, RightIcon,
           {add && <ThemeIconButton
             iconName={"plus"}
             iconType={Feather}
+            iconSize={scale(14)}
+          />}
+          {notifications && <ThemeIconButton
+            iconName={"bell-alt"}
+            iconType={Fontisto}
+            onPress={()=>{
+              navigation.navigate("Notification")
+            }}
             iconSize={scale(14)}
           />}
           {dots &&  <LinearGradient

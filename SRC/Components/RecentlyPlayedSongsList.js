@@ -4,6 +4,7 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { windowWidth } from '../Utillity/utils';
 import CustomText from './CustomText';
 import ArtistCard from './ArtistCard';
+import navigationService from '../navigationService';
 
 const RecentlyPlayedSongsList = () => {
     const data = [
@@ -74,6 +75,9 @@ const RecentlyPlayedSongsList = () => {
     renderItem={({item, index}) =>{
       return (
         <ArtistCard
+        onPress={()=>{
+          navigationService.navigate("RecentlyPlayed")
+        }}
            image={item.image}
            title={item.title}
            key={item.id}

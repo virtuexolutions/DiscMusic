@@ -73,7 +73,9 @@ const DetailedScreen = () => {
             paddingBottom: moderateScale(80, 0.6),
           }}
           style={styles.container}>
-          <CustomHeader leftIcon text={''} subtext={''} />
+          <CustomHeader leftIcon 
+          showBack
+          text={''} subtext={''} />
 
           <View
             style={{

@@ -13,6 +13,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
+import navigationService from '../navigationService';
 
 const Notification = () => {
   const rbRef = useRef(null);
@@ -88,7 +89,9 @@ const Notification = () => {
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}
         imageStyle={styles.image}>
-          <CustomHeader leftIcon text={'notifications'} subtext={''} />
+          <CustomHeader leftIcon  
+          showBack={true}
+          text={'notifications'} subtext={''} />
         <ScrollView
           scrollEnabled={true}
           showsVerticalScrollIndicator={false}
@@ -143,7 +146,11 @@ const Notification = () => {
             data={musicList}
             renderItem={({item, index}) => {
               return (
-                <View style={styles.card_con}>
+                <TouchableOpacity 
+                onPress={()=>{
+                  navigationService.navigate("RecentlyPlayed")
+                }}
+                style={styles.card_con}>
                   <View style={styles.card_image}>
                     <CustomImage
                       style={{height: '100%', width: '100%'}}
@@ -210,7 +217,7 @@ const Notification = () => {
                       {item?.artist}
                     </CustomText>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             }}
           />

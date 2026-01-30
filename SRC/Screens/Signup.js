@@ -14,6 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CustomButton from '../Components/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Checkbox from '../Components/CustomCheckbox';
+import navigationService from '../navigationService';
 const SignupScreen = () => {
   const [agree, setAgree] = useState(false);
 
@@ -203,6 +204,9 @@ const SignupScreen = () => {
                 Already Have an account?
               </CustomText>
               <CustomText
+              onPress={()=>{
+                navigationService.navigate("LoginScreen")
+              }}
                 style={[
                   styles.text_1,
                   {color: Color.veryLightGray, textAlign: 'left'},

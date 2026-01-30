@@ -6,14 +6,16 @@ import CustomImage from './CustomImage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { moderateScale, scale } from 'react-native-size-matters';
 import navigationService from '../navigationService';
+import { useNavigation } from '@react-navigation/native';
 
 const ITEM_SIZE = 140;
 const SIDE_SIZE = 90;
 const CarouselView = ({ data=[
     require("../Assets/Images/event_1.png"),
     require("../Assets/Images/event_2.png"),
-    require("../Assets/Images/event_2.png"),
+    require("../Assets/Images/event3.png"),
 ] }) => {
+    const navigation = useNavigation();
     return (
         <GestureHandlerRootView>
 
@@ -65,13 +67,18 @@ const CarouselView = ({ data=[
                     return (
                         <TouchableOpacity
                         onPress={()=>{
-                            navigationService.navigate("MusicPlayerScreen");
+                            console.log("first")
+                            navigation.navigate("MusicPlayerScreen");
                         }}
                         style={
                             styles.circleContainer
                         }
                         >
                             <CustomImage
+                        onPress={()=>{
+                            console.log("first")
+                            navigation.navigate("MusicPlayerScreen");
+                        }}
                                 source={item}
                                 style={{
                                     width:"100%",

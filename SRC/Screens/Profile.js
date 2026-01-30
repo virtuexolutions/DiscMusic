@@ -45,7 +45,9 @@ const Profile = () => {
             flexGrow: 0,
           }}>
           <View style={styles.container}>
-            <CustomHeader leftIcon RightIcon 
+            <CustomHeader leftIcon 
+            
+            RightIcon 
                         showBack={true}
                         dots={true}
             />

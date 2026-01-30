@@ -34,6 +34,7 @@ import ReviewYourPlan from './Screens/ReviewYourPlan';
 import MusicDetailsScreen from './Screens/MusicDetailsScreen';
 import GetStarted from './Screens/GetStarted';
 import MusicPlayerScreen from './Screens/MusicPlayerScreen';
+import Profile from './Screens/Profile';
 
 const AppNavigator = () => {
   const isGoalCreated = useSelector(state => state.authReducer.isGoalCreated);
@@ -57,7 +58,7 @@ const AppNavigator = () => {
     return (
       <NavigationContainer ref={navigationService.navigationRef}>
         <RootNav.Navigator
-          initialRouteName={'HomeScreen'}
+          initialRouteName={'GetStarted'}
           // initialRouteName={firstScreen}
           screenOptions={{headerShown: false}}>
           <RootNav.Screen name="GetStarted" component={GetStarted} />
@@ -77,6 +78,7 @@ const AppNavigator = () => {
           <RootNav.Screen name="MusicCodeScreen" component={MusicCodeScreen} />
           <RootNav.Screen name="RecentlyPlayed" component={RecentlyPlayed} />
           <RootNav.Screen name="Notification" component={Notification} />
+          <RootNav.Screen name="Profile" component={Profile} />
 
           <RootNav.Screen name="ReviewYourPlan" component={ReviewYourPlan} />
           {/* <RootNav.Screen name="YourLibrary" component={YourLibrary} /> */}

@@ -9,6 +9,7 @@ import CustomImage from '../Components/CustomImage'
 import CustomText from '../Components/CustomText'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import MinimisedPlayer from '../Components/MinimisedPlayer'
+import { useNavigation } from '@react-navigation/native'
 
 const SearchScreen = () => {
   const [search, setSearch] = useState("");
@@ -171,8 +172,11 @@ const SearchScreen = () => {
   )
 }
  function CategoryComponent({item}) {
+  const navigation = useNavigation();
   return (
-    <TouchableOpacity style={styles.category} onPress={()=>{}}>
+    <TouchableOpacity style={styles.category} onPress={()=>{
+      navigation.navigate("MusicDetailsScreen")
+    }}>
       <View style={styles.imageContainer}>
       <CustomImage source={item.image} style={[styles.image, {resizeMode: 'cover'}]}/>
       </View>

@@ -27,7 +27,7 @@ import AboutInfo from '../Components/AboutInfo';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
 import navigationService from '../navigationService';
 
-const Settings = () => {
+const Settings = ({navigation}) => {
   const [audioQuality, setAudioQuality] = useState(false)
   const playBackSettings = [
     {
@@ -98,6 +98,8 @@ const Settings = () => {
         imageStyle={styles.image}>
           <CustomHeader 
           showBack
+          RightIcon={true}
+          notifications={true}
           leftIcon text={'Settings'} subtext={''} />
         <ScrollView
           scrollEnabled={true}
@@ -236,10 +238,17 @@ const Settings = () => {
             style={styles.label} 
             text={"Other"}
             />
+            <TouchableOpacity 
+            onPress={()=>{
+              navigation.navigate("LoginScreen")
+            }}
+            >
+
             <TitleWithDescription
             title='Log Out'
             description='You are logged in as suchir'
             />
+            </TouchableOpacity>
             </View>
 </ScrollView>
 <MinimisedPlayer

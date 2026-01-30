@@ -15,7 +15,7 @@ import navigationService from '../navigationService';
 const EventCard = ({data}) => {
   return (
     <TouchableOpacity
-      onPress={() => navigationService.navigate('PlaylistScreen')}>
+      onPress={() => navigationService.navigate('EventScreen')}>
       <ImageBackground
         source={data?.image}
         style={styles.card_view}

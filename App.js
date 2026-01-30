@@ -60,10 +60,13 @@ const MainContainer = () => {
 
   const [isloading] = useloader(true);
   if (isloading == true) {
-    // return <SplashScreen 
+    return <SplashScreen />
+    // return <SplashScreen />
   }
-
+  
+  // return <SplashScreen />
   return <AppNavigator />;
+
   // return <PostLoadScreen />
 };
 

@@ -7,6 +7,7 @@ import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import {windowHeight, windowWidth} from '../Utillity/utils';
+import navigationService from '../navigationService';
 
 const GetStarted = () => {
   return (
@@ -68,7 +69,9 @@ const GetStarted = () => {
             width={windowWidth * 0.9}
             height={windowHeight * 0.08}
             marginTop={moderateScale(40, 0.3)}
-            onPress={() => {}}
+            onPress={() => {
+              navigationService.navigate("LoginScreen")
+            }}
             borderRadius={moderateScale(30, 0.3)}
             isGradient
           />
