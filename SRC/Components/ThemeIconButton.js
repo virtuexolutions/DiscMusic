@@ -41,8 +41,8 @@ const ThemeIconButton = ({
       as={type}
       name={icon}
       onPress={onPress}
-      size={moderateScale(20, 0.6)}
-      color={Color.white}
+      size={iconSize ?? moderateScale(20, 0.6)}
+      color={iconColor ?? Color.white}
     />
   }
   
