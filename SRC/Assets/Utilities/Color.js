@@ -27,10 +27,13 @@ export default Color = {
   themePink: '#F84569',
   themeColor1: '#52C4BF',
 
+  themeGray:"#7F8489",
+
   themeDarkGray: '#535353',
   themeLightGray: '#8D8D8D',
   themeBlack: '#3A3838',
   themebgBusinessQbidder: ['#CD5C5C', '#7E191B'],
+  themeGradient: [""],
   //gradientColors
   themeBgColor: ['#2F353A', '#1C1F22',],
   themeBgColorNegotiator: ['#0D668E', '#00ADEF'],
