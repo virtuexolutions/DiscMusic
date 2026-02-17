@@ -10,6 +10,7 @@ export default function CustomStatusBar(props) {
 
   const isGradient = Array.isArray(backgroundColor);
   const StatusBarHeight = StatusBar.currentHeight;
+  console.log("StatusBarHeight  ", StatusBarHeight)
   return (
     <>
       {isGradient ? (

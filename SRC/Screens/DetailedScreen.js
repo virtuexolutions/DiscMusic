@@ -16,6 +16,7 @@ import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components
 import OtherLocation from '../Components/OtherLocation';
 import {mode} from 'native-base/lib/typescript/theme/tools';
 import MusicModal from '../Components/MusicModal';
+import MinimisedPlayer from '../Components/MinimisedPlayer';
 
 const DetailedScreen = () => {
     const rbRef = useRef(null)
@@ -69,10 +70,12 @@ const DetailedScreen = () => {
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
-            paddingBottom: moderateScale(50, 0.6),
+            paddingBottom: moderateScale(80, 0.6),
           }}
           style={styles.container}>
-          <CustomHeader leftIcon text={''} subtext={''} />
+          <CustomHeader leftIcon 
+          showBack
+          text={''} subtext={''} />
 
           <View
             style={{
@@ -286,7 +289,7 @@ const DetailedScreen = () => {
             {musicData?.map((item, index) => {
               return (
                 <TouchableOpacity onPress={() =>{
-                    // rbRef.current.open()
+                    rbRef.current.open()
                 }}   style={styles.card_con}>
                   <View style={styles.card_image}>
                     <CustomImage
@@ -329,6 +332,7 @@ const DetailedScreen = () => {
           </View>
         </ScrollView>
         <MusicModal rbRef={rbRef} />
+        <MinimisedPlayer/>
       </ImageBackground>
     </>
   );

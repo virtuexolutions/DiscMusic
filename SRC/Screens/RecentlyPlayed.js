@@ -13,6 +13,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
 import RecentCard from '../Components/RecentCard';
+import MinimisedPlayer from '../Components/MinimisedPlayer';
 
 const RecentlyPlayed = () => {
   const rbRef = useRef(null);
@@ -152,10 +153,12 @@ const RecentlyPlayed = () => {
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
-            paddingBottom: moderateScale(50, 0.6),
+            paddingBottom: moderateScale(80, 0.6),
           }}
           style={styles.container}>
-          <CustomHeader leftIcon text={'Recently Played'} subtext={''} />
+          <CustomHeader leftIcon 
+          showBack
+          text={'Recently Played'} subtext={''} />
           <CustomText isBold style={[styles.title]}>
             yesterday
           </CustomText>
@@ -219,6 +222,7 @@ const RecentlyPlayed = () => {
             }}
           />
         </ScrollView>
+        <MinimisedPlayer/>
       </ImageBackground>
     </>
   );

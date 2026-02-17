@@ -63,6 +63,7 @@ const AboutArtist = () => {
           }}>
           <CustomHeader
             leftIcon
+            showBack
             //   RightIcon
             text={'oliver tree'}
             subtext={''}

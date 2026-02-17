@@ -58,6 +58,8 @@ const PlaylistScreen = () => {
             <CustomHeader
               leftIcon
               RightIcon
+              showBack={true}
+              dots={true}
               text1={'playing from playlist'}
               subtext={'Mega hit mix'}
             />

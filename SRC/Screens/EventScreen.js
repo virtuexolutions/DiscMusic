@@ -14,6 +14,7 @@ import {windowHeight, windowWidth} from '../Utillity/utils';
 import {Circle} from 'react-native-svg';
 import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
 import OtherLocation from '../Components/OtherLocation';
+import MinimisedPlayer from '../Components/MinimisedPlayer';
 
 const EventScreen = () => {
   const [countryCode, setCountryCode] = useState('ID'); // For flag
@@ -81,10 +82,12 @@ const EventScreen = () => {
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
-            paddingBottom: moderateScale(50, 0.6),
+            paddingBottom: moderateScale(80, 0.6),
           }}
           style={styles.container}>
-          <CustomHeader leftIcon text={'Oliver tree'} subtext={''} />
+          <CustomHeader leftIcon 
+          showBack={true}
+          text={'Oliver tree'} subtext={''} />
 
           <View
             style={{
@@ -126,6 +129,7 @@ const EventScreen = () => {
             return <OtherLocation item={item} />;
           })}
         </ScrollView>
+        <MinimisedPlayer/>
       </ImageBackground>
     </>
   );

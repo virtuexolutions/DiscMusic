@@ -12,6 +12,7 @@ import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import {windowHeight, windowWidth} from '../Utillity/utils';
+import navigationService from '../navigationService';
 
 const Profile = () => {
   const [countryCode, setCountryCode] = useState('ID'); // For flag
@@ -44,7 +45,12 @@ const Profile = () => {
             flexGrow: 0,
           }}>
           <View style={styles.container}>
-            <CustomHeader leftIcon RightIcon />
+            <CustomHeader leftIcon 
+            
+            RightIcon 
+                        showBack={true}
+                        dots={true}
+            />
             <View style={styles.image_con}>
               <CustomImage
                 style={{
@@ -243,7 +249,7 @@ const Profile = () => {
               width={windowWidth * 0.9}
               height={windowHeight * 0.07}
               onPress={() => {
-                // setIsVisible(false);
+                navigationService.navigate("TabNavigation")                
               }}
               bgColor={Color.lightGrey}
               marginTop={windowHeight * 0.1}

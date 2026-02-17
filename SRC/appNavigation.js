@@ -26,6 +26,15 @@ import EventScreen from './Screens/EventScreen';
 import DetailedScreen from './Screens/DetailedScreen';
 import Notification from './Screens/Notification';
 import RecentlyPlayed from './Screens/RecentlyPlayed';
+import Settings from './Screens/Setting';
+import MusicCodeScreen from './Screens/MusicCodeScreen';
+import ScanScreen from './Screens/ScanScreen';
+import ViewArtistLibrary from './Screens/ViewArtistLibrary';
+import ReviewYourPlan from './Screens/ReviewYourPlan';
+import MusicDetailsScreen from './Screens/MusicDetailsScreen';
+import GetStarted from './Screens/GetStarted';
+import MusicPlayerScreen from './Screens/MusicPlayerScreen';
+import Profile from './Screens/Profile';
 
 const AppNavigator = () => {
   const isGoalCreated = useSelector(state => state.authReducer.isGoalCreated);
@@ -49,20 +58,33 @@ const AppNavigator = () => {
     return (
       <NavigationContainer ref={navigationService.navigationRef}>
         <RootNav.Navigator
-          initialRouteName={'Notification'}
+          initialRouteName={'GetStarted'}
           // initialRouteName={firstScreen}
           screenOptions={{headerShown: false}}>
+          <RootNav.Screen name="GetStarted" component={GetStarted} />
           <RootNav.Screen name="Walkthrough" component={Walkthrough} />
           <RootNav.Screen name="LoginScreen" component={LoginScreen} />
           <RootNav.Screen name="SignupScreen" component={SignupScreen} />
           <RootNav.Screen name="TabNavigation" component={TabNavigation} />
           <RootNav.Screen name="PlaylistScreen" component={PlaylistScreen} />
+          <RootNav.Screen name="MusicDetailsScreen" component={MusicDetailsScreen} />
+          
+          <RootNav.Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
+
           <RootNav.Screen name="AboutArtist" component={AboutArtist} />
           <RootNav.Screen name="EventScreen" component={EventScreen} />
-        
+          <RootNav.Screen name = "HomeScreen" component={HomeScreen}/> 
           <RootNav.Screen name="DetailedScreen" component={DetailedScreen} />
+          <RootNav.Screen name="MusicCodeScreen" component={MusicCodeScreen} />
           <RootNav.Screen name="RecentlyPlayed" component={RecentlyPlayed} />
           <RootNav.Screen name="Notification" component={Notification} />
+          <RootNav.Screen name="Profile" component={Profile} />
+
+          <RootNav.Screen name="ReviewYourPlan" component={ReviewYourPlan} />
+          {/* <RootNav.Screen name="YourLibrary" component={YourLibrary} /> */}
+          <RootNav.Screen name="ViewArtistLibrary" component={ViewArtistLibrary} />
+          <RootNav.Screen name="Settings" component={Settings} />
+          <RootNav.Screen name="ScanScreen" component={ScanScreen} />
         </RootNav.Navigator>
       </NavigationContainer>
     );

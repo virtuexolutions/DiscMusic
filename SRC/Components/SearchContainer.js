@@ -1,14 +1,15 @@
-import {View, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity, TextInput} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import {moderateScale, ScaledSheet, verticalScale} from 'react-native-size-matters';
 import CustomText from './CustomText';
 import Constants from '../Assets/Utilities/Constants';
 import Color from '../Assets/Utilities/Color';
 import TextInputWithTitle from './TextInputWithTitle';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Icon} from 'native-base';
-import {TextInput} from 'react-native-gesture-handler';
+// import {TextInput} from 'react-native-gesture-handler';
 import {windowHeight, windowWidth} from '../Utillity/utils';
+import LinearGradient from 'react-native-linear-gradient';
 // import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const SearchContainer = ({
@@ -16,15 +17,17 @@ const SearchContainer = ({
   text,
   input,
   onPress,
-  data,
-  setData,
+  placeholder,
+  data='',
+  setData=()=>{},
   style,
   places,
   inputStyle,
 }) => {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
-      <View
+      <LinearGradient 
+       colors={Color.themeGradient}
         style={[
           styles.container,
           width && {width: width},
@@ -62,7 +65,7 @@ const SearchContainer = ({
             />
 
             <TextInput
-              placeholder="Search here"
+              placeholder= {placeholder ?? "Search here"}
               placeholderTextColor={Color.themeLightGray}
               numberOfLines={1}
               value={data}
@@ -94,32 +97,33 @@ const SearchContainer = ({
             </CustomText>
           </>
         )}
-      </View>
+      </LinearGradient>
     </TouchableOpacity>
   );
 };
 
 const styles = ScaledSheet.create({
   container: {
+    width:windowWidth * 0.8,
+    paddingVertical:verticalScale(2),
     // flexGrow: 0,
     flexDirection: 'row',
     // justifyContent: "space-between",
     marginTop: moderateScale(10, 0.3),
-    borderWidth: 0.5,
-    borderColor: Color.lightGrey,
-    backgroundColor: Color.white,
-    borderRadius: moderateScale(5, 0.3),
-    paddingVertical: moderateScale(8, 0.3),
-    paddingHorizontal: moderateScale(10, 0.3),
-    shadowColor: '#000',
+    // borderWidth: 0.5,
+    // borderColor: Color.lightGrey,
+    // backgroundColor: Color.white,
+    borderRadius: moderateScale(40, 0.3),
+    paddingHorizontal: moderateScale(20, 0.3),
+    shadowColor: '#fff',
     shadowOffset: {
-      width: 0,
-      height: 2,
+      width: 10,
+      height: 20,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowRadius: 40,
 
-    elevation: 5,
+    elevation: 10,
     alignItems: 'center',
   },
 });

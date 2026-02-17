@@ -1,16 +1,21 @@
 import {View} from 'native-base';
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import {moderateScale} from 'react-native-size-matters';
 
 import Color from '../Assets/Utilities/Color';
 import CustomText from '../Components/CustomText';
 
 import {windowWidth} from '../Utillity/utils';
+import navigationService from '../navigationService';
 
 const OtherLocation = ({item}) => {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity 
+    onPress={()=>{
+      navigationService.navigate("DetailedScreen")
+    }}
+    style={styles.card}>
       <View style={styles.Circle}>
         <CustomText
           style={{
@@ -40,7 +45,7 @@ const OtherLocation = ({item}) => {
           {item?.details}
         </CustomText>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

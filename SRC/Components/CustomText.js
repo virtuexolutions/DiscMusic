@@ -2,11 +2,12 @@ import React from "react";
 import { Text } from "react-native";
 import Color from "../Assets/Utilities/Color";
 
-const CustomText = (props) => {
-  const { children, numberOfLines, style, isBold, onPress } = props;
+const CustomText = ({ children, numberOfLines, style, isBold, onPress, ellipsizeMode }) => {
+  
   return (
     <Text
       onPress={onPress}
+      ellipsizeMode={ellipsizeMode}
       style={[
         {
           textTransform: "capitalize",

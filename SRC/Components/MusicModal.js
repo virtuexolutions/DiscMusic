@@ -8,7 +8,6 @@ import Color from '../Assets/Utilities/Color';
 import {windowHeight, windowWidth} from '../Utillity/utils';
 import CustomImage from './CustomImage';
 import CustomText from './CustomText';
-import {color} from 'native-base/lib/typescript/theme/styled-system';
 
 const MusicModal = ({item, setRef, rbRef}) => {
   const data = [

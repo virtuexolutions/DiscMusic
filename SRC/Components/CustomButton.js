@@ -13,43 +13,52 @@ import LinearGradient from "react-native-linear-gradient";
 import { moderateScale, scale } from "react-native-size-matters";
 import CustomText from "./CustomText";
 import Color from "../Assets/Utilities/Color";
+import CustomImage from "./CustomImage";
 
-const CustomButton = (props) => {
-  const {
-    activeOpacity,
-    onPress,
-    width,
-    height,
-    bgColor,
-    borderWidth,
-    borderColor,
-    marginTop,
-    marginBottom,
-    justifyContent,
-    borderRadius,
-    isGradient,
-    fontSize,
-    loader,
-    loaderColor,
-    iconName,
-    iconType,
-    iconStyle,
-    textColor,
-    textTransform,
-    text,
-    isBold,
-    disabled = false,
-    alignSelf,
-    elevation
-
-    // value
-  } = props;
+const CustomButton = ({
+  activeOpacity,
+  onPress,
+  width,
+  height,
+  style,
+  bgColor,
+  borderWidth,
+  borderColor,
+  marginTop,
+  marginBottom,
+  justifyContent,
+  borderRadius,
+  isGradient,
+  fontSize,
+  loader,
+  loaderColor,
+  iconName,
+  iconType,
+  iconStyle,
+  textColor,
+  textTransform,
+  text,
+  iconComponent,
+  iconSource,
+  iconSize,
+  iconIsImage,
+  isBold,
+  disabled = false,
+  alignSelf,
+  elevation,
+  shadowColor,
+  gradientColors,
+  //  style,
+  // value
+}) => {
+  // const  = props;
   return (
     <TouchableOpacity
       activeOpacity={activeOpacity ? activeOpacity : 0.9}
       onPress={onPress}
       style={[
         styles.mainBtn,
+        style,
         {
           width: width,
           height: height,
@@ -59,7 +68,7 @@ const CustomButton = (props) => {
           marginBottom: marginBottom || 0,
         },
         elevation && {
-          shadowColor: Color.themeColor,
+          shadowColor: shadowColor ?? Color.themeColor,
           shadowOffset: {
             width: 0,
             height: 4,
@@ -92,7 +101,7 @@ const CustomButton = (props) => {
       {disabled == false && isGradient ? (
         <View style={{ width: width, height: height, position: "relative" }}>
           <LinearGradient
-            style={{
+            style={[{
               flexDirection: "row",
               width: width,
               height: height,
@@ -100,15 +109,15 @@ const CustomButton = (props) => {
               justifyContent: "center",
               overflow: "hidden",
               borderRadius: width / 2,
-              shadowColor: '#FFFFFF',
+              shadowColor: shadowColor ?? '#FFFFFF',
               shadowOffset: {
                 width: 0,
                 height: 10,
               }, shadowOpacity: 0.15,
               shadowRadius: 8,
               elevation: 6,
-            }}
-            colors={['#2A2E35', '#1D2025', '#171A1F']}
+            }, style]}
+            colors={ gradientColors ??['#2A2E35', '#1D2025', '#171A1F']}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
           >
@@ -119,6 +128,11 @@ const CustomButton = (props) => {
                 color={loaderColor ? loaderColor : Color.white}
               />
             )}
+            {iconComponent && iconComponent}
+            {iconIsImage && <CustomImage
+            source={iconSource}
+            style={{width: iconSize, height: iconSize}}
+            /> }
             {iconName && (
               <Icon
                 name={iconName}
