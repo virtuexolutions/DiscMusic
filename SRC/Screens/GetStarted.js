@@ -8,8 +8,19 @@ import CustomText from '../Components/CustomText';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import {windowHeight, windowWidth} from '../Utillity/utils';
 import navigationService from '../navigationService';
+import {useDispatch, useSelector} from 'react-redux';
+import {setWalkThrough} from '../Store/slices/auth';
 
 const GetStarted = () => {
+  const isProfileCreated = useSelector(state => state.commonReducer.isProfile);
+  const token = useSelector(state => state.authReducer.token);
+  const dispatch = useDispatch()
+
+  // const firstScreen = [null, '', undefined].includes(token)
+  //   ? 'LoginScreen'
+  //   : isProfileCreated == null
+  //   ? 'Profile'
+  //   : 'TabNavigation';
   return (
     <ScreenBoiler
       statusBarBackgroundColor={Color.themeColor}
@@ -70,7 +81,9 @@ const GetStarted = () => {
             height={windowHeight * 0.08}
             marginTop={moderateScale(40, 0.3)}
             onPress={() => {
-              navigationService.navigate("LoginScreen")
+              dispatch(setWalkThrough(true));
+              // console.log('first ==================== >>>>>>>>>>true')
+              // navigationService.navigate(firstScreen);
             }}
             borderRadius={moderateScale(30, 0.3)}
             isGradient

@@ -46,6 +46,7 @@ const initialState = {
   ],
   selectedRole: '',
   location: '',
+  isProfile: 0,
 };
 
 const CommonSlice = createSlice({
@@ -82,6 +83,10 @@ const CommonSlice = createSlice({
     setBidDetail(state, action) {
       state.bidDetail = action.payload;
     },
+    setProfileCreated(state, action) {
+      state.isProfile = action.payload;
+      console.log('🚀 ~ action.payload:', action.payload);
+    },
   },
 });
 
@@ -95,6 +100,7 @@ export const {
   setSelectedRole,
   setLocation,
   setBidDetail,
+  setProfileCreated,
 } = CommonSlice.actions;
 
 export default CommonSlice.reducer;

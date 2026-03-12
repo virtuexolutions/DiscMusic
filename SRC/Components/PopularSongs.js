@@ -9,59 +9,61 @@ import Color from '../Assets/Utilities/Color';
 import { windowWidth } from '../Utillity/utils';
 import CustomText from './CustomText';
 import SongListTile from './SongListTile';
+import { baseUrl } from '../Config';
 
-const PopularSongs = ({ data }) => {
-    const songsList = [
-        {
-            id: '1',
-            image: require("../Assets/Images/bottom.png"),
-            title: 'Main Khiladi - From "Selfiee"',
-            plays: 22836690,
-        },
-        {
-            id: '2',
-            image: require("../Assets/Images/recent1.png"),
-            title: 'Jhanjharia - Mala Version',
-            plays: 13226572,
-        },
-        {
-            id: '3',
-            image: require("../Assets/Images/artist1.png"),
-            title: 'Tumhe Jo Maine Dekha',
-            plays: 19506427,
-        },
-        {
-            id: '4',
-            image: require("../Assets/Images/recent2.png"),
-            title: 'Chunnari Chunnari',
-            plays: 14006854,
-        },
-        {
-            id: '5',
-            image: require("../Assets/Images/recent3.png"),
-            title: 'Main Koi Aisa Geet Gaoon (From...)',
-            plays: 30412561,
-        },
-    ];
+const PopularSongs = ({ data, title }) => {
+    console.log('///////////////////////////////////', data)
+    // const songsList = [
+    //     {
+    //         id: '1',
+    //         image: require("../Assets/Images/bottom.png"),
+    //         title: 'Main Khiladi - From "Selfiee"',
+    //         plays: 22836690,
+    //     },
+    //     {
+    //         id: '2',
+    //         image: require("../Assets/Images/recent1.png"),
+    //         title: 'Jhanjharia - Mala Version',
+    //         plays: 13226572,
+    //     },
+    //     {
+    //         id: '3',
+    //         image: require("../Assets/Images/artist1.png"),
+    //         title: 'Tumhe Jo Maine Dekha',
+    //         plays: 19506427,
+    //     },
+    //     {
+    //         id: '4',
+    //         image: require("../Assets/Images/recent2.png"),
+    //         title: 'Chunnari Chunnari',
+    //         plays: 14006854,
+    //     },
+    //     {
+    //         id: '5',
+    //         image: require("../Assets/Images/recent3.png"),
+    //         title: 'Main Koi Aisa Geet Gaoon (From...)',
+    //         plays: 30412561,
+    //     },
+    // ];
 
 
     return (
 
         <FlatList
-            data={songsList}
+            data={data}
             contentContainerStyle={styles.contentContainer}
             ListHeaderComponent={<CustomText
                 style={styles.heading}
-                children={"Popular"}
+                children={title}
             />}
             keyExtractor={item => item.id}
             renderItem={({ item, index }) => {
                 return (
                     <SongListTile
-                    image={item?.image}
-                    title={item?.title}
-                    subtitle={item?.plays}
-                    showMoreOption={true}
+                        image={item?.cover_image_path ? { uri: baseUrl + item?.cover_image_path } : item?.image}
+                        title={item?.title || item?.name}
+                        subtitle={item?.description || item?.plays}
+                        showMoreOption={true}
                     />
                 );
             }}

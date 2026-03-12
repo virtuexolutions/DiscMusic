@@ -1,17 +1,17 @@
-import {Icon, ScrollView, View} from 'native-base';
-import React, {useRef} from 'react';
-import {FlatList, ImageBackground, TouchableOpacity} from 'react-native';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { Icon, ScrollView, View } from 'native-base';
+import React, { useRef } from 'react';
+import { FlatList, ImageBackground, TouchableOpacity } from 'react-native';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 
 import Color from '../Assets/Utilities/Color';
 import CustomHeader from '../Components/CustomHeader';
 import CustomImage from '../Components/CustomImage';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
+import { Custom } from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
 import RecentCard from '../Components/RecentCard';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
 
@@ -156,9 +156,9 @@ const RecentlyPlayed = () => {
             paddingBottom: moderateScale(80, 0.6),
           }}
           style={styles.container}>
-          <CustomHeader leftIcon 
-          showBack
-          text={'Recently Played'} subtext={''} />
+          <CustomHeader leftIcon
+            showBack
+            text={'Recently Played'} subtext={''} />
           <CustomText isBold style={[styles.title]}>
             yesterday
           </CustomText>
@@ -169,60 +169,60 @@ const RecentlyPlayed = () => {
               paddingBottom: moderateScale(10, 0.6),
             }}
             data={musicList}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               return <RecentCard item={item} />;
             }}
           />
           <CustomText
             isBold
-            style={[styles.title, {marginTop: moderateScale(20, 0.6)}]}>
+            style={[styles.title, { marginTop: moderateScale(20, 0.6) }]}>
             sun,may 14,2003
           </CustomText>
           <FlatList
             showsVerticalScrollIndicator={false}
-            style={{marginTop: moderateScale(10, 0.6)}}
+            style={{ marginTop: moderateScale(10, 0.6) }}
             contentContainerStyle={{
               paddingBottom: moderateScale(30, 0.6),
             }}
             data={data}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               return <RecentCard item={item} />;
             }}
           />
           <CustomText
             isBold
-            style={[styles.title, {marginTop: moderateScale(20, 0.6)}]}>
+            style={[styles.title, { marginTop: moderateScale(20, 0.6) }]}>
             see all 7 played
           </CustomText>
           <FlatList
             showsVerticalScrollIndicator={false}
-            style={{marginTop: moderateScale(10, 0.6)}}
+            style={{ marginTop: moderateScale(10, 0.6) }}
             contentContainerStyle={{
               paddingBottom: moderateScale(30, 0.6),
             }}
             data={data2}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               return <RecentCard item={item} />;
             }}
           />
           <CustomText
             isBold
-            style={[styles.title, {marginTop: moderateScale(20, 0.6)}]}>
+            style={[styles.title, { marginTop: moderateScale(20, 0.6) }]}>
             see all 8 played
           </CustomText>
           <FlatList
             showsVerticalScrollIndicator={false}
-            style={{marginTop: moderateScale(10, 0.6)}}
+            style={{ marginTop: moderateScale(10, 0.6) }}
             contentContainerStyle={{
               paddingBottom: moderateScale(30, 0.6),
             }}
             data={data3}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               return <RecentCard item={item} />;
             }}
           />
         </ScrollView>
-        <MinimisedPlayer/>
+        <MinimisedPlayer />
       </ImageBackground>
     </>
   );

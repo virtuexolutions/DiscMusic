@@ -1,11 +1,15 @@
 import {Icon, ScrollView, View} from 'native-base';
-import React from 'react';
+import React, {useState} from 'react';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import CustomStatusBar from '../Components/CustomStatusBar';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
-import {ImageBackground, TouchableOpacity} from 'react-native';
+import {
+  ActivityIndicator,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 import CustomHeader from '../Components/CustomHeader';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -14,7 +18,36 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CustomButton from '../Components/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import navigationService from '../navigationService';
+import {useDispatch, useSelector} from 'react-redux';
+import {setProfileCreated, setUserData} from '../Store/slices/common';
+import {Post} from '../Axios/AxiosInterceptorFunction';
+import {setUserToken} from '../Store/slices/auth';
+
 const LoginScreen = () => {
+  const token = useSelector(state => state.authReducer.token);
+  const isProfileCreated = useSelector(state => state.commonReducer.isProfile);
+  const dispatch = useDispatch();
+  // console.log('first ========================== >>>>>>>>> token here' ,token)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const login = async () => {
+    const body = {
+      email: email,
+      password: password,
+    };
+    const url = 'login';
+    setIsLoading(true);
+    const response = await Post(url, body, apiHeader(token));
+    setIsLoading(false);
+    if (response != undefined) {
+      dispatch(setUserToken({token: response?.data?.token}));
+      dispatch(setUserData(response?.data?.user_info));
+      dispatch(setProfileCreated(response?.data?.user_info?.isProfileCreated));
+    }
+  };
+
   return (
     <>
       <CustomStatusBar
@@ -37,10 +70,7 @@ const LoginScreen = () => {
             flexGrow: 0,
           }}>
           <View style={styles.container}>
-            <CustomHeader 
-            showBack={true}
-            dots={true}
-            leftIcon RightIcon />
+            <CustomHeader showBack={true} leftIcon />
             <View style={styles.text_view}>
               <CustomText isBold style={styles.Heading}>
                 Hello Again!
@@ -54,12 +84,12 @@ const LoginScreen = () => {
               iconName={'mail'}
               iconType={Ionicons}
               iconColor={Color.lightGrey}
-              color={Color.lightGrey}
+              color={Color.white}
               titleText={'First Name'}
               secureText={false}
               placeholder={' aidenparker@gmail.com'}
-              // setText={setFirstName}
-              // value={firstName}
+              setText={setEmail}
+              value={email}
               border
               viewHeight={0.07}
               viewWidth={0.9}
@@ -67,18 +97,19 @@ const LoginScreen = () => {
               borderColor={'#ffffff'}
               marginTop={moderateScale(30, 0.3)}
               placeholderColor={Color.lightGrey}
+              // placeholderTextColor={Color.white}
               borderRadius={moderateScale(25, 0.3)}
             />
             <TextInputWithTitle
               iconName={'locked'}
               iconType={Fontisto}
               iconColor={Color.lightGrey}
-              color={Color.lightGrey}
+              color={Color.white}
               titleText={'First Name'}
               secureText={true}
-              placeholder={' aidenparker@gmail.com'}
-              // setText={setFirstName}
-              // value={firstName}
+              placeholder={'........'}
+              setText={setPassword}
+              value={password}
               border
               viewHeight={0.07}
               viewWidth={0.9}
@@ -88,15 +119,29 @@ const LoginScreen = () => {
               placeholderColor={Color.lightGrey}
               borderRadius={moderateScale(25, 0.3)}
             />
-            <CustomText style={styles.txt4}>Forget Password?</CustomText>
+            <CustomText
+              onPress={() => {
+                navigationService.navigate('EnterEmail');
+              }}
+              style={styles.txt4}>
+              Forget Password?
+            </CustomText>
             <CustomButton
               isGradient
-              text={'Access Now'}
+              text={
+                isLoading ? (
+                  <ActivityIndicator size={'small'} color={Color.white} />
+                ) : (
+                  'Access Now'
+                )
+              }
               textColor={Color.white}
               width={windowWidth * 0.9}
               height={windowHeight * 0.07}
-              // onPress={() => { setIsVisible(false) }}
-              onPress={() => navigationService.navigate('Profile')}
+              onPress={() => {
+                login();
+              }}
+              // onPress={() => navigationService.navigate('Profile')}
               marginTop={moderateScale(20, 0.3)}
               borderRadius={windowWidth / 2}
               fontSize={moderateScale(16, 0.3)}
@@ -179,7 +224,6 @@ const LoginScreen = () => {
                   styles.text_1,
                   {color: Color.veryLightGray, textAlign: 'left'},
                 ]}>
-                {' '}
                 Sign up
               </CustomText>
             </View>

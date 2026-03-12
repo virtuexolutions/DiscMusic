@@ -1,16 +1,21 @@
-import { Icon, View } from 'native-base';
+import {Icon, View} from 'native-base';
 import React from 'react';
-import { moderateScale } from 'react-native-size-matters';
+import {moderateScale} from 'react-native-size-matters';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Color from '../Assets/Utilities/Color';
 import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
-import { windowHeight, windowWidth } from '../Utillity/utils';
+import {windowHeight, windowWidth} from '../Utillity/utils';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 
-const NotificationCard = () => {
+const NotificationCard = ({item}) => {
   return (
-    <View style={styles.card_con}>
+    <TouchableOpacity
+      onPress={() => {
+        navigationService.navigate('RecentlyPlayed');
+      }}
+      style={styles.card_con}>
       <View style={styles.card_image}>
         <CustomImage
           style={{height: '100%', width: '100%'}}
@@ -77,7 +82,7 @@ const NotificationCard = () => {
           {item?.artist}
         </CustomText>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -99,7 +104,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-
     elevation: 6,
   },
   card_image: {
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginRight: moderateScale(10, 0.6),
   },
-    play_circle: {
+  play_circle: {
     position: 'absolute',
     top: '50%',
     left: '50%',

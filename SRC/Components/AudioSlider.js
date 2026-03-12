@@ -4,41 +4,55 @@ import Slider from '@react-native-community/slider';
 import { windowWidth } from '../Utillity/utils';
 import { moderateScale } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
+import TrackPlayer, { State, useActiveTrack, usePlaybackState, useProgress } from 'react-native-track-player';
 const AudioSlider = ({
-  currentTime=30, 
+  currentTime = 30,
   totalTime,
   containerStyle,
   sliderStyle,
   sliderTimerContainerStyle
 }) => {
-  const [value, setValue] = useState(currentTime);
-  const duration = 164;
-  const formatTime = (sec) => {
-    const minutes = Math.floor(sec / 60);
-    const seconds = Math.floor(sec % 60);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  const [isSliding, setIsSliding] = useState(false);
+  const [sliderValue, setSliderValue] = useState(0);
+  // 1. Get current position and duration
+  const { position, duration } = useProgress();
+
+  const safePosition = !isNaN(position) ? position : 0;
+  const safeDuration = !isNaN(duration) && duration > 0 ? duration : 1;
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
   return (
     <View
       style={
         [
-        {
-        width: '100%',
-        alignItems: 'center',
-      }, containerStyle]}
+          {
+            width: '100%',
+            alignItems: 'center',
+            // backgroundColor: 'red'
+          }, containerStyle]}
     >
       <Slider
         style={
           [{ width: '100%', height: 30 }, sliderStyle]}
         minimumValue={0}
-        maximumValue={duration}
-        value={value}
-        minimumTrackTintColor="#fff"
-    
-        maximumTrackTintColor={Color.themeLightGray}
-        thumbTintColor="#fff"
-        onValueChange={(val) => setValue(val)}
+        // maximumValue={100}
+        // value={50}
+        maximumValue={safeDuration}
+        value={isSliding ? sliderValue : safePosition}
+        minimumTrackTintColor={Color.white}
+        maximumTrackTintColor={Color.veryLightGray}
+        thumbTintColor={Color.white}
+        onSlidingStart={() => setIsSliding(true)}
+        onValueChange={(val) => setSliderValue(val)}
+        onSlidingComplete={async (val) => {
+          await TrackPlayer.seekTo(val);
+          setIsSliding(false);
+        }}
       />
       <View
         style={[{
@@ -48,8 +62,8 @@ const AudioSlider = ({
           marginTop: -10,
         }, sliderTimerContainerStyle]}
       >
-        <Text style={{ color: '#fff', fontSize: 10 }}>{formatTime(value)}</Text>
-        <Text style={{ color: '#fff', fontSize: 10 }}>{formatTime(duration)}</Text>
+        <Text style={{ color: '#fff', fontSize: 10, }}>{formatTime(isSliding ? sliderValue : safePosition)}</Text>
+        <Text style={{ color: '#fff', fontSize: 10, }}>{formatTime(safeDuration)}</Text>
       </View>
     </View>
   );

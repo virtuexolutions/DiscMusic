@@ -13,8 +13,89 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import RecentlyPlayedSongsList from '../Components/RecentlyPlayedSongsList'
 import PlayList from '../Components/PlayList'
 import MinimisedPlayer from '../Components/MinimisedPlayer'
+import { playPlaylist } from '../Components/MusicPlayerController'
+import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player'
 
-const MusicDetailsScreen = () => {
+const MusicDetailsScreen = ({ route }) => {
+    const { item } = route.params;
+    console.log('item====================== >>>>>>> item from music detail', item);
+    const playbackState = usePlaybackState();
+    const isPlaying = playbackState.state === State.Playing;
+    console.log('mmmmmmmmmmmmmmmmmmmm ', playbackState.state)
+    const songsList = [
+        {
+            id: '1',
+            image: require('../Assets/Images/bottom.png'),
+            title: 'Someone to Be Around',
+            type: 'song | Six60',
+            url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+            duration: 402,
+        },
+        {
+            id: '2',
+            image: require('../Assets/Images/recent1.png'),
+            title: 'Miss You',
+            type: 'song | Oliver Tree',
+            url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
+            // url: 'https://www.zedge.net/notification-sounds/a03bfc80-eb9c-4fb6-84ec-c3940f10bc0a',
+        },
+        {
+            id: '3',
+            image: require('../Assets/Images/artist1.png'),
+            title: "Don't remind me i'm minding me",
+            type: 'playlist | PlaylistM7',
+            url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
+        },
+        {
+            id: '4',
+            image: require('../Assets/Images/recent2.png'),
+            title: 'Mega Hit Mix',
+            type: 'playlist | Spotify',
+            url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
+        },
+        {
+            id: '5',
+            image: require('../Assets/Images/recent3.png'),
+            title: 'One Kiss (With Dua Lipa)',
+            type: 'song | Calvin Harris',
+            url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
+        },
+        {
+            id: '6',
+            image: require('../Assets/Images/recent4.png'),
+            title: 'Heather',
+            type: 'song | Conan Gray',
+            url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
+        },
+        {
+            id: '7',
+            image: require('../Assets/Images/release2.png'),
+            title: 'Catching Feelings',
+            type: 'song | Calvin Harris',
+            url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
+        },
+        {
+            id: '8',
+            image: require('../Assets/Images/release3.png'),
+            title: "Don't Forget Your Roots - 2021",
+            type: 'playlist | PlaylistM7',
+            url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
+        },
+        {
+            id: '9',
+            image: require('../Assets/Images/release4.png'),
+            title: 'Before You Leave',
+            url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
+            type: 'song | Conan Gray',
+        },
+    ];
+
+
+    // const handlePlayAll = async () => {
+    //     // if (isPlayerReady) {
+    //     await playPlaylist(songsList);
+    //     // }
+    // };
     return (
         <>
             <CustomStatusBar
@@ -63,9 +144,16 @@ const MusicDetailsScreen = () => {
 
                         />
                         <ThemeIconButton
+                            onPress={() => {
+                                // if (isPlaying) {
+                                //     TrackPlayer.pause();
+                                // } else {
+                                //     handlePlayAll();
+                                // }
+                            }}
                             isGradient={true}
                             gradientColors={Color.themeGradient2}
-                            iconSource={require("../Assets/Images/pause.png")}
+                            iconSource={State.Playing ? require("../Assets/Images/pause.png") : require("../Assets/Images/play-circle.png")}
                         />
                     </View>
                     <View style={[styles.actions2]}>
@@ -95,10 +183,10 @@ const MusicDetailsScreen = () => {
                             iconType={Entypo}
                         />
                     </View>
-                    <PlayList />
+                    <PlayList trackData={item} />
                     <RecentlyPlayedSongsList />
                 </ScrollView>
-                    <MinimisedPlayer />
+                {/* <MinimisedPlayer /> */}
             </ImageBackground>
         </>
 
@@ -127,7 +215,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        gap: scale(10)
+        gap: scale(10),
+        // backgroundColor: 'red'
     },
     textContainer: {
         gap: scale(5),

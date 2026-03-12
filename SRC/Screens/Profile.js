@@ -1,6 +1,14 @@
 import {Icon, ScrollView, View} from 'native-base';
 import React, {useState} from 'react';
-import {ImageBackground, TextInput, TouchableOpacity} from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  ImageBackground,
+  Platform,
+  TextInput,
+  ToastAndroid,
+  TouchableOpacity,
+} from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -11,10 +19,16 @@ import CustomImage from '../Components/CustomImage';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
 import navigationService from '../navigationService';
+import {useDispatch, useSelector} from 'react-redux';
+import {Post} from '../Axios/AxiosInterceptorFunction';
+import {setProfileCreated} from '../Store/slices/common';
+import ImagePickerModal from '../Components/ImagePickerModal';
 
 const Profile = () => {
+  const token = useSelector(state => state.authReducer.token);
+  const dispatch = useDispatch() 
   const [countryCode, setCountryCode] = useState('ID'); // For flag
   const [callingCode, setCallingCode] = useState('62'); // For +62
   const [visible, setVisible] = useState(false);
@@ -22,6 +36,50 @@ const Profile = () => {
   const [phone, setPhone] = useState('');
   const [birthday, setBirthday] = useState('');
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [gender, setGender] = useState('male');
+
+  const [image, setImage] = useState(null);
+
+  const profile = async () => {
+    const body = {
+      name: firstName,
+      phone: phone,
+      dob: birthday,
+      gender: gender,
+      isProfileCreated: 1,
+
+      // role: 'user',
+      // email: email,
+      // password: password,
+    };
+    const formdata = new FormData();
+    for (let key in body) {
+      if ([undefined, '', null].includes(body[key])) {
+        Platform.OS == 'android'
+          ? ToastAndroid.show(`Required field is empty`, ToastAndroid.SHORT)
+          : Alert.alert(`Required field is empty`);
+      }
+      formdata.append(key, body[key]);
+    }
+    if (image && Object.keys(image).length > 0) {
+      formdata.append('profile_image', image);
+    }
+    // return console.log('first 0000000000000000' ,formdata)
+    const url = 'auth/profile';
+    setIsLoading(true);
+    const response = await Post(url, formdata, apiHeader(token));
+    setIsLoading(false);
+
+    console.log('first =============== >>>>>>>>>', response?.data);
+    if (response?.data != undefined) {
+      console.log('from conolsoe im hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+      dispatch(setProfileCreated(response?.data?.user_info?.isProfileCreated));
+      // navigationService.navigate('TabNavigation');
+      dispatch(setUserData(response?.data?.user_info));
+    }
+  };
 
   return (
     <>
@@ -45,31 +103,25 @@ const Profile = () => {
             flexGrow: 0,
           }}>
           <View style={styles.container}>
-            <CustomHeader leftIcon 
-            
-            RightIcon 
-                        showBack={true}
-                        dots={true}
-            />
-            <View style={styles.image_con}>
-              <CustomImage
-                style={{
-                  height: '100%',
-                  width: '100%',
-                }}
-                source={require('../Assets/Images/profile.png')}
-              />
+            <CustomHeader RightIcon dots={true} />
+            <View style={{}}>
+              <View style={styles.image_con}>
+                <CustomImage
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                  }}
+                  source={
+                    image
+                      ? {uri: image?.uri}
+                      : require('../Assets/Images/profile.png')
+                  }
+                />
+              </View>
               <TouchableOpacity
-                style={{
-                  backgroundColor: Color.mediumGray,
-                  height: windowHeight * 0.03,
-                  width: windowHeight * 0.03,
-                  borderRadius: (windowHeight * 0.03) / 2,
-                  position: 'absolute',
-                  bottom: 20,
-                  right: 15,
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                style={styles.edit_btn}
+                onPress={() => {
+                  setModalVisible(true);
                 }}>
                 <Icon
                   as={AntDesign}
@@ -127,6 +179,7 @@ const Profile = () => {
 
                 {/* Phone Input */}
                 <TextInput
+                  maxLength={10}
                   style={styles.phoneInput}
                   placeholder="812345678912"
                   placeholderTextColor="#777"
@@ -152,22 +205,49 @@ const Profile = () => {
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       paddingHorizontal: moderateScale(10, 0.3),
-                    //   height: isVisible
-                    //     ? windowHeight * 0.07
-                    //     : windowHeight * 0.05,
+                      height: isVisible
+                        ? windowHeight * 0.07
+                        : windowHeight * 0.05,
                     },
                   ]}>
-                  <View>
+                  <View
+                    style={{
+                      // _backgroundColor: 'red',
+
+                      width: '80%',
+                    }}>
                     <CustomText
                       style={{
                         color: Color.white,
                         fontSize: moderateScale(14, 0.6),
+                        paddingBottom: moderateScale(5, 0.6),
                       }}>
-                      Male
+                      {gender}
                     </CustomText>
+                    {isVisible && (
+                      <CustomText
+                        onPress={() => {
+                          setGender(gender == 'female' ? 'male' : 'female');
+                          setIsVisible(false);
+                        }}
+                        style={{
+                          paddingTop: moderateScale(5, 0.6),
+                          // marginTop: moderateScale(10, 0.6),
+                          color: Color.white,
+                          borderTopWidth: 2,
+
+                          borderTopColor: Color.mediumGray,
+                          fontSize: moderateScale(14, 0.6),
+                        }}>
+                        {gender == 'female' ? 'male' : 'female'}
+                      </CustomText>
+                    )}
                   </View>
 
                   <Icon
+                    onPress={() => {
+                      setIsVisible(!isVisible);
+                    }}
                     as={AntDesign}
                     name="down"
                     size={moderateScale(12, 0.6)}
@@ -191,13 +271,7 @@ const Profile = () => {
                     },
                   ]}>
                   {isVisible && (
-                    <CustomText
-                      style={{
-                        color: Color.white,
-                        fontSize: moderateScale(14, 0.6),
-                      }}>
-                      Female
-                    </CustomText>
+                   
                   )}
                 </View> */}
               </View>
@@ -244,12 +318,19 @@ const Profile = () => {
 
             <CustomButton
               isGradient
-              text={'Set Up Profile'}
+              text={
+                isLoading ? (
+                  <ActivityIndicator size={'small'} color={Color.white} />
+                ) : (
+                  'Set Up Profile'
+                )
+              }
               textColor={Color.white}
               width={windowWidth * 0.9}
               height={windowHeight * 0.07}
               onPress={() => {
-                navigationService.navigate("TabNavigation")                
+                profile();
+                // navigationService.navigate('TabNavigation');
               }}
               bgColor={Color.lightGrey}
               marginTop={windowHeight * 0.1}
@@ -257,6 +338,12 @@ const Profile = () => {
               fontSize={moderateScale(12, 0.3)}
             />
           </View>
+
+          <ImagePickerModal
+            setShow={setModalVisible}
+            show={modalVisible}
+            setFileObject={setImage}
+          />
         </ScrollView>
       </ImageBackground>
     </>
@@ -293,6 +380,8 @@ const styles = ScaledSheet.create({
     alignSelf: 'center',
     marginBottom: moderateScale(20, 0.3),
     marginTop: windowHeight * 0.06,
+    overflow: 'hidden',
+    // zIndex :                      0
   },
   roW_con: {
     flexDirection: 'row',
@@ -343,9 +432,21 @@ const styles = ScaledSheet.create({
   },
   phoneInput: {
     flex: 1,
-    paddingLeft: moderateScale(12,.6),
+    paddingLeft: moderateScale(12, 0.6),
     color: 'white',
     fontSize: moderateScale(16, 0.6),
+  },
+  edit_btn: {
+    backgroundColor: Color.mediumGray,
+    height: windowHeight * 0.03,
+    width: windowHeight * 0.03,
+    borderRadius: (windowHeight * 0.03) / 2,
+    position: 'absolute',
+    bottom: 45,
+    right: windowHeight * 0.11,
+    // zIndex :1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

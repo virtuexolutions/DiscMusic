@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import CustomText from './CustomText'
 import { windowWidth } from '../Utillity/utils'
@@ -10,11 +10,13 @@ const TitleWithDescription = ({
     description="",
     style,
     descriptionStyle,
-    titleStyle
+    titleStyle,
+    onPress
 }) => {
   return (
-    <View style={[styles.container, style]}>
+    <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
        <CustomText
+       
        ellipsizeMode={"tail"}
        style={[styles.text1, titleStyle]}
        children={title}
@@ -24,7 +26,7 @@ const TitleWithDescription = ({
        style={[styles.text2, descriptionStyle]}
        children={description}
        />
-    </View>
+    </TouchableOpacity>
   )
 }
 

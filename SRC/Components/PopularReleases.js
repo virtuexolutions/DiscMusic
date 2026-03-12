@@ -9,8 +9,10 @@ import Color from '../Assets/Utilities/Color';
 import { windowWidth } from '../Utillity/utils';
 import CustomText from './CustomText';
 import SongListTile from './SongListTile';
+import { baseUrl } from '../Config';
 
-const PopularReleases = ({ data }) => {
+const PopularReleases = ({ data, title }) => {
+    console.log('.........................////////////////////', data)
     const songsList = [
         {
             id: '1',
@@ -42,19 +44,20 @@ const PopularReleases = ({ data }) => {
     return (
 
         <FlatList
-            data={songsList}
+            data={data}
             contentContainerStyle={styles.contentContainer}
             ListHeaderComponent={<CustomText
                 style={styles.heading}
-                children={"Popular Releases"}
+                children={title}
             />}
             keyExtractor={item => item.id}
             renderItem={({ item, index }) => {
+                console.log(JSON.stringify(item, null, 2), '------------------ >>>>item')
                 return (
                     <SongListTile
-                        image={item?.image}
-                        title={item?.title}
-                        subtitle={item?.type}
+                        image={item?.cover_image_path ? { uri: baseUrl + item?.cover_image_path } : item?.image}
+                        title={item?.title || item?.name}
+                        subtitle={item?.description || item?.type}
                         showMoreOption={false}
                     />
                 );

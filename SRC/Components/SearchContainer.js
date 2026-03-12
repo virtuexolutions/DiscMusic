@@ -1,6 +1,10 @@
 import {View, TouchableOpacity, TextInput} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import {moderateScale, ScaledSheet, verticalScale} from 'react-native-size-matters';
+import {
+  moderateScale,
+  ScaledSheet,
+  verticalScale,
+} from 'react-native-size-matters';
 import CustomText from './CustomText';
 import Constants from '../Assets/Utilities/Constants';
 import Color from '../Assets/Utilities/Color';
@@ -18,16 +22,16 @@ const SearchContainer = ({
   input,
   onPress,
   placeholder,
-  data='',
-  setData=()=>{},
+  data = '',
+  setData = () => {},
   style,
   places,
   inputStyle,
 }) => {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
-      <LinearGradient 
-       colors={Color.themeGradient}
+      <LinearGradient
+        colors={Color.themeGradient}
         style={[
           styles.container,
           width && {width: width},
@@ -65,7 +69,7 @@ const SearchContainer = ({
             />
 
             <TextInput
-              placeholder= {placeholder ?? "Search here"}
+              placeholder={placeholder ?? 'Search here'}
               placeholderTextColor={Color.themeLightGray}
               numberOfLines={1}
               value={data}
@@ -76,10 +80,7 @@ const SearchContainer = ({
                 {
                   marginLeft: moderateScale(10, 0.3),
                   width: windowWidth * 0.6,
-                  // height : windowHeight * 0.05,
-                  // fontSize: moderateScale(15, 0.3),
                   color: Color.black,
-                  // backgroundColor : 'red'
                 },
                 inputStyle && inputStyle,
               ]}
@@ -89,7 +90,6 @@ const SearchContainer = ({
           <>
             <CustomText
               style={{
-                // backgroundColor: 'green',
                 fontSize: moderateScale(12, 0.6),
                 color: Color.veryLightGray,
               }}>
@@ -104,8 +104,8 @@ const SearchContainer = ({
 
 const styles = ScaledSheet.create({
   container: {
-    width:windowWidth * 0.8,
-    paddingVertical:verticalScale(2),
+    width: windowWidth * 0.8,
+    paddingVertical: verticalScale(2),
     // flexGrow: 0,
     flexDirection: 'row',
     // justifyContent: "space-between",

@@ -16,8 +16,31 @@ import FeaturingList from '../Components/FeaturingList'
 import FansLikedList from '../Components/FansLikedList'
 import ArtistAboutInfo from '../Components/ArtistAboutInfo'
 import MinimisedPlayer from '../Components/MinimisedPlayer'
+import PlayList from '../Components/PlayList'
+import { imageUrl } from '../Config'
+import TrackPlayer, { State, useActiveTrack, usePlaybackState } from 'react-native-track-player'
 
-const ViewArtistLibrary = () => {
+const ViewArtistLibrary = (props) => {
+  const data = props?.route?.params?.artistData
+  console.log(JSON.stringify(data?.track_categories?.recently_released, null, 2), '------------------ >>>>> data')
+  // const track = useActiveTrack();
+  // // // console.log('track====================== >>>>>>> here from minimised player', track);
+  // // // 2. Get the current playback state (playing/paused)
+  // const playbackState = usePlaybackState();
+
+  // // // If no track is playing, don't show the bar
+  // if (!track) return null;
+
+  // const isPlaying = playbackState.state === State.Playing;
+
+  // const togglePlayback = async () => {
+  //   if (isPlaying) { 
+  //     await TrackPlayer.pause();
+  //   } else {
+  //     await TrackPlayer.play();
+  //   }
+  // };
+
   return (
     <>
       <CustomStatusBar
@@ -27,10 +50,10 @@ const ViewArtistLibrary = () => {
       <ImageBackground
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}>
-        <CustomHeader 
-        leftIcon={true}
-        showBack={true}
-        text={"Abhijeet"}
+        <CustomHeader
+          leftIcon={true}
+          showBack={true}
+          text={"Abhijeet"}
           RightIcon={true}
           dots={true} />
         <ScrollView
@@ -45,7 +68,7 @@ const ViewArtistLibrary = () => {
             <View style={styles.imageContainer}>
               <CustomImage
                 style={styles.image}
-                source={require("../Assets/Images/artist10.png")}
+                source={data?.cover_image ? { uri: imageUrl + data?.cover_image } : require("../Assets/Images/artist.png")}
               />
             </View>
             <TitleWithDescription
@@ -82,20 +105,28 @@ const ViewArtistLibrary = () => {
               iconSource={require("../Assets/Images/shuffle.png")}
             />
             <ThemeIconButton
+              onPress={() => {
+                console.log('first');
+              }}
               isGradient={true}
               gradientColors={Color.themeGradient2}
               iconSource={require("../Assets/Images/pause.png")}
             />
           </View>
-          <PopularSongs
-          />
-          <PopularReleases/>
-          <FeaturingList/>
-          <ArtistAboutInfo/>
-          <FansLikedList/>
+          {(data?.track_categories?.most_popular || data?.track_categories?.top_tracks) && <PlayList trackData={data?.track_categories?.most_popular ? data?.track_categories?.most_popular : data?.track_categories?.top_tracks} title={'top hits'} isSearch={false} isViewAll={false} />}
+          {![undefined, [], null].includes(data?.track_categories?.recently_released) && <PlayList trackData={data?.track_categories?.recently_released} title={'new Rleases'} isSearch={false} isViewAll={false} />}
+          {data?.all_tracks && <PlayList trackData={data?.all_tracks} title={'all tracks'} isSearch={false} isViewAll={false} />}
+
+          {/* <PopularSongs data={trackData?.top_tracks} title={'top hits'} />
+          <PopularReleases data={trackData?.recently_released} title={'new Rleases'} />
+          <PopularReleases data={trackData?.all_tracks} title={'all tracks'} /> */}
+
+          <FeaturingList />
+          <ArtistAboutInfo data={data} />
+          <FansLikedList />
         </ScrollView>
-        <MinimisedPlayer 
-        style={styles.player}
+        <MinimisedPlayer
+          style={styles.player}
         />
       </ImageBackground>
     </>
@@ -132,11 +163,11 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
     gap: scale(10)
   },
-  player:{
-    paddingBottom:scale(20),
-    bottom:scale(30)
+  player: {
+    paddingBottom: scale(20),
+    bottom: scale(30)
   }
 })

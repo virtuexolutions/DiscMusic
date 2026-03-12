@@ -1,36 +1,51 @@
-import {Icon, ScrollView, View} from 'native-base';
-import React, {useState} from 'react';
-import {ImageBackground, TextInput, TouchableOpacity} from 'react-native';
-import CountryPicker from 'react-native-country-picker-modal';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { Icon, ScrollView, View } from 'native-base';
+import React, { useEffect, useState } from 'react';
+import { ImageBackground, TouchableOpacity } from 'react-native';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import TrackPlayer, { Event, State, usePlaybackState, useActiveTrack } from 'react-native-track-player';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
 import Color from '../Assets/Utilities/Color';
-import CustomButton from '../Components/CustomButton';
+import AudioSlider from '../Components/AudioSlider';
+import Card from '../Components/Card';
 import CustomHeader from '../Components/CustomHeader';
 import CustomImage from '../Components/CustomImage';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
+import { windowHeight, windowWidth } from '../Utillity/utils';
+import { playNext, playPlaylist, playPrevious, playSingleTrack, getArtistNameFromTrack } from '../Components/MusicPlayerController';
 
-import TextInputWithTitle from '../Components/TextInputWithTitle';
-import {windowHeight, windowWidth} from '../Utillity/utils';
-import AudioSlider from '../Components/AudioSlider';
-import LinearGradient from 'react-native-linear-gradient';
-import Card from '../Components/Card';
+const PlaylistScreen = props => {
+  const data = props?.route?.params?.item;
+  console.log('🚀 ~ PlaylistScreen ~ data:', data);
 
-const PlaylistScreen = () => {
-  const [countryCode, setCountryCode] = useState('ID'); // For flag
-  const [callingCode, setCallingCode] = useState('62'); // For +62
-  const [visible, setVisible] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [isVisible, setIsVisible] = useState(false);
 
+  // Use the reactive hook to track the actual play state
+  const playbackState = usePlaybackState();
+  const isPlaying = playbackState.state === State.Playing;
+  console.log('mmmmmmmmmmmmmmmmmmmm ', playbackState.state)
+  const currentTrack = useActiveTrack();
+  const artistName = getArtistNameFromTrack(currentTrack);
+
+  useEffect(() => {
+    // Attempt to play the single track passed from the prev screen immediately
+    if (data) {
+      playSingleTrack(data);
+    }
+  }, [data?.id]);
+
+  useEffect(() => {
+    // Add playback error listener
+    const errorListener = TrackPlayer.addEventListener('playback-error', error => {
+      console.error('Playback error:', error);
+    });
+
+    // Cleanup listener on unmount
+    return () => errorListener.remove();
+  }, []);
   return (
     <>
       <CustomStatusBar
@@ -48,7 +63,7 @@ const PlaylistScreen = () => {
           contentContainerStyle={{
             alignSelf: 'center',
             alignItems: 'center',
-            paddingBottom : moderateScale(15,.6)
+            paddingBottom: moderateScale(15, 0.6),
           }}
           style={{
             width: '100%',
@@ -74,13 +89,13 @@ const PlaylistScreen = () => {
             </View>
             <View style={styles.text_con}>
               <View>
-                <CustomText style={styles.h1}>Miss you </CustomText>
+                <CustomText style={styles.h1}>{currentTrack?.title || 'Unknown Title'}</CustomText>
                 <CustomText style={styles.h2}>
-                  oliver tree, Robin schulz
+                  {artistName}
                 </CustomText>
               </View>
               <Icon
-                style={{alignSelf: 'center'}}
+                style={{ alignSelf: 'center' }}
                 color={Color.white}
                 size={moderateScale(20, 0.6)}
                 name="hearto"
@@ -88,8 +103,7 @@ const PlaylistScreen = () => {
               />
             </View>
             <AudioSlider />
-            <View
-              style={styles.player_btn}>
+            <View style={styles.player_btn}>
               <TouchableOpacity style={styles.btn}>
                 <Icon
                   name="shuffle"
@@ -99,6 +113,9 @@ const PlaylistScreen = () => {
                 />
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => {
+                  playPrevious();
+                }}
                 style={[
                   styles.btn,
                   {
@@ -108,6 +125,9 @@ const PlaylistScreen = () => {
                   },
                 ]}>
                 <Icon
+                  onPress={() => {
+                    playPrevious();
+                  }}
                   name="play-skip-back-outline"
                   as={Ionicons}
                   color={Color.white}
@@ -115,6 +135,14 @@ const PlaylistScreen = () => {
                 />
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => {
+                  // If we have a track in Context, we want to play/pause appropriately
+                  if (isPlaying) {
+                    TrackPlayer.pause();
+                  } else {
+                    TrackPlayer.play();
+                  }
+                }}
                 style={[
                   styles.btn,
                   {
@@ -124,13 +152,24 @@ const PlaylistScreen = () => {
                   },
                 ]}>
                 <Icon
-                  name="pause"
+                  onPress={() => {
+                    // If we have a track in Context, we want to play/pause appropriately
+                    if (isPlaying) {
+                      TrackPlayer.pause();
+                    } else {
+                      TrackPlayer.play();
+                    }
+                  }}
+                  name={isPlaying ? 'pause' : 'play'}
                   as={Feather}
                   color={Color.white}
                   size={moderateScale(20, 0.6)}
                 />
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => {
+                  playNext()
+                }}
                 style={[
                   styles.btn,
                   {
@@ -139,7 +178,9 @@ const PlaylistScreen = () => {
                     borderRadius: (windowWidth * 0.13) / 2,
                   },
                 ]}>
-                <Icon
+                <Icon onPress={() => {
+                  playNext()
+                }}
                   name="play-skip-forward-outline"
                   as={Ionicons}
                   color={Color.white}
@@ -163,7 +204,7 @@ const PlaylistScreen = () => {
                   color={Color.white}
                   size={moderateScale(20, 0.6)}
                 />
-                <View style={{marginLeft: moderateScale(10, 0.3)}}>
+                <View style={{ marginLeft: moderateScale(10, 0.3) }}>
                   <CustomText style={styles.h3}>current Device </CustomText>
                   <CustomText style={styles.h4}>this phone </CustomText>
                 </View>
@@ -231,8 +272,8 @@ const PlaylistScreen = () => {
                 </CustomText>
               </View>
             </View>
-          <Card/>
-          <Card fromEvent={true}/>
+            <Card />
+            <Card fromEvent={true} />
 
             {/* <View style={styles.lyrics_con}></View> */}
 
@@ -438,15 +479,15 @@ const styles = ScaledSheet.create({
     paddingHorizontal: moderateScale(20, 0.6),
     paddingVertical: moderateScale(10, 0.6),
   },
-  player_btn :{
-                marginTop: moderateScale(10, 0.3),
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+  player_btn: {
+    marginTop: moderateScale(10, 0.3),
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
 
-                // backgroundColor: 'red',
-              }
+    // backgroundColor: 'red',
+  },
 });
 
 export default PlaylistScreen;

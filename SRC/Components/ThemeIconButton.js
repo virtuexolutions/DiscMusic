@@ -20,22 +20,21 @@ const ThemeIconButton = ({
   isGradient,
   gradientColors
 }) => {
-  console.log("====> ", onPress);
-  const icon = iconName 
-  ? iconName 
-  : arrowRight 
-  ? "chevron-thin-right"
-  : "chevron-small-down";
-  
-  const type = iconType 
-  ? iconType 
-  : Entypo;
+  const icon = iconName
+    ? iconName
+    : arrowRight
+      ? "chevron-thin-right"
+      : "chevron-small-down";
+
+  const type = iconType
+    ? iconType
+    : Entypo;
   let iconComponent;
-  
+
   if (iconSource) {
-    iconComponent = <CustomImage 
-    onPress={onPress}
-    source={iconSource} style={[{ width: iconSize ?? scale(20), height: iconSize ?? scale(20) }, iconColor && {tintColor:iconColor}]} />
+    iconComponent = <CustomImage
+      onPress={onPress}
+      source={iconSource} style={[{ width: iconSize ?? scale(20), height: iconSize ?? scale(20) }, iconColor && { tintColor: iconColor }]} />
   } else {
     iconComponent = <Icon
       as={type}
@@ -45,14 +44,14 @@ const ThemeIconButton = ({
       color={iconColor ?? Color.white}
     />
   }
-  
+
   return (
     <TouchableOpacity
       onPress={onPress}
       // activeOpacity={0.4}
       style={isGradient ? {
-        width:"auto",
-        height:"auto"
+        width: "auto",
+        height: "auto"
       } : [styles.button, style]}>
       {
         isGradient ? <LinearGradient

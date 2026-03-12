@@ -14,6 +14,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
 import navigationService from '../navigationService';
+import NotificationCard from '../Components/NotificationCard';
 
 const Notification = () => {
   const rbRef = useRef(null);
@@ -146,78 +147,8 @@ const Notification = () => {
             data={musicList}
             renderItem={({item, index}) => {
               return (
-                <TouchableOpacity 
-                onPress={()=>{
-                  navigationService.navigate("RecentlyPlayed")
-                }}
-                style={styles.card_con}>
-                  <View style={styles.card_image}>
-                    <CustomImage
-                      style={{height: '100%', width: '100%'}}
-                      source={item.image}
-                    />
-                    <View style={styles.play_circle}>
-                      <CustomImage
-                        source={require('../Assets/Images/play-circle.png')}
-                        style={{height: '100%', width: '100%'}}
-                      />
-                    </View>
-                  </View>
-
-                  <View>
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        flexDirection: 'row',
-                        marginTop: moderateScale(10, 0.6),
-                        justifyContent: 'space-between',
-                        width: windowWidth * 0.57,
-                      }}>
-                      <CustomText
-                        isBold
-                        style={{
-                          color: '#7F8489',
-                          fontSize: moderateScale(16, 0.6),
-                          //   fontWeight: '800',
-                        }}>
-                        {item?.time}
-                      </CustomText>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          // marginLeft: moderateScale(10, 0.6),
-                        }}>
-                        <Icon
-                          onPress={() => {}}
-                          name="heart-o"
-                          as={FontAwesome}
-                          size={moderateScale(18, 0.6)}
-                          color={Color.white}
-                        />
-                        <Icon
-                          activeopacity={0.7}
-                          onPress={() => {
-                            console.log('first================= >>>>');
-                          }}
-                          style={{marginLeft: moderateScale(10, 0.6)}}
-                          name="dots-three-vertical"
-                          as={Entypo}
-                          size={moderateScale(18, 0.6)}
-                          color={Color.white}
-                        />
-                      </View>
-                    </View>
-                    <CustomText style={styles.title}>{item.title}</CustomText>
-                    <CustomText
-                      style={{
-                        color: '#7F8489',
-                        fontSize: moderateScale(16, 0.6),
-                        paddingTop: moderateScale(5, 0.6),
-                      }}>
-                      {item?.artist}
-                    </CustomText>
-                  </View>
-                </TouchableOpacity>
+                <NotificationCard item={item}/>
+                
               );
             }}
           />

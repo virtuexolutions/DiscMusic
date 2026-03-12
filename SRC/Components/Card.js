@@ -158,7 +158,7 @@ const styles = ScaledSheet.create({
   artist_image: {
     height: windowHeight * 0.2,
     width: windowWidth * 0.8,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     borderRadius: moderateScale(20, 0.6),
     overflow: 'hidden',
   },
