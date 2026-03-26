@@ -14,7 +14,7 @@ import navigationService from '../navigationService';
 import { baseUrl, imageUrl } from '../Config';
 
 const EventCard = ({ data }) => {
-  console.log(JSON.stringify(data, null, 2), 'data from event card ', `${baseUrl}/storage/` + data?.image)
+  // console.log('data from event card ', `${baseUrl}/storage/` + data?.image)
   return (
     <TouchableOpacity
       onPress={() => navigationService.navigate('EventScreen')}>

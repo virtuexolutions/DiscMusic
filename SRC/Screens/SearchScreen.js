@@ -194,7 +194,7 @@ const SearchScreen = () => {
               }}
             />
         }
-        {/* <MinimisedPlayer /> */}
+        <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.18 }} />
       </ImageBackground>
     </>
   );
@@ -206,12 +206,12 @@ function CategoryComponent({ item, isLoading }) {
     <TouchableOpacity
       style={styles.category}
       onPress={() => {
-        navigation.navigate('DetailScreen', { item_id: item?.id });
+        navigation.navigate('DetailScreen', { item_id: item?.id, title: item?.name });
       }}>
       <View style={styles.imageContainer}>
         {!isLoading && <CustomImage
           onPress={() => {
-            navigation.navigate('DetailScreen', { item_id: item?.id });
+            navigation.navigate('DetailScreen', { item_id: item?.id, title: item?.name });
           }}
           source={require('../Assets/Images/artist7.png')}
           style={[styles.image, { resizeMode: 'cover' }]}

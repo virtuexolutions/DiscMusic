@@ -6,11 +6,11 @@ import { windowHeight, windowWidth } from '../Utillity/utils'
 import CustomText from './CustomText'
 import { FlatList } from 'native-base'
 import CustomImage from './CustomImage'
-import { imageUrl } from '../Config'
+import { baseUrl, imageUrl } from '../Config'
 import navigationService from '../navigationService'
 
-export const AnimatedCard = ({ item }) => {
-    console.log('item====================== >>>>>>> item from detail', item);
+export const AnimatedCard = ({ item, from }) => {
+    console.log('item====================== >>>>>>> item from detail', `${baseUrl}/storage/${item?.cover_image}`);
     // Use Animated.Value to handle the scale transform
     // const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
     const scaleValue = useRef(new Animated.Value(1)).current;
@@ -36,25 +36,34 @@ export const AnimatedCard = ({ item }) => {
 
     return (
         <View style={{ marginBottom: moderateScale(13, 0.2), }}>
-            <TouchableOpacity style={styles.card}
+            <TouchableOpacity style={[styles.card,
+            from == 'home' && {
+                marginTop: moderateScale(10, .6)
+            }
+            ]}
                 onPress={() => {
-                    navigationService.navigate('MusicDetailsScreen', { item: item?.tracks })
-                    console.log('item====================== >>>>>>> item from detail');
+                    const tracksData = from === 'home' ? (item?.items || item?.item) : item?.tracks;
+                    navigationService.navigate('MusicDetailsScreen', { item: tracksData, data: item?.weekly_trending, from: from });
+                    // console.log('item====================== >>>>>>> item from detail payload:', baseUrl + item?.cover_image);
                 }}
             >
                 {/* <Animated.View style={{ transform: [{ scale: scaleValue }] }}> */}
                 <CustomImage onPress={() => {
-                    navigationService.navigate('MusicDetailsScreen', { item: item?.tracks })
-                    console.log('item====================== >>>>>>> item from detail',);
+                    const tracksData = from === 'home' ? (item?.items || item?.item) : item?.tracks;
+                    navigationService.navigate('MusicDetailsScreen', { item: tracksData, data: item?.weekly_trending, from: from });
+                    // console.log('item====================== >>>>>>> item from detail payload:', tracksData);
                 }}
-                    source={{ uri: imageUrl + item?.album?.cover_image }}
+                    source={{ uri: `${baseUrl}/storage/${item?.cover_image}` }}
                     style={styles.image}
                 />
                 {/* </Animated.View> */}
             </TouchableOpacity>
-            <CustomText numberOfLines={2} style={styles.cardTitle}>{item?.title}</CustomText>
-
-            <CustomText style={styles.sub_title}>36,322 listeners</CustomText>
+            {from != 'home' && (
+                <>
+                    <CustomText numberOfLines={2} style={styles.cardTitle}>{item?.title}</CustomText>
+                    <CustomText style={styles.sub_title}>36,322 listeners</CustomText>
+                </>
+            )}
         </View>
     );
 };

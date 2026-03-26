@@ -23,11 +23,8 @@ import { Get } from '../Axios/AxiosInterceptorFunction';
 import { useSelector } from 'react-redux';
 import { baseUrl } from '../Config';
 
-const PlayList = ({ data, trackData, isSearch, isViewAll, title }) => {
-
-
-
-  console.log('trackData', title)
+const PlayList = ({ data, trackData, isSearch, isViewAll, title, from }) => {
+  // console.log('trackData==================================', trackData)
   const token = useSelector(state => state.authReducer.token);
   const [search, setSearch] = useState('');
   const [trackTitle, setTrackTitle] = useState('');
@@ -120,6 +117,7 @@ const PlayList = ({ data, trackData, isSearch, isViewAll, title }) => {
     async function init() {
       await setupPlayer();
     }
+    playPlaylist(songsListArray)
     init();
     Songdata()
   }, []);
@@ -128,7 +126,18 @@ const PlayList = ({ data, trackData, isSearch, isViewAll, title }) => {
 
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, from != 'home' && {
+
+      backgroundColor: '#282C30',
+      elevation: 16,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 10,
+        height: 40,
+      },
+      shadowOpacity: 0.45,
+      shadowRadius: 40,
+    }]}>
       {isSearch && <SearchContainer
         placeholder={'Find in Playlist'}
         data={search}
@@ -136,28 +145,36 @@ const PlayList = ({ data, trackData, isSearch, isViewAll, title }) => {
         input
       />}
       {
-        title && <CustomText style={[styles.title]}>
+        title && <CustomText style={[styles.title, {
+          // color: Color.white,
+
+          fontSize: from == 'home' ? moderateScale(20, .6) : moderateScale(15, .6),
+        }]}>
           {title}
         </CustomText>
       }
       <FlatList
+        showsVerticalScrollIndicator={false}
+        // scrollEnabled={false}
         data={trackData}
-        contentContainerStyle={styles.contentContainer}
+        contentContainerStyle={[styles.contentContainer]}
         keyExtractor={item => item.id}
         renderItem={({ item, index }) => {
-          console.log('item====================== >>>>>>> item from playlist', `${baseUrl}/storage/` + item?.audio_file_path);
+          // console.log('item====================== >>>>>>> item from playlist', `${baseUrl}/storage/${item?.audio_file}`);
           return (
             <SongListTile
 
               onPress={() => {
                 navigationService.navigate('PlaylistScreen', {
                   item: item,
+                  allTracks: trackData
                 });
               }}
-              image={{ uri: baseUrl + item?.cover_image_path }}
+              image={{ uri: `${baseUrl}/storage/${item?.cover_image}` }}
               title={item?.title}
-              subtitle={item?.description?.length > 0 ? item?.description : 'hjashdj asfhjkashd'}
+              subtitle={item?.description?.length > 0 ? item?.description : ''}
               showMoreOption={true}
+              from={from}
             />
           );
         }}
@@ -171,7 +188,6 @@ export default PlayList;
 const styles = StyleSheet.create({
   container: {
     width: windowWidth,
-    backgroundColor: '#282C30',
     alignItems: 'center',
     gap: verticalScale(12),
     borderRadius: moderateScale(30, 0.2),
@@ -179,15 +195,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(15),
     paddingTop: verticalScale(5),
     paddingBottom: verticalScale(15),
-    elevation: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 10,
-      height: 40,
-    },
-    shadowOpacity: 0.45,
-    shadowRadius: 40,
-    elevation: 10,
+
   },
   contentContainer: {
     paddingBottom: scale(15),
@@ -199,7 +207,6 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(10),
   },
   title: {
-    fontSize: moderateScale(15, .6),
     color: Color.white,
     alignSelf: 'flex-start',
     paddingHorizontal: scale(10),

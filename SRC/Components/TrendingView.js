@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Color from '../Assets/Utilities/Color';
 import { windowWidth } from '../Utillity/utils';
@@ -60,7 +61,7 @@ const TrendingView = () => {
             horizontal
             scrollEnabled={false}
             renderItem={({ item }) => {
-              console.log('itemmmmmm', item);
+              // console.log('itemmmmmm', item);
               return (
                 <View style={styles.inner_view}>
                   <CustomImage source={item} style={styles.image} />
@@ -72,7 +73,7 @@ const TrendingView = () => {
             Trending
           </CustomText>
           <CustomText style={styles.text}>384 songs</CustomText>
-          <AudioSlider />
+          <AudioSlider width={windowWidth * 0.45} />
         </View>
         <View style={styles.sub_view_2}>
           <View style={styles.row_view}>
@@ -97,16 +98,16 @@ const TrendingView = () => {
             <View style={styles.icon_View}>
               <Icon
                 name="step-backward"
-                as={AntDesign}
-                size={moderateScale(25, 0.6)}
+                as={FontAwesome5}
+                size={moderateScale(20, 0.6)}
                 color={Color.white}
               />
             </View>
             <View style={styles.icon_View}>
               <Icon
-                name="controller-next"
-                as={Entypo}
-                size={moderateScale(25, 0.6)}
+                name="step-forward"
+                as={FontAwesome5}
+                size={moderateScale(20, 0.6)}
                 color={Color.white}
               />
             </View>

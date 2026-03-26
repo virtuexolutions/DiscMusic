@@ -35,7 +35,8 @@ const DATA = [
 
 // Main Screen Component
 const DetailScreen = ({ route }) => {
-    const { item_id } = route.params;
+    const { item_id, title } = route.params;
+    console.log('item_id====================== >>>>>>> here from detail', title);
     const token = useSelector(state => state.authReducer.token)
     const [isLoading, setIsLoading] = useState(false)
     const [genreList, setGenreList] = useState([]);
@@ -48,7 +49,7 @@ const DetailScreen = ({ route }) => {
 
         const url = `auth/genres-detail/${item_id}?page=${pageNumber}`;
 
-        console.log('url====================== >>>>>>> here from detail', url);
+        // console.log('url====================== >>>>>>> here from detail', url);
         if (pageNumber === 1) {
             setIsLoading(true);
         } else {
@@ -56,7 +57,7 @@ const DetailScreen = ({ route }) => {
         }
 
         const response = await Get(url, token);
-        console.log('response====================== >>>>>>> response from detail', JSON.stringify(response?.data, null, 2));
+        // console.log('response====================== >>>>>>> response from detail', JSON.stringify(response?.data, null, 2));
 
         if (pageNumber === 1) {
             setIsLoading(false);
@@ -99,6 +100,7 @@ const DetailScreen = ({ route }) => {
                 <CustomHeader
                     leftIcon
                     showBack={true}
+                    text={title}
                 />
                 <ScrollView contentContainerStyle={{ paddingBottom: verticalScale(20, .6) }}>
                     {/* Header Component */}

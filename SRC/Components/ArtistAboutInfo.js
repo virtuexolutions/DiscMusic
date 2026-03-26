@@ -5,9 +5,11 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { windowWidth } from '../Utillity/utils'
 import CustomImage from './CustomImage'
 import TitleWithDescription from './TitleWithDescription'
+import navigationService from '../navigationService'
+import { baseUrl, imageUrl } from '../Config'
 
 const ArtistAboutInfo = ({ data }) => {
-    console.log(JSON.stringify(data, null, 2), '------------------ >>>>data')
+    // console.log(JSON.stringify(data, null, 2), '------------------ >>>>data')
     return (
         <View style={styles.mainContainer}>
             <CustomText
@@ -22,11 +24,12 @@ const ArtistAboutInfo = ({ data }) => {
 export default ArtistAboutInfo;
 
 function ArtistInfoCard({ data }) {
+    // console.log('............/////////////////////', `${baseUrl}/storage/${data?.profile_image}`)
     return (
         <View style={styles.card}>
             <View style={styles.imageContainer}>
                 <CustomImage
-                    source={data?.profile_image ? { uri: imageUrl + data?.profile_image } : require("../Assets/Images/artist10.png")}
+                    source={data?.profile_image ? { uri: `${baseUrl}/storage/${data?.profile_image}` } : require("../Assets/Images/artist10.png")}
                     style={styles.image}
                 />
             </View>
@@ -50,6 +53,9 @@ function ArtistInfoCard({ data }) {
                         description='Monthly Listeners'
                     />
                     <CustomImage
+                        onPress={() => {
+                            navigationService.navigate('AboutArtist', { artistData: data })
+                        }}
                         source={require("../Assets/Images/arrow-circle-right.png")}
                         style={styles.badge}
                     />

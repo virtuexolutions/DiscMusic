@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import CustomImage from './CustomImage';
 import TitleWithDescription from './TitleWithDescription';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
@@ -7,18 +7,32 @@ import { windowHeight, windowWidth } from '../Utillity/utils';
 import ThemeIconButton from './ThemeIconButton';
 import Slider from '@react-native-community/slider';
 import Color from '../Assets/Utilities/Color';
-import { State, useActiveTrack, usePlaybackState } from 'react-native-track-player';
+import TrackPlayer, { State, useActiveTrack, usePlaybackState, useProgress } from 'react-native-track-player';
+import navigationService from '../navigationService';
+import AudioSlider from './AudioSlider';
 
-const MinimisedPlayer = ({ style }) => {
+const MinimisedPlayer = ({ style, data }) => {
+
   const track = useActiveTrack();
-  // console.log('track====================== >>>>>>> here from minimised player', track);
-  // 2. Get the current playback state (playing/paused)
   const playbackState = usePlaybackState();
+  const [isSliding, setIsSliding] = useState(false);
+  const [sliderValue, setSliderValue] = useState(0);
+  const { position, duration } = useProgress();
 
-  // If no track is playing, don't show the bar
   if (!track) return null;
-
   const isPlaying = playbackState.state === State.Playing;
+
+  const safePosition = !isNaN(position) ? position : 0;
+  const safeDuration = !isNaN(duration) && duration > 0 ? duration : 1;
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+  // console.log('track====================== >>>>>>> here from minimised player', track);
+  // console.log('isPlaying====================== >>>>>>> here from minimised player', playbackState.state);
+
 
   const togglePlayback = async () => {
     if (isPlaying) {
@@ -27,11 +41,16 @@ const MinimisedPlayer = ({ style }) => {
       await TrackPlayer.play();
     }
   };
+
+
   return (
     <View style={[styles.container, style]}>
       <View style={styles.innerContainer}>
         <View style={styles.imageContainer}>
           <CustomImage
+            onPress={() => {
+              navigationService.navigate('MusicPlayerScreen')
+            }}
             source={require('../Assets/Images/bottom.png')}
             style={styles.image}
           />
@@ -40,14 +59,17 @@ const MinimisedPlayer = ({ style }) => {
           style={styles.textContainer}
           titleStyle={styles.text1}
           descriptionStyle={styles.text2}
-          title={'don’t forget your roots - 2021'}
-          description="Six 60"
+          title={track?.title}
+          description={track?.artist}
+          onPress={() => {
+            navigationService.navigate('MusicPlayerScreen')
+          }}
         />
         <View style={styles.actions}>
           <ThemeIconButton
             style={styles.iconBtn}
             iconSource={isPlaying ? require('../Assets/Images/pause.png') : require('../Assets/Images/play-circle.png')}
-          // onPress={togglePlayback}
+            onPress={togglePlayback}
           />
           <ThemeIconButton
             style={styles.iconBtn}
@@ -63,15 +85,25 @@ const MinimisedPlayer = ({ style }) => {
         </View>
       </View>
       <View>
-        <Slider
-          style={styles.slider}
-          thumbTintColor={'#058DD9'}
-          minimumTrackTintColor={'#058DD9'}
-          maximumTrackTintColor="rgba(255,255,255,0.3)"
+        <AudioSlider width={'100%'} />
+        {/* <Slider
+          style={
+            [{ width: '100%', height: 30 }]}
           minimumValue={0}
-          maximumValue={100}
-          value={60}
-        />
+          // maximumValue={100}
+          // value={50}
+          maximumValue={safeDuration}
+          value={isSliding ? sliderValue : safePosition}
+          minimumTrackTintColor={Color.white}
+          maximumTrackTintColor={Color.veryLightGray}         
+          thumbTintColor={Color.white}
+          onSlidingStart={() => setIsSliding(true)}
+          onValueChange={(val) => setSliderValue(val)}
+          onSlidingComplete={async (val) => {
+            await TrackPlayer.seekTo(val);
+            setIsSliding(false);
+          }}
+        /> */}
       </View>
     </View>
   );
@@ -81,17 +113,20 @@ export default MinimisedPlayer;
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
+    bottom: windowWidth * 0.2,
+    // + moderateScale(15),
     width: windowWidth,
+    // backgroundColor: 'green',
     backgroundColor: '#353A40',
-    gap: verticalScale(10),
-    paddingHorizontal: scale(20),
-    paddingTop: verticalScale(20),
+    // gap: verticalScale(10),
+    paddingHorizontal: scale(15),
+    paddingTop: verticalScale(10),
     borderTopLeftRadius: moderateScale(30, 0.2),
     borderTopRightRadius: moderateScale(30, 0.3),
     zIndex: 1,
-    paddingBottom: verticalScale(50),
+    paddingBottom: verticalScale(5),
 
-    bottom: scale(30),
     shadowColor: Color.black,
     shadowOffset: {
       width: 0,
@@ -99,13 +134,13 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-
     elevation: 16,
   },
   innerContainer: {
     gap: scale(10),
     flexDirection: 'row',
     alignItems: 'center',
+    // backgroundColor: 'red'
   },
   imageContainer: {
     width: scale(30),
@@ -123,7 +158,7 @@ const styles = StyleSheet.create({
     gap: scale(15),
   },
   textContainer: {
-    width: 'auto',
+    width: '55%',
     paddingVertical: 0,
     paddingHorizontal: 0,
   },

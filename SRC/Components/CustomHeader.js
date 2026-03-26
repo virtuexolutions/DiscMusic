@@ -51,14 +51,14 @@ const CustomHeader = ({ leftIcon, RightIcon,
                 iconSource={require("../Assets/Images/user-icon.png")}
               />
               : premium ? <ThemeIconButton
-              onPress={() => {
-                // navigation.goBack();
-              }}
-              style={styles.premium}
-              iconColor={Color.black}
-              iconSource={require("../Assets/Images/shapes.png")}
-            />
-            : null
+                onPress={() => {
+                  // navigation.goBack();
+                }}
+                style={styles.premium}
+                iconColor={Color.black}
+                iconSource={require("../Assets/Images/shapes.png")}
+              />
+                : null
         )}
       <CustomText style={[styles.title, titlStyle]}>{text}</CustomText>
       {subtext && (
@@ -74,16 +74,16 @@ const CustomHeader = ({ leftIcon, RightIcon,
       )}
 
       {RightIcon ?
-        <View style={{flexDirection:"row", gap:scale(10)}}>
-        {camera && (<ThemeIconButton
+        <View style={{ flexDirection: "row", gap: scale(10) }}>
+          {camera && (<ThemeIconButton
             iconSource={require("../Assets/Images/camera.png")}
             iconSize={scale(14)}
-            onPress={()=>{
+            onPress={() => {
               navigation.navigate("MusicCodeScreen")
               console.log("first")
             }}
           />)}
-           {search && <ThemeIconButton
+          {search && <ThemeIconButton
             iconSource={require("../Assets/Images/search.png")}
             iconSize={scale(14)}
           />}
@@ -95,41 +95,41 @@ const CustomHeader = ({ leftIcon, RightIcon,
           {notifications && <ThemeIconButton
             iconName={"bell-alt"}
             iconType={Fontisto}
-            onPress={()=>{
+            onPress={() => {
               navigation.navigate("Notification")
             }}
             iconSize={scale(14)}
           />}
-          {dots &&  <LinearGradient
-    start={{x: 0, y: 0}}
-    end={{x: 1, y: 0}}
-    colors={Color.themeBgColor}
-    style={{
-      width: windowWidth * 0.12,
-      height: windowWidth * 0.12,
-      borderRadius: windowWidth / 2,
-      justifyContent: 'ceneter',
-      alignItems: 'center',
-    }}>
-    <Icon
-      name="dots-three-vertical"
-      as={Entypo}
-      size={moderateScale(20, 0.3)}
-      color={Color.white}
-      style={{
-        position: 'absolute',
-        top: moderateScale(12, 0.3),
-      }}
-      onPress={() => {
-        navigationService.navigate("Settings")
-        // dispatch(setUserLogOut());
-        // dispatch(setUserLogoutAuth());
-      }}
-    />
-  </LinearGradient>
+          {dots && <LinearGradient
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            colors={Color.themeBgColor}
+            style={{
+              width: windowWidth * 0.12,
+              height: windowWidth * 0.12,
+              borderRadius: windowWidth / 2,
+              justifyContent: 'ceneter',
+              alignItems: 'center',
+            }}>
+            <Icon
+              name="dots-three-vertical"
+              as={Entypo}
+              size={moderateScale(20, 0.3)}
+              color={Color.white}
+              style={{
+                position: 'absolute',
+                top: moderateScale(12, 0.3),
+              }}
+              onPress={() => {
+                navigationService.navigate("Settings")
+                // dispatch(setUserLogOut());
+                // dispatch(setUserLogoutAuth());
+              }}
+            />
+          </LinearGradient>
 
-  }
-  { rightIconComponent && rightIconComponent }
+          }
+          {rightIconComponent && rightIconComponent}
         </View>
 
         : (
@@ -177,9 +177,9 @@ const styles = StyleSheet.create({
     color: Color.mediumGray,
     fontSize: moderateScale(10, 0.6),
   },
-  premium:{
-     backgroundColor:Color.white,
-     width:scale(30),
-     height:scale(30)
+  premium: {
+    backgroundColor: Color.white,
+    width: scale(30),
+    height: scale(30)
   }
 });

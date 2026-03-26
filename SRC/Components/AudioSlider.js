@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { Text, View, } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { windowWidth } from '../Utillity/utils';
 import { moderateScale } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import TrackPlayer, { State, useActiveTrack, usePlaybackState, useProgress } from 'react-native-track-player';
+// import Text from './Text';
+// import CustomText from './CustomText';
 const AudioSlider = ({
   currentTime = 30,
   totalTime,
   containerStyle,
   sliderStyle,
-  sliderTimerContainerStyle
+  sliderTimerContainerStyle,
+  width,
 }) => {
   const [isSliding, setIsSliding] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
@@ -31,14 +34,18 @@ const AudioSlider = ({
       style={
         [
           {
-            width: '100%',
+            width: width ? width : windowWidth * 0.8,
             alignItems: 'center',
             // backgroundColor: 'red'
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }, containerStyle]}
     >
+
+      <Text style={{ color: '#fff', fontSize: 10, }}>{formatTime(isSliding ? sliderValue : safePosition)}</Text>
       <Slider
         style={
-          [{ width: '100%', height: 30 }, sliderStyle]}
+          [{ flex: 1, height: 30, marginHorizontal: moderateScale(5) }, sliderStyle]}
         minimumValue={0}
         // maximumValue={100}
         // value={50}
@@ -54,17 +61,17 @@ const AudioSlider = ({
           setIsSliding(false);
         }}
       />
-      <View
+      {/* <View
         style={[{
           width: '100%',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginTop: -10,
+          marginTop: moderateScale(-10, .6),
+          backgroundColor: 'red'
         }, sliderTimerContainerStyle]}
-      >
-        <Text style={{ color: '#fff', fontSize: 10, }}>{formatTime(isSliding ? sliderValue : safePosition)}</Text>
-        <Text style={{ color: '#fff', fontSize: 10, }}>{formatTime(safeDuration)}</Text>
-      </View>
+      > */}
+      <Text style={{ color: '#fff', fontSize: 10, }}>{formatTime(safeDuration)}</Text>
+      {/* </View> */}
     </View>
   );
 };

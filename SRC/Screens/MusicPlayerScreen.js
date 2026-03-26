@@ -5,18 +5,53 @@ import Color from '../Assets/Utilities/Color'
 import CustomHeader from '../Components/CustomHeader'
 import ThemeIconButton from '../Components/ThemeIconButton'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
-import { windowHeight, windowWidth } from '../Utillity/utils'
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils'
 import CustomButton from '../Components/CustomButton'
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import Feather from 'react-native-vector-icons/Feather';
 
 import TitleWithDescription from '../Components/TitleWithDescription'
 import PlayerSliderWithActions from '../Components/playerSliderWithActions'
 import LyricsContainer from '../Components/LyricsContainer'
 import RotatingDisc from '../Components/RotatingDisc'
 import CircularMenu from '../Components/CircularMenu'
+import { useActiveTrack, usePlaybackState } from 'react-native-track-player'
+import { playPlaylist } from '../Components/MusicPlayerController'
+import AudioSlider from '../Components/AudioSlider'
+import { useSelector } from 'react-redux'
+import { Post } from '../Axios/AxiosInterceptorFunction'
 
 const MusicPlayerScreen = () => {
+    const token = useSelector((state) => state.authReducer.token);
+    const track = useActiveTrack();
+    console.log('track====================== >>>>>>> here from music player screen', track);
+
+
+    const likeTrack = async () => {
+        const url = 'auth/liked-songs/store'
+        const body = {
+            track_id: track?.id,
+            // is_liked: true
+        }
+        // return console.log('body====================== >>>>>>> here from music player screen',)
+        const response = await Post(url, { track_id: track?.id }, apiHeader(token));
+        if (response != undefined) {
+            console.log('you liked this song')
+        }
+        console.log('response====================== >>>>>>> here from music player screen', response?.data);
+    }
+
+    const unlikeTrack = async () => {
+        const url = 'auth/liked-songs/remove'
+
+        // return console.log('body====================== >>>>>>> here from music player screen',)
+        const response = await Post(url, { track_id: track?.id }, apiHeader(token));
+        if (response != undefined) {
+            console.log('you liked this song')
+        }
+        console.log('response====================== >>>>>>> here from music player screen', response?.data);
+    }
+
     return (
         <>
             <CustomStatusBar
@@ -36,18 +71,17 @@ const MusicPlayerScreen = () => {
                     showsVerticalScrollIndicator={false}
                     removeClippedSubviews={true}
                     contentContainerStyle={{
-                        paddingTop:verticalScale(10),
+                        paddingTop: verticalScale(10),
                         paddingBottom: verticalScale(100),
                     }}>
-                        <RotatingDisc isPlaying={true}/>
-                    <View style={styles.actions}>
+                    <RotatingDisc isPlaying={true} image={track?.artwork} />
+                    {/* <View style={styles.actions}>
                         <CustomButton
                             //   isGradient
                             isBold={true}
                             text={'Sad Vibes'}
                             textColor={Color.white}
                             onPress={() => { }}
-
                             style={styles.button}
                             borderColor={Color.white}
                             borderRadius={moderateScale(8, 0.2)}
@@ -58,38 +92,42 @@ const MusicPlayerScreen = () => {
                             style={styles.iconButton}
                             iconName={"chevron-down"}
                         />
-                    </View>
+                    </View> */}
                     <View style={styles.actions}>
                         <TitleWithDescription
-                            title={"Lonely"}
+                            disable={true}
+                            title={track?.title}
                             titleStyle={styles.text1}
-                            description={'by Axol Storm'}
+                            description={track?.artist}
                             descriptionStyle={styles.text2}
                         />
                         <View style={styles.innerView}>
 
                             <ThemeIconButton
+                                onPress={() => likeTrack()}
                                 style={styles.iconButton2}
                                 iconType={AntDesign}
                                 iconName={"heart"}
+                                iconSize={moderateScale(22, 0.2)}
                                 iconColor={Color.themeDarkGray}
                             />
                             <ThemeIconButton
                                 style={styles.iconButton2}
-                                iconType={FontAwesome6}
-                                iconSize={moderateScale(14, 0.2)}
-                                iconName={"arrow-down-long"}
+                                iconType={Feather}
+                                iconSize={moderateScale(22, 0.2)}
+                                iconName={"download"}
                                 iconColor={Color.themeLightGray}
                             />
                         </View>
                     </View>
-                <PlayerSliderWithActions/>
-                <LyricsContainer/>
-                <CircularMenu
-                containerStyle={styles.circularButton}
-                />
+                    <PlayerSliderWithActions item={track} />
+                    {/* <AudioSlider /> */}
+                    <LyricsContainer />
+                    <CircularMenu
+                        containerStyle={styles.circularButton}
+                    />
                 </ScrollView>
-                
+
             </ImageBackground>
         </>
     )
@@ -114,7 +152,8 @@ const styles = StyleSheet.create({
     },
     innerView: {
         flexDirection: "row",
-        gap: scale(10),
+        gap: scale(13),
+        // backgroundColor: "red",
         alignItems: "center"
     },
     iconButton: {
@@ -151,8 +190,8 @@ const styles = StyleSheet.create({
         color: Color.white,
         // fontWeight:"bold"
     },
-    circularButton:{
-        bottom:scale(-60),
+    circularButton: {
+        bottom: scale(-60),
         // right:scale(-120)
     }
 })

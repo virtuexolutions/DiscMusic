@@ -10,13 +10,12 @@ export default function CustomStatusBar(props) {
 
   const isGradient = Array.isArray(backgroundColor);
   const StatusBarHeight = StatusBar.currentHeight;
-  console.log("StatusBarHeight  ", StatusBarHeight)
   return (
     <>
       {isGradient ? (
         <LinearGradient
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           colors={backgroundColor ? backgroundColor : [Color.themeBgColor]}
           style={[
             {

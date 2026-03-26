@@ -9,13 +9,14 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { moderateScale } from 'react-native-size-matters';
 import { windowWidth } from '../Utillity/utils';
 import CustomImage from './CustomImage';
-import { imageUrl } from '../Config';
+import { baseUrl, imageUrl } from '../Config';
 
 const ITEM_SIZE = 140;
 const SIDE_SIZE = 90;
 const CarouselView = ({
   data
 }) => {
+  console.log('data from carousel view', JSON.stringify(data?.profile_image, null, 2))
   const navigation = useNavigation();
   return (
     <GestureHandlerRootView>
@@ -26,7 +27,7 @@ const CarouselView = ({
         data={data}
         contentContainerStyle={{ marginLeft: moderateScale(10, 0.6), marginEnd: moderateScale(10, 0.6) }}
         renderItem={({ index, item }) => {
-          console.log('------------------ >>>>dataitemitemitem', JSON.stringify(item, null, 2))
+          // console.log('------------------ >>>>dataitemitemitem', JSON.stringify(`${baseUrl}/storage/${item?.profile_image}`, null, 2))
           return (
             <TouchableOpacity
               onPress={() => {
@@ -43,7 +44,7 @@ const CarouselView = ({
 
                   // navigation.navigate('MusicPlayerScreen');
                 }}
-                source={{ uri: imageUrl + item?.user?.profile_image }}
+                source={{ uri: `${baseUrl}/storage/${item?.profile_image}` }}
                 style={{
                   width: '100%',
                   height: '100%',

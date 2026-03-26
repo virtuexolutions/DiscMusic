@@ -13,6 +13,7 @@ const SongListTile = ({
   title,
   subtitle,
   onPress,
+  from
 }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
@@ -38,8 +39,10 @@ export default SongListTile;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    gap: scale(8),
+    gap: scale(5),
     alignItems: 'center',
+    // backgroundColor: 'red',
+    // backgroundColor: 'transparent',
     paddingVertical: verticalScale(5),
   },
   imageContainer: {

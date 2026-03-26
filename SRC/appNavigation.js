@@ -1,63 +1,54 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import navigationService from './navigationService';
-import LoginScreen from './Screens/LoginScreen';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Walkthrough from './Screens/Walkthrough';
-import SignupScreen from './Screens/Signup';
-import HomeScreen from './Screens/HomeScreen';
-import { windowHeight, windowWidth } from './Utillity/utils';
 import LinearGradient from 'react-native-linear-gradient';
-import { View } from 'react-native';
-import Color from './Assets/Utilities/Color';
 import { moderateScale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import Octicons from 'react-native-vector-icons/Octicons';
-import SearchScreen from './Screens/SearchScreen';
-import YourLibrary from './Screens/YourLibrary';
-import PremiumScreen from './Screens/PremiumScreen';
-import PlaylistScreen from './Screens/PlaylistScreen';
+import { useSelector } from 'react-redux';
+import Color from './Assets/Utilities/Color';
+import navigationService from './navigationService';
 import AboutArtist from './Screens/AboutArtist';
-import EventScreen from './Screens/EventScreen';
-import DetailedScreen from './Screens/DetailedScreen';
-import Notification from './Screens/Notification';
-import RecentlyPlayed from './Screens/RecentlyPlayed';
-import Settings from './Screens/Setting';
-import MusicCodeScreen from './Screens/MusicCodeScreen';
-import ScanScreen from './Screens/ScanScreen';
-import ViewArtistLibrary from './Screens/ViewArtistLibrary';
-import ReviewYourPlan from './Screens/ReviewYourPlan';
-import MusicDetailsScreen from './Screens/MusicDetailsScreen';
-import GetStarted from './Screens/GetStarted';
-import MusicPlayerScreen from './Screens/MusicPlayerScreen';
-import Profile from './Screens/Profile';
 import ChangePassword from './Screens/ChangePassword';
-import EnterEmail from './Screens/EnterEmail';
-import VerifyNumber from './Screens/VerifyNumber';
-import ResetPassword from './Screens/ResetPassword';
+import DetailedScreen from './Screens/DetailedScreen';
 import DetailScreen from './Screens/DetailScreen';
+import EnterEmail from './Screens/EnterEmail';
+import EventScreen from './Screens/EventScreen';
+import GetStarted from './Screens/GetStarted';
+import HomeScreen from './Screens/HomeScreen';
+import LoginScreen from './Screens/LoginScreen';
+import MusicCodeScreen from './Screens/MusicCodeScreen';
+import MusicDetailsScreen from './Screens/MusicDetailsScreen';
+import MusicPlayerScreen from './Screens/MusicPlayerScreen';
+import Notification from './Screens/Notification';
+import PlaylistScreen from './Screens/PlaylistScreen';
+import PremiumScreen from './Screens/PremiumScreen';
+import Profile from './Screens/Profile';
+import RecentlyPlayed from './Screens/RecentlyPlayed';
+import ResetPassword from './Screens/ResetPassword';
+import ReviewYourPlan from './Screens/ReviewYourPlan';
+import ScanScreen from './Screens/ScanScreen';
+import SearchScreen from './Screens/SearchScreen';
+import Settings from './Screens/Setting';
+import SignupScreen from './Screens/Signup';
+import VerifyNumber from './Screens/VerifyNumber';
+import ViewArtistLibrary from './Screens/ViewArtistLibrary';
+import Walkthrough from './Screens/Walkthrough';
+import YourLibrary from './Screens/YourLibrary';
+import { windowWidth } from './Utillity/utils';
 
 const AppNavigator = () => {
-  // const isGoalCreated = useSelector(state => state.authReducer.isGoalCreated);
   const walkThrough = useSelector(state => state.authReducer.userWalkThrough);
-  const isVerified = useSelector(state => state.authReducer.isVerified);
   const token = useSelector(state => state.authReducer.token);
-  console.log('first ==================sss= >>>>>>', token);
-  const selectedRole = useSelector(state => state.commonReducer.selectedRole);
   const isProfileCreated = useSelector(state => state.commonReducer.isProfile);
-  console.log('🚀 ~ AppNavigator ~ isProfileCreated:', isProfileCreated);
   const userdata = useSelector(state => state.commonReducer.userData);
-  console.log('🚀 ~ AppNavigator ~ userdata:', userdata);
+
 
   const RootNav = createNativeStackNavigator();
   const RootNavLogged = createNativeStackNavigator();
 
   const AppNavigatorContainer = () => {
-    // const firstScreen = walkThrough == false ? 'LoginScreen' : 'TabNavigation';
 
     const firstScreen =
       walkThrough == false
@@ -67,7 +58,6 @@ const AppNavigator = () => {
           : isProfileCreated == false || 0
             ? 'Profile'
             : 'TabNavigation';
-    console.log('🚀 ~ AppNavigatorContainer ~ firstScreen:', firstScreen);
 
     return (
       <NavigationContainer ref={navigationService.navigationRef}>

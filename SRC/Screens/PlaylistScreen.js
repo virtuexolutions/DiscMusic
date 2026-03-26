@@ -16,11 +16,13 @@ import CustomImage from '../Components/CustomImage';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 import { windowHeight, windowWidth } from '../Utillity/utils';
-import { playNext, playPlaylist, playPrevious, playSingleTrack, getArtistNameFromTrack } from '../Components/MusicPlayerController';
+import { playNext, playPlaylist, playPrevious, playSingleTrack, getArtistNameFromTrack, playPlaylistFromTrack } from '../Components/MusicPlayerController';
+import { baseUrl } from '../Config';
 
 const PlaylistScreen = props => {
   const data = props?.route?.params?.item;
-  console.log('🚀 ~ PlaylistScreen ~ data:', data);
+  const allTracks = props?.route?.params?.allTracks;
+  console.log('🚀 ~ PlaylistScreen ~ data >>>>>>>>>>>>>>>>>>>>>>>>>>>> :', data?.cover_image);
 
 
   // Use the reactive hook to track the actual play state
@@ -31,9 +33,11 @@ const PlaylistScreen = props => {
   const artistName = getArtistNameFromTrack(currentTrack);
 
   useEffect(() => {
-    // Attempt to play the single track passed from the prev screen immediately
-    if (data) {
-      playSingleTrack(data);
+    // Play the full list but start from the selected track
+    if (data && allTracks) {
+      playPlaylistFromTrack(allTracks, data);
+    } else if (data) {
+      playPlaylist(data);
     }
   }, [data?.id]);
 
@@ -56,6 +60,14 @@ const PlaylistScreen = props => {
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}
         imageStyle={styles.image}>
+        <CustomHeader
+          leftIcon
+          RightIcon
+          showBack={true}
+          dots={true}
+          text1={'playing from playlist'}
+          subtext={'Mega hit mix'}
+        />
         <ScrollView
           scrollEnabled={true}
           showsVerticalScrollIndicator={false}
@@ -68,23 +80,17 @@ const PlaylistScreen = props => {
           style={{
             width: '100%',
             flexGrow: 0,
+            // backgroundColor: 'red'
           }}>
           <View style={styles.container}>
-            <CustomHeader
-              leftIcon
-              RightIcon
-              showBack={true}
-              dots={true}
-              text1={'playing from playlist'}
-              subtext={'Mega hit mix'}
-            />
+
             <View style={styles.image_con}>
               <CustomImage
                 style={{
                   height: '100%',
                   width: '100%',
                 }}
-                source={require('../Assets/Images/playlist_image.png')}
+                source={{ uri: data?.cover_image ? `${baseUrl}/storage/${data?.cover_image}` : require('../Assets/Images/playlist_image.png') }}
               />
             </View>
             <View style={styles.text_con}>
@@ -102,7 +108,7 @@ const PlaylistScreen = props => {
                 as={AntDesign}
               />
             </View>
-            <AudioSlider />
+            <AudioSlider width={windowWidth * 0.9} />
             <View style={styles.player_btn}>
               <TouchableOpacity style={styles.btn}>
                 <Icon
@@ -113,6 +119,7 @@ const PlaylistScreen = props => {
                 />
               </TouchableOpacity>
               <TouchableOpacity
+                disabled={true}
                 onPress={() => {
                   playPrevious();
                 }}
@@ -126,7 +133,7 @@ const PlaylistScreen = props => {
                 ]}>
                 <Icon
                   onPress={() => {
-                    playPrevious();
+                    // playPrevious();
                   }}
                   name="play-skip-back-outline"
                   as={Ionicons}
@@ -272,8 +279,8 @@ const PlaylistScreen = props => {
                 </CustomText>
               </View>
             </View>
-            <Card />
-            <Card fromEvent={true} />
+            <Card artistData={data} />
+            <Card fromEvent={true} artistData={data} />
 
             {/* <View style={styles.lyrics_con}></View> */}
 
@@ -319,6 +326,8 @@ const styles = ScaledSheet.create({
     alignSelf: 'center',
     marginBottom: moderateScale(20, 0.3),
     marginTop: windowHeight * 0.05,
+    overflow: 'hidden',
+    borderRadius: moderateScale(30, 0.3),
   },
   text_con: {
     flexDirection: 'row',
@@ -450,7 +459,7 @@ const styles = ScaledSheet.create({
   artist_image: {
     height: windowHeight * 0.2,
     width: windowWidth * 0.8,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     borderRadius: moderateScale(20, 0.6),
     overflow: 'hidden',
   },

@@ -28,14 +28,15 @@ export const formatTrack = (track) => {
   if (!track) return null;
   // If it's already formatted, just return it
   if (track.url?.startsWith('http')) return track;
-
+  console.log('url====================== >>>>>>>>>>>>>> hereeeeeeeeeeeee', `${baseUrl}/storage/${JSON.stringify(track, null, 2)}`)
   return {
     id: track.id.toString(),
     // Important: Include /storage/ for the audio file path
-    url: `${baseUrl}/storage/${track.audio_file_path}`,
+    url: `${baseUrl}/storage/${track.audio_file_path || track.audio_file}`,
     title: track.title || 'Unknown Title',
     artist: getArtistNameFromTrack(track),
-    artwork: `${baseUrl}/${track.cover_image_path}`,
+    is_liked: track?.is_liked,
+    artwork: `${baseUrl}/storage/${track.cover_image_path || track.cover_image}`,
   };
 };
 
@@ -63,7 +64,6 @@ export const setupPlayer = async () => {
         Capability.Play,
         Capability.Pause,
         Capability.SkipToNext,
-        Capability.SkipToPrevious,
         Capability.SeekTo,
       ],
       compactCapabilities: [Capability.Play, Capability.Pause, Capability.SkipToNext],
@@ -136,10 +136,11 @@ export const playSingleTrack = async (track) => {
 export const playPlaylist = async (tracks) => {
   console.log('🎵 Playing Playlist (Count):', tracks?.length);
   try {
-    if (!tracks || tracks.length === 0) return;
+    if (!tracks) return;
+    const trackArray = Array.isArray(tracks) ? tracks : [tracks];
 
     // Format all tracks before adding to queue
-    const formattedTracks = tracks.map(t => formatTrack(t)).filter(t => t !== null);
+    const formattedTracks = trackArray.map(t => formatTrack(t)).filter(t => t !== null);
 
     await TrackPlayer.reset();
     await TrackPlayer.add(formattedTracks);
@@ -150,15 +151,46 @@ export const playPlaylist = async (tracks) => {
     console.error('Error playing playlist:', error);
   }
 };
+
+/**
+ * 4. Play from a specific track in a list
+ * Adds the entire list to the queue but starts playback at the specified track.
+ */
+export const playPlaylistFromTrack = async (tracks, startTrack) => {
+  try {
+    if (!tracks || !startTrack) return;
+    const trackArray = Array.isArray(tracks) ? tracks : [tracks];
+
+    // Format all tracks
+    const formattedTracks = trackArray.map(t => formatTrack(t)).filter(t => t !== null);
+
+    // Find the index of the start track
+    const startIndex = formattedTracks.findIndex(t => t.id === startTrack.id.toString());
+
+    await TrackPlayer.reset();
+    await TrackPlayer.add(formattedTracks);
+    await TrackPlayer.setRepeatMode(RepeatMode.Queue);
+
+    if (startIndex !== -1) {
+      await TrackPlayer.skip(startIndex);
+    }
+    await TrackPlayer.play();
+    console.log(`✅ Playlist Added, Skipping to #${startIndex + 1}: ${startTrack.title}`);
+  } catch (error) {
+    console.error('Error in playPlaylistFromTrack:', error);
+  }
+};
 export const playNext = async () => {
   try {
     const queue = await TrackPlayer.getQueue();
     const currentIndex = await TrackPlayer.getActiveTrackIndex();
 
     // Check if we are at the last track
+    // Loop back to the start if we are at the last track
     if (currentIndex === queue.length - 1) {
-      console.log('🏁 End of queue reached');
-      // Optional: await TrackPlayer.skip(0); // Loop to start
+      console.log('🏁 End of queue reached, looping to start');
+      await TrackPlayer.skip(0);
+      await TrackPlayer.play();
       return;
     }
 

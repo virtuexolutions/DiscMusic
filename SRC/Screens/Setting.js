@@ -1,6 +1,6 @@
-import {ScrollView, View} from 'native-base';
-import React, {useRef, useState} from 'react';
-import {ImageBackground, TouchableOpacity} from 'react-native';
+import { ScrollView, View } from 'native-base';
+import React, { useRef, useState } from 'react';
+import { ImageBackground, TouchableOpacity } from 'react-native';
 import {
   moderateScale,
   scale,
@@ -15,11 +15,11 @@ import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {windowHeight, windowWidth} from '../Utillity/utils';
-import {Circle} from 'react-native-svg';
-import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
+import { windowHeight, windowWidth } from '../Utillity/utils';
+import { Circle } from 'react-native-svg';
+import { Custom } from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
 import OtherLocation from '../Components/OtherLocation';
-import {mode} from 'native-base/lib/typescript/theme/tools';
+import { mode } from 'native-base/lib/typescript/theme/tools';
 import MusicModal from '../Components/MusicModal';
 import ProfileComponent from '../Components/ProfileComponent';
 import CustomButton from '../Components/CustomButton';
@@ -31,10 +31,10 @@ import StorageSettings from '../Components/StorageSettings';
 import AboutInfo from '../Components/AboutInfo';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
 import navigationService from '../navigationService';
-import {setUserLogoutAuth, setUserToken} from '../Store/slices/auth';
-import {useDispatch} from 'react-redux';
+import { setUserLogoutAuth, setUserToken } from '../Store/slices/auth';
+import { useDispatch } from 'react-redux';
 
-const Settings = ({navigation}) => {
+const Settings = ({ navigation }) => {
   const dispatch = useDispatch();
   const [audioQuality, setAudioQuality] = useState(false);
   const playBackSettings = [
@@ -168,7 +168,7 @@ const Settings = ({navigation}) => {
               }}
             />
             <InfoText
-              containerStyle={{marginTop: verticalScale(10)}}
+              containerStyle={{ marginTop: verticalScale(10) }}
               text={
                 'Note: video is not streamed when the spotify app is backgrounded.'
               }
@@ -248,7 +248,7 @@ const Settings = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </ScrollView>
-        <MinimisedPlayer style={styles.player} />
+        {/* <MinimisedPlayer style={styles.player} /> */}
       </ImageBackground>
     </>
   );
@@ -397,7 +397,7 @@ const styles = ScaledSheet.create({
     bottom: scale(30),
     paddingBottom: verticalScale(30),
   },
-  label: {marginTop: moderateScale(12, 0.2)},
+  label: { marginTop: moderateScale(12, 0.2) },
 });
 
 export default Settings;

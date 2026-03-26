@@ -1,7 +1,7 @@
-import {ScrollView, View} from 'native-base';
-import React, {useState} from 'react';
-import {ImageBackground, TouchableOpacity} from 'react-native';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { ScrollView, View } from 'native-base';
+import React, { useState } from 'react';
+import { ImageBackground, TouchableOpacity } from 'react-native';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 
 import Color from '../Assets/Utilities/Color';
 import CustomHeader from '../Components/CustomHeader';
@@ -10,9 +10,9 @@ import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {windowHeight, windowWidth} from '../Utillity/utils';
-import {Circle} from 'react-native-svg';
-import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
+import { windowHeight, windowWidth } from '../Utillity/utils';
+import { Circle } from 'react-native-svg';
+import { Custom } from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
 import OtherLocation from '../Components/OtherLocation';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
 
@@ -85,9 +85,9 @@ const EventScreen = () => {
             paddingBottom: moderateScale(80, 0.6),
           }}
           style={styles.container}>
-          <CustomHeader leftIcon 
-          showBack={true}
-          text={'Oliver tree'} subtext={''} />
+          <CustomHeader leftIcon
+            showBack={true}
+            text={'Oliver tree'} subtext={''} />
 
           <View
             style={{
@@ -102,10 +102,10 @@ const EventScreen = () => {
                 this artist has no upcomin concerts near chennai
               </CustomText>
             </View>
-            <TouchableOpacity onPress={() => {}} style={styles.btn_Con}>
+            <TouchableOpacity onPress={() => { }} style={styles.btn_Con}>
               <CustomText
                 style={{
-                  fontSize: moderateScale(14, 0.6),
+                  fontSize: moderateScale(11, 0.6),
                   color: Color.white,
                 }}>
                 change location
@@ -129,7 +129,7 @@ const EventScreen = () => {
             return <OtherLocation item={item} />;
           })}
         </ScrollView>
-        <MinimisedPlayer/>
+        <MinimisedPlayer />
       </ImageBackground>
     </>
   );
@@ -163,6 +163,7 @@ const styles = ScaledSheet.create({
     color: '#7F8489',
     fontSize: moderateScale(13, 0.6),
     padding: moderateScale(2, 0.6),
+    width: windowWidth * 0.65,
   },
   details: {
     paddingVertical: moderateScale(20, 0.6),

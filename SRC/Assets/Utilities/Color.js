@@ -21,8 +21,8 @@ export default Color = {
   blue: '#00ADEF',
 
   purple: '#0D668E',
-  themeSkyBlue:"#058DD9",
-  themeLightGray:"#7F8489",
+  themeSkyBlue: "#058DD9",
+  themeLightGray: "#7F8489",
   // theme colors
   themeColor: '#8DC73F',
   themePink: '#F84569',
@@ -32,9 +32,9 @@ export default Color = {
   // themeLightGray: '#8D8D8D',
   themeBlack: '#3A3838',
   themebgBusinessQbidder: ['#CD5C5C', '#7E191B'],
- 
-  themeGradient:["#2F353A","#1C1F22"],
-  themeGradient2:["#016BB8", "#11A8FD"],
+
+  themeGradient: ["#2F353A", "#1C1F22"],
+  themeGradient2: ["#016BB8", "#11A8FD"],
 
   //gradientColors
   themeBgColor: ['#2F353A', '#1C1F22',],
