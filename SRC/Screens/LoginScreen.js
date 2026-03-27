@@ -1,9 +1,9 @@
-import {Icon, ScrollView, View} from 'native-base';
-import React, {useState} from 'react';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { Icon, ScrollView, View } from 'native-base';
+import React, { useState } from 'react';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import CustomStatusBar from '../Components/CustomStatusBar';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
 import {
   ActivityIndicator,
@@ -18,10 +18,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CustomButton from '../Components/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import navigationService from '../navigationService';
-import {useDispatch, useSelector} from 'react-redux';
-import {setProfileCreated, setUserData} from '../Store/slices/common';
-import {Post} from '../Axios/AxiosInterceptorFunction';
-import {setUserToken} from '../Store/slices/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFavArtist, setProfileCreated, setUserData } from '../Store/slices/common';
+import { Post } from '../Axios/AxiosInterceptorFunction';
+import { setUserToken } from '../Store/slices/auth';
 
 const LoginScreen = () => {
   const token = useSelector(state => state.authReducer.token);
@@ -40,11 +40,13 @@ const LoginScreen = () => {
     const url = 'login';
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
+    // return console.log('response====================== >>>>>>> here from login', JSON.stringify(response?.data?.user_info?.liked_artist, null, 2));
     setIsLoading(false);
     if (response != undefined) {
-      dispatch(setUserToken({token: response?.data?.token}));
+      dispatch(setUserToken({ token: response?.data?.token }));
       dispatch(setUserData(response?.data?.user_info));
       dispatch(setProfileCreated(response?.data?.user_info?.isProfileCreated));
+      dispatch(setFavArtist(response?.data?.user_info?.liked_artist));
     }
   };
 
@@ -146,7 +148,7 @@ const LoginScreen = () => {
               borderRadius={windowWidth / 2}
               fontSize={moderateScale(16, 0.3)}
             />
-            <View style={[styles.row_view, {marginTop: windowWidth * 0.12}]}>
+            <View style={[styles.row_view, { marginTop: windowWidth * 0.12 }]}>
               <View style={styles.line} />
               <CustomText style={styles.text_1}>Or Sign in with</CustomText>
               <View style={styles.line} />
@@ -215,14 +217,14 @@ const LoginScreen = () => {
                 },
               ]}>
               <CustomText
-                style={[styles.text_1, {width: '60%', textAlign: 'right'}]}>
+                style={[styles.text_1, { width: '60%', textAlign: 'right' }]}>
                 Don't Have account?
               </CustomText>
               <CustomText
                 onPress={() => navigationService.navigate('SignupScreen')}
                 style={[
                   styles.text_1,
-                  {color: Color.veryLightGray, textAlign: 'left'},
+                  { color: Color.veryLightGray, textAlign: 'left' },
                 ]}>
                 Sign up
               </CustomText>

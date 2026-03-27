@@ -22,9 +22,11 @@ import { useSelector } from 'react-redux'
 const MusicDetailsScreen = ({ route }) => {
     const { item } = route.params;
     const token = useSelector(state => state.authReducer.token)
-    console.log('item====================== >>>>>>> item from music detailscreen ', item?.cover_image, `${baseUrl}/storage/${item?.cover_image}`);
     const playbackState = usePlaybackState();
     const isPlaying = playbackState.state === State.Playing;
+
+
+    // console.log('item====================== >>>>>>> item from music detailscreen ', item?.cover_image, `${baseUrl}/storage/${item?.cover_image}`);
     const [recentlyPlayedSongs, setRecentlyPlayedSongs] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     // console.log('mmmmmmmmmmmmmmmmmmmm ', playbackState.state)

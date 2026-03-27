@@ -185,7 +185,7 @@ const SearchScreen = () => {
         {
           isLoading ? <Loader animation={true} /> :
             <FlatList
-              data={genreList}
+              data={search ? genreList.filter(item => item?.name?.toLowerCase().includes(search.toLowerCase())) : genreList}
               numColumns={2}
               keyExtractor={item => item.id}
               contentContainerStyle={{ paddingBottom: verticalScale(80) }}

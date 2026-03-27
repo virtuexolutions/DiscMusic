@@ -1,5 +1,5 @@
-import {Icon, ScrollView, View} from 'native-base';
-import React, {useState} from 'react';
+import { Icon, ScrollView, View } from 'native-base';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Color from '../Assets/Utilities/Color';
 import CustomButton from '../Components/CustomButton';
@@ -19,16 +19,16 @@ import CustomImage from '../Components/CustomImage';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import navigationService from '../navigationService';
-import {useDispatch, useSelector} from 'react-redux';
-import {Post} from '../Axios/AxiosInterceptorFunction';
-import {setProfileCreated} from '../Store/slices/common';
+import { useDispatch, useSelector } from 'react-redux';
+import { Post } from '../Axios/AxiosInterceptorFunction';
+import { setFavArtist, setProfileCreated } from '../Store/slices/common';
 import ImagePickerModal from '../Components/ImagePickerModal';
 
 const Profile = () => {
   const token = useSelector(state => state.authReducer.token);
-  const dispatch = useDispatch() 
+  const dispatch = useDispatch()
   const [countryCode, setCountryCode] = useState('ID'); // For flag
   const [callingCode, setCallingCode] = useState('62'); // For +62
   const [visible, setVisible] = useState(false);
@@ -78,6 +78,7 @@ const Profile = () => {
       dispatch(setProfileCreated(response?.data?.user_info?.isProfileCreated));
       // navigationService.navigate('TabNavigation');
       dispatch(setUserData(response?.data?.user_info));
+      dispatch(setFavArtist(response?.data?.user_info?.liked_artist));
     }
   };
 
@@ -113,7 +114,7 @@ const Profile = () => {
                   }}
                   source={
                     image
-                      ? {uri: image?.uri}
+                      ? { uri: image?.uri }
                       : require('../Assets/Images/profile.png')
                   }
                 />
@@ -149,7 +150,7 @@ const Profile = () => {
               borderRadius={moderateScale(15, 0.3)}
             />
 
-            <View style={{marginTop: moderateScale(20, 0.3)}}>
+            <View style={{ marginTop: moderateScale(20, 0.3) }}>
               <CustomText isBold style={styles.label}>
                 Phone Number
               </CustomText>

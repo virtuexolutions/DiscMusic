@@ -28,6 +28,9 @@ import { useActiveTrack } from 'react-native-track-player';
 
 const HomeScreen = () => {
   const token = useSelector(state => state.authReducer.token)
+  const user = useSelector(state => state.commonReducer.userData)
+  console.log('user==================================== >>>>>>>>>>>>> user', user)
+
   const activeTrack = useActiveTrack()
   console.log('activeTrack==================================== >>>>>>>>>>>>> activeTrack', activeTrack)
 

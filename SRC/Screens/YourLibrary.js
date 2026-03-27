@@ -1,9 +1,9 @@
-import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { FlatList, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import CustomStatusBar from '../Components/CustomStatusBar'
 import Color from '../Assets/Utilities/Color'
 import CustomHeader from '../Components/CustomHeader'
-import { windowHeight, windowWidth } from '../Utillity/utils'
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils'
 import CustomButton from '../Components/CustomButton'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import IconWithText from '../Components/IconWithText'
@@ -15,9 +15,20 @@ import LinearGradient from 'react-native-linear-gradient'
 import ThemeIconButton from '../Components/ThemeIconButton'
 import MinimisedPlayer from '../Components/MinimisedPlayer'
 import { useNavigation } from '@react-navigation/native'
-import { State } from 'react-native-track-player'
+import { State, useActiveTrack } from 'react-native-track-player'
+import { Get, Post } from '../Axios/AxiosInterceptorFunction'
+import { useSelector } from 'react-redux'
+import { baseUrl } from '../Config'
 
 const YourLibrary = () => {
+  const token = useSelector(state => state.authReducer.token)
+  console.log('token====================== >>>>>>> here from YourLibrary', token);
+  const activeTrack = useActiveTrack()
+  const navigation = useNavigation();
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [artistList, setArtistList] = useState([]);
+
   const array = [
     {
       id: 1, title: "Abhijeet", type: "Artist", image: (require("../Assets/Images/artist7.png")),
@@ -30,12 +41,32 @@ const YourLibrary = () => {
     },
   ];
   const actions = [{
-    id: "add", title: "Add artist", onPress: () => { },
+    id: "add", title: "Add artist", onPress: () => {
+      navigation.navigate("SearchArtist")
+    },
   },
   {
     id: "add", title: "Add podcasts & shows", onPress: () => { },
   },
   ];
+
+
+
+  const addArtist = async () => {
+    const url = 'auth/liked-artist'
+    setIsLoading(true)
+    const resposnse = await Get(url, token)
+    setIsLoading(false)
+    console.log('response====================== >>>>>>> here from addArtist', JSON.stringify(resposnse?.data?.artist_list, null, 2));
+    if (resposnse != undefined) {
+      setArtistList(resposnse?.data?.artist_list)
+    }
+    // navigation.navigate("SearchArtist")
+  }
+
+  useEffect(() => {
+    addArtist()
+  }, [])
   return (
     <>
       <CustomStatusBar
@@ -54,6 +85,7 @@ const YourLibrary = () => {
           RightIcon={true}
           search={true}
           add={true} />
+
 
         <View style={styles.row}>
           <CustomButton
@@ -80,24 +112,45 @@ const YourLibrary = () => {
             onPress={() => { }}
           />
         </View>
-        <FlatList
-          data={[...array, ...actions]}
-          keyExtractor={item => item}
-          contentContainerStyle={{
-            marginTop: verticalScale(5),
-            paddingBottom: scale(50),
-            gap: verticalScale(10),
-            // backgroundColor: 'red'
-          }}
-          renderItem={({ item, index }) => {
-            return (
-              <ArtistCard
-                item={item}
-              />
-            );
-          }}
-        />
-        {State.Playing && <MinimisedPlayer />}
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: moderateScale(90, .6) }}>
+          <FlatList
+            style={{
+              // height: windowHeight * 0.3,
+              paddingVertical: moderateScale(10, .6)
+            }}
+            // data={[1, 3, 6, 6, 6, 6]}
+            data={artistList}
+            keyExtractor={item => item} z
+            contentContainerStyle={{
+              // paddingHorizontal: moderateScale(10, .6),
+              // marginTop: verticalScale(5),
+              // paddingBottom: scale(50),
+              // gap: verticalScale(10),
+            }}
+            renderItem={({ item, index }) => {
+              console.log('item====================== >>>>>>> here from renderItem', `${baseUrl}/storage/${item?.user?.profile_image}`);
+              return (
+                <ArtistCard
+                  item={item}
+                />
+              );
+
+            }}
+          />
+
+
+          <ArtistCard
+            item={{
+              id: "add", title: "Add artist", onPress: () => {
+                navigation.navigate("SearchArtist", { from: 'library' })
+              },
+            }}
+          />
+
+          <ArtistCard
+            item={{ id: "add", title: "Add podcasts & shows", onPress: () => { }, }}
+          /></ScrollView>
+        {activeTrack && <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.2 }} />}
       </ImageBackground>
     </>
   )
@@ -126,7 +179,7 @@ const ArtistCard = ({
         // bgColor={[Color.black, "white"]}
         width={windowWidth * 0.18}
         height={windowWidth * 0.18}
-        source={item.image}
+        source={{ uri: `${baseUrl}/storage/${item?.user?.profile_image}` }}
         // shadow={"9"}
         style={{
           elevation: 16, shadowColor: Color.black,
@@ -148,11 +201,14 @@ const ArtistCard = ({
     </View> */}
       <View style={styles.info}>
         <CustomText
-          children={item?.title}
-          style={styles.title}
+          children={item?.title ? item?.title : item?.user?.name}
+          style={[styles.title, {
+
+            fontSize: item?.title ? moderateScale(12, 0.2) : moderateScale(14, 0.2),
+          }]}
         />
         {!isCreate && <CustomText
-          children={item.type}
+          children={'artist'}
           style={styles.desc}
         />}
       </View>
@@ -197,7 +253,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: scale(20),
-
+    marginTop: moderateScale(10, .6),
     overflow: "hidden",
     backgroundColor: "#282C30",
     borderRadius: (windowWidth * 0.18) / 2,
@@ -222,7 +278,6 @@ const styles = StyleSheet.create({
     gap: verticalScale(5)
   },
   title: {
-    fontSize: moderateScale(12, 0.2),
     fontWeight: "500",
     color: Color.white
   },

@@ -24,7 +24,7 @@ import Checkbox from '../Components/CustomCheckbox';
 import navigationService from '../navigationService';
 import { Post } from '../Axios/AxiosInterceptorFunction';
 import { setUserToken } from '../Store/slices/auth';
-import { setProfileCreated, setUserData } from '../Store/slices/common';
+import { setFavArtist, setProfileCreated, setUserData } from '../Store/slices/common';
 import { validateEmail } from '../Config';
 import { useDispatch } from 'react-redux';
 
@@ -109,6 +109,8 @@ const SignupScreen = () => {
       dispatch(setUserToken({ token: response?.data?.token }));
       dispatch(setUserData(response?.data?.user_info));
       dispatch(setProfileCreated(response?.data?.user_info?.isProfileCreated));
+      dispatch(setFavArtist(response?.data?.user_info?.liked_artist));
+
       // navigationService.navigate('Profile');
     }
   };

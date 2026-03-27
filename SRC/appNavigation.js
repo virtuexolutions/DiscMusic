@@ -37,11 +37,15 @@ import ViewArtistLibrary from './Screens/ViewArtistLibrary';
 import Walkthrough from './Screens/Walkthrough';
 import YourLibrary from './Screens/YourLibrary';
 import { windowWidth } from './Utillity/utils';
+import SearchArtist from './Screens/SearchArtist';
 
 const AppNavigator = () => {
   const walkThrough = useSelector(state => state.authReducer.userWalkThrough);
   const token = useSelector(state => state.authReducer.token);
   const isProfileCreated = useSelector(state => state.commonReducer.isProfile);
+  const favArtist = useSelector(state => state.commonReducer.favArtist);
+  console.log('favArtist====================== >>>>>>> here from appNavigation', favArtist);
+
   const userdata = useSelector(state => state.commonReducer.userData);
 
 
@@ -56,8 +60,9 @@ const AppNavigator = () => {
         : [null, undefined, ''].includes(token)
           ? 'LoginScreen'
           : isProfileCreated == false || 0
-            ? 'Profile'
-            : 'TabNavigation';
+            ? 'Profile' : favArtist.length === 0
+              ? 'SearchArtist'
+              : 'TabNavigation';
 
     return (
       <NavigationContainer ref={navigationService.navigationRef}>
@@ -94,6 +99,8 @@ const AppNavigator = () => {
           <RootNav.Screen name="EnterEmail" component={EnterEmail} />
           <RootNav.Screen name="VerifyNumber" component={VerifyNumber} />
           <RootNav.Screen name="ResetPassword" component={ResetPassword} />
+          <RootNav.Screen name="SearchArtist" component={SearchArtist} />
+
 
 
           <RootNav.Screen name="ReviewYourPlan" component={ReviewYourPlan} />
