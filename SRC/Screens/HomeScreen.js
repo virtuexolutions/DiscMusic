@@ -1,67 +1,160 @@
-import {ScrollView, View} from 'native-base';
-import React from 'react';
-import {FlatList, ImageBackground} from 'react-native';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
-import Color from '../Assets/Utilities/Color';
+import { ActivityIndicator, FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Avatar, ScrollView } from 'native-base';
 import CustomHeader from '../Components/CustomHeader';
 import CustomStatusBar from '../Components/CustomStatusBar';
-import CustomText from '../Components/CustomText';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import TrendingView from '../Components/TrendingView';
-import {windowHeight, windowWidth} from '../Utillity/utils';
 import EventCard from '../Components/EventCard';
+import CustomText from '../Components/CustomText';
+import Color from '../Assets/Utilities/Color';
+import CircularMenu from '../Components/CircularMenu';
+import CustomImage from '../Components/CustomImage';
+import TitleWithDescription from '../Components/TitleWithDescription';
 import CarouselView from '../Components/CarouselView';
+import Animated from 'react-native-reanimated';
+import { useSelector } from 'react-redux';
+import Geolocation from 'react-native-geolocation-service';
+import { PermissionsAndroid, Platform } from 'react-native';
+import { Get } from '../Axios/AxiosInterceptorFunction';
+import { AnimatedCard } from '../Components/DetailedCard';
+import RecommendedArtist from '../Components/RecommendedArtist';
+import BestArtistCard from './BestArtistCard';
+import { baseUrl } from '../Config';
+import PlayList from '../Components/PlayList';
+import MinimisedPlayer from '../Components/MinimisedPlayer';
+import { useActiveTrack } from 'react-native-track-player';
 
 const HomeScreen = () => {
-  const events = [
-    {
-      id: 1,
-      name: 'Miss You',
-      text: 'oliver tree, robin schulz',
-      image: require('../Assets/Images/event_1.png'),
-    },
-    {
-      id: 2,
-      name: 'Miss You',
-      text: 'oliver tree, robin schulz',
-      image: require('../Assets/Images/event_2.png'),
-    },
-    {
-      id: 3,
-      name: 'Miss You',
-      text: 'oliver tree, robin schulz',
-      image: require('../Assets/Images/event_3.png'),
-    },
-  ];
+  const token = useSelector(state => state.authReducer.token)
+  const user = useSelector(state => state.commonReducer.userData)
+  console.log('user==================================== >>>>>>>>>>>>> user', user)
 
-  const musicCategories = [
-    'Classic',
-    'Pop',
-    'Jazz',
-    'Hip-Hop',
-    'R&B',
-    'Rock',
-    'Anime',
-    'K-pop',
-    'Indie',
-    'Instrumental',
-    'Dance',
-  ];
+  const activeTrack = useActiveTrack()
+  console.log('activeTrack==================================== >>>>>>>>>>>>> activeTrack', activeTrack)
 
-  const artist = [
-    {
-      id: 1,
-      image: require('../Assets/Images/event_1.png'),
-    },
-    {
-      id: 2,
-      image: require('../Assets/Images/event_2.png'),
-    },
-    {
-      id: 3,
-      image: require('../Assets/Images/event_3.png'),
-    },
-  ];
+  const [Loading, setLoading] = useState(false)
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [events, setEvents] = useState([])
+  const [artist, setArtist] = useState([])
+  const [recommendedArtist, setRecommendedArtist] = useState([])
+  const [bestArtist, setBestArtist] = useState([])
+  const [trending, setTrending] = useState([])
+  // console.log('recommendedArtist', JSON.stringify(recommendedArtist, null, 2), 'recommendedArtist')
+  // console.log(JSON.stringify(events, null, 2), 'events')
 
+
+
+  // const getCurrentLocation = async () => {
+  //   try {
+  //     const position = await new Promise((resolve, reject) => {
+
+  //       Geolocation.getCurrentPosition(
+  //         position => {
+  //           console.log(position, 'position')
+  //           const coords = {
+  //             latitude: position.coords.latitude,
+  //             longitude: position.coords.longitude,
+  //           };
+  //           getWeather(position?.coords?.latitude, position?.coords?.longitude);
+  //           resolve(coords);
+
+  //         },
+  //         error => {
+  //           reject(new Error(error.message));
+  //         },
+  //         {
+  //           enableHighAccuracy: true,
+  //           timeout: 15000,
+  //           maximumAge: 10000,
+  //         },
+  //       );
+  //     });
+  //     // console.log(weather, 'weather')
+  //   } catch (error) {
+  //     console.error('Error getting location:', error);
+  //     throw error;
+  //   }
+  // };
+
+  const getWeather = async (lat, lon) => {
+    // return console.log('ppppppppppppppppppppppppppppp', lat, lon)
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data, 'data')
+      return data.current_weather;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const getArtist = async () => {
+    const url = 'auth/artists-list'
+    setLoading(true)
+    const response = await Get(url, token)
+    // return console.log('------------------ >>>>response artist', JSON.stringify(response?.data, null, 2), '------------------ >>>>response artist')
+    setLoading(false)
+    if (response != undefined) {
+      setArtist(response?.data?.data?.artists)
+    }
+  }
+  const getEvents = async () => {
+    const url = 'auth/events-list'
+    setLoading(true)
+    const response = await Get(url, token)
+    // return console.log(JSON.stringify(response?.data, null, 2), '------------------ >>>>event response ')
+    setLoading(false)
+    if (response != undefined) {
+      setEvents(response?.data?.event_list)
+    }
+  }
+
+
+  const getRecommendedArtist = async () => {
+    const url = 'auth/recommendations/recommended-artict'
+    setLoading(true)
+    const response = await Get(url, token)
+    // return console.log(JSON.stringify(response?.data, null, 2), '------------------ >>>>> recommended artist response')
+    setLoading(false)
+    if (response != undefined) {
+      setRecommendedArtist(response?.data?.data[0])
+    }
+  }
+  const getBestArtist = async () => {
+    const url = 'auth/recommendations/best-artists'
+    setLoading(true)
+    const response = await Get(url, token)
+    // return console.log('------------------ >>>>> best artist response ', JSON.stringify(response?.data?.data, null, 2), '------------------ >>>>> recommended artist response ')
+    setLoading(false)
+    if (response != undefined) {
+      setBestArtist(response?.data?.data)
+    }
+  }
+
+
+  const getTrendingTracks = async () => {
+    const url = 'auth/trending-tracks'
+    setLoading(true)
+    const response = await Get(url, token)
+    // return console.log('------------------ >>>>> treanding track response ', JSON.stringify(response?.data?.data, null, 2), '------------------ >>>>> recommended artist response ')
+    setLoading(false)
+    if (response != undefined) {
+      // setBestArtist(response?.data?.data)
+      setTrending(response?.data?.data?.tracks)
+    }
+  }
+
+  useEffect(() => {
+    getArtist()
+    getEvents()
+    getRecommendedArtist()
+    getBestArtist()
+    getTrendingTracks()
+  }, [])
   return (
     <>
       <CustomStatusBar
@@ -72,153 +165,165 @@ const HomeScreen = () => {
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}
         imageStyle={styles.image}>
-        <ScrollView
+        <CustomHeader RightIcon dots />
+        {Loading ? <ActivityIndicator style={{ height: windowHeight * 0.8, justifyContent: 'center', alignItems: 'center' }} size={'large'} color={Color.white} /> : <ScrollView
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
-            alignSelf: 'center',
+            // alignSelf: 'center',
             alignItems: 'center',
-          }}
-          style={{
-            width: '100%',
-            flexGrow: 0,
+            paddingBottom: moderateScale(120, 0.2),
           }}>
-          <CustomHeader leftIcon RightIcon />
-          <View style={styles.container}>
-            <TrendingView />
-            <View style={styles.main_view}>
-              <CustomText style={styles.heading}>Events</CustomText>
-              <FlatList
-                horizontal
-                data={events}
-                renderItem={({item, index}) => {
-                  return <EventCard data={item} />;
-                }}
-              />
-              <CustomText style={styles.heading}>Genre</CustomText>
-              <FlatList
-                numColumns={4}
-                data={musicCategories}
-                renderItem={({item, index}) => {
-                  return (
-                    <View style={styles.category_view}>
-                      <CustomText
-                        numberOfLines={1}
-                        style={styles.category_text}>
-                        {item}
-                      </CustomText>
-                    </View>
-                  );
-                }}
-              />
-              <CustomText
-                style={[
-                  styles.heading,
-                  {width: windowWidth * 0.8, textAlign: 'center'},
-                ]}>
-                Artist
-              </CustomText>
-              <CarouselView data={artist} />
-            </View>
+          <TrendingView />
+
+
+
+          {/* <View style={[styles.eventListContainer, {
+            backgroundColor: 'red',
+            marginTop: verticalScale(35),
+            height: windowHeight * 0.26,
+            marginLeft: moderateScale(0, 0.6),
+
+          }]}>
+            <CustomText style={styles.heading}>trending</CustomText>
+            <FlatList
+              horizontal
+              data={trending}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingRight: moderateScale(25, 0.6),
+              }}
+              renderItem={({ item, index }) => {
+                return <RecommendedArtist from={'home'} item={item} title={item?.title} image={item?.image} index={index} />
+
+              }} />
+          </View> */}
+          <View style={{
+            // width: windowWidth * 0.9,
+            marginTop: moderateScale(20, .6),
+            //  backgroundColor: 'red' 
+            height: windowHeight * 0.255
+          }}>
+
+            <PlayList title={'Trending'} trackData={trending} from={'home'} />
           </View>
-        </ScrollView>
-      </ImageBackground>
+
+
+          <View style={[styles.caroselContainer, {
+            marginTop: moderateScale(50, .6)
+          }]}>
+            <CustomText style={styles.heading}>Artists</CustomText>
+            <CarouselView data={artist}
+            // data={[1,2,,3,4,]}
+            />
+          </View>
+          <View style={[styles.eventListContainer]}>
+            <CustomText style={styles.heading}>Events</CustomText>
+            <FlatList
+              horizontal
+              data={events}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingRight: moderateScale(25, 0.6),
+              }}
+              renderItem={({ item, index }) => {
+                return <EventCard data={item} />;
+              }}
+            />
+          </View>
+          <View style={[styles.eventListContainer]}>
+            <CustomText style={styles.heading}>recommended artist</CustomText>
+            <FlatList
+              horizontal
+              data={recommendedArtist}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingRight: moderateScale(25, 0.6),
+              }}
+              renderItem={({ item, index }) => {
+                const key = Object.keys(item)[0]
+                const section = item[key]
+                if (key === "week_summary") return null;
+                if (!section?.items || section?.items?.length === 0) return null
+                return <RecommendedArtist from={'home'} item={section} title={section?.title} image={section?.image} index={index} />
+
+              }} />
+          </View>
+          {/* <View style={styles.eventListContainer}>
+            <CustomText style={styles.heading}>Trending</CustomText>
+            <AnimatedCard from={'home'} item={recommendedArtist?.your_weekly_top} />
+          </View> */}
+          <View style={styles.eventListContainer}>
+            <CustomText style={styles.heading}>best artist</CustomText>
+
+            <FlatList
+              horizontal
+              data={bestArtist}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingRight: moderateScale(25, 0.6),
+              }}
+              renderItem={({ item, index }) => {
+                const itemData = item?.tracks?.map((t) => {
+                  // console.log('itemData==================================== >>>>>>>>>>>>> track best artist', baseUrl + '/' + t?.audio_file)
+
+                })
+
+                return <BestArtistCard from={'home'} item={item} index={index} />
+
+              }} />
+
+
+          </View>
+          {/* <CustomImage
+            style={{ marginTop: verticalScale(20) }}
+            source={require('../Assets/Images/list.png')}
+          /> */}
+          <CircularMenu containerStyle={styles.circularButton} />
+          <View style={styles.bottomContainer}>
+            <Avatar source={require('../Assets/Images/song1.png')} />
+            <TitleWithDescription
+              title={'Don’t Forget Your Roots'}
+              description="2025"
+              titleStyle={styles.text}
+              descriptionStyle={styles.text}
+            />
+          </View>
+          {/* <MinimisedPlayer /> */}
+        </ScrollView>}
+        {activeTrack && <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.2 }} />}
+      </ImageBackground >
     </>
   );
 };
 
-const styles = ScaledSheet.create({
-  bottomImage: {
-    width: windowWidth * 0.4,
-  },
-  row_view: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginTop: moderateScale(20, 0.6),
-    width: '100%',
-  },
-  line: {
-    width: windowWidth * 0.25,
-    height: moderateScale(2, 0.6),
-    backgroundColor: Color.veryLightGray,
-  },
-  textContainer: {
-    marginTop: moderateScale(20, 0.3),
-  },
+export default HomeScreen;
+
+const styles = StyleSheet.create({
   bg_container: {
     width: windowWidth,
     height: windowHeight,
-  },
-  text_view: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: moderateScale(20, 0.6),
-  },
-
-  Heading: {
-    fontSize: moderateScale(24, 0.3),
-    color: '#ffffff',
-  },
-
-  txt3: {
-    fontSize: moderateScale(14, 0.6),
-    alignSelf: 'center',
-    color: Color.lightGrey,
-    textAlign: 'center',
-    marginTop: moderateScale(10, 0.6),
-  },
-  container: {
-    width: windowWidth,
-    height: windowHeight,
-    paddingHorizontal: moderateScale(20, 0.6),
   },
   image: {
     width: '100%',
     height: '100%',
   },
-  container2: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  txt4: {
-    color: Color.veryLightGray,
-    fontSize: moderateScale(12, 0.6),
-    marginTop: moderateScale(8, 0.3),
-    width: '100%',
-    textAlign: 'right',
-    marginTop: moderateScale(10, 0.6),
-  },
-  txt5: {
-    color: Color.white,
-    marginTop: moderateScale(10, 0.3),
-    fontSize: moderateScale(15, 0.6),
-  },
-  dropDown: {
-    backgroundColor: Color.red,
-  },
-  text_1: {
-    width: '40%',
-    marginTop: 0,
-    textAlign: 'center',
-    color: Color.white,
-    fontSize: moderateScale(14, 0.6),
-    fontWeight: '700',
-  },
-  btn_txt: {
-    fontSize: moderateScale(14, 0.6),
-    color: Color.white,
-    marginLeft: moderateScale(6, 0.6),
-  },
   main_view: {
     marginVertical: moderateScale(40, 0.6),
   },
+  eventListContainer: {
+    width: windowWidth,
+    marginLeft: moderateScale(26, 0.6),
+    // paddingHorizontal: scale(10),
+  },
   heading: {
-    fontSize: moderateScale(16, 0.6),
+    fontSize: moderateScale(20, 0.6),
     color: Color.white,
     paddingVertical: moderateScale(10, 0.6),
+  },
+  catgoryListContainer: {
+    height: windowHeight * 0.25,
+    gap: scale(10),
   },
   category_view: {
     width: windowWidth * 0.2,
@@ -235,6 +340,29 @@ const styles = ScaledSheet.create({
     fontSize: moderateScale(11, 0.6),
     color: Color.veryLightGray,
   },
+  bottomContainer: {
+    flexDirection: 'row',
+    gap: scale(10),
+    alignItems: 'center',
+    width: windowWidth * 0.85,
+    marginTop: verticalScale(20),
+    // paddingVertical:verticalScale(1),
+    paddingHorizontal: scale(10),
+    // backgroundColor: 'red',
+    backgroundColor: Color.black,
+    borderRadius: moderateScale(18, 0.2),
+  },
+  caroselContainer: {
+    height: windowHeight * 0.2,
+    alignItems: 'center',
+    gap: verticalScale(7),
+  },
+  text: {
+    color: Color.white,
+    fontSize: moderateScale(14, 0.2),
+  },
+  circularButton: {
+    bottom: scale(-120),
+    zIndex: 1,
+  },
 });
-
-export default HomeScreen;

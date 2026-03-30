@@ -1,20 +1,20 @@
-import {View} from 'native-base';
+import { View } from 'native-base';
 import React from 'react';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 
 import Color from '../Assets/Utilities/Color';
 import CustomButton from '../Components/CustomButton';
 import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
 
-import {windowHeight, windowWidth} from '../Utillity/utils';
-import {TouchableOpacity} from 'react-native';
+import { windowHeight, windowWidth } from '../Utillity/utils';
+import { TouchableOpacity } from 'react-native';
 import navigationService from '../navigationService';
 
-const Card = ({fromEvent}) => {
+const Card = ({ fromEvent, artistData }) => {
   return (
     <TouchableOpacity
-      onPress={() => navigationService.navigate('AboutArtist')}
+      onPress={() => navigationService.navigate('AboutArtist', { artistData: artistData })}
       style={[
         styles.lyrics_con,
         {
@@ -158,7 +158,7 @@ const styles = ScaledSheet.create({
   artist_image: {
     height: windowHeight * 0.2,
     width: windowWidth * 0.8,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     borderRadius: moderateScale(20, 0.6),
     overflow: 'hidden',
   },

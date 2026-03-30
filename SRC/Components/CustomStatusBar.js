@@ -14,8 +14,8 @@ export default function CustomStatusBar(props) {
     <>
       {isGradient ? (
         <LinearGradient
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           colors={backgroundColor ? backgroundColor : [Color.themeBgColor]}
           style={[
             {

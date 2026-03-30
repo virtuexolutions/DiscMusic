@@ -1,6 +1,6 @@
 import {ScrollView, View} from 'native-base';
-import React, {useState} from 'react';
-import {ImageBackground} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {ImageBackground, TouchableOpacity} from 'react-native';
 import {moderateScale, ScaledSheet} from 'react-native-size-matters';
 
 import Color from '../Assets/Utilities/Color';
@@ -11,32 +11,47 @@ import CustomText from '../Components/CustomText';
 
 import LinearGradient from 'react-native-linear-gradient';
 import {windowHeight, windowWidth} from '../Utillity/utils';
+import {Circle} from 'react-native-svg';
+import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
+import OtherLocation from '../Components/OtherLocation';
+import {mode} from 'native-base/lib/typescript/theme/tools';
+import MusicModal from '../Components/MusicModal';
+import MinimisedPlayer from '../Components/MinimisedPlayer';
 
 const DetailedScreen = () => {
-  const [countryCode, setCountryCode] = useState('ID'); // For flag
-  const [callingCode, setCallingCode] = useState('62'); // For +62
-  const [visible, setVisible] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [isVisible, setIsVisible] = useState(false);
-
-  const socialData = [
+    const rbRef = useRef(null)
+  const events = [
     {
-      id: 1,
-      image: require('../Assets/Images/insta.png'),
+      date: `May \n13`,
+      name: 'sam smith, cat burns',
+      details: 'sat, 8 pm | accor arena, paris',
     },
     {
-      id: 2,
-      image: require('../Assets/Images/twitter.png'),
+      date: `May \n13`,
+      name: 'sofi tukker',
+      details: 'sat, 11 am | marquee dayclub, las vegas',
     },
     {
-      id: 3,
-      image: require('../Assets/Images/facebook.png'),
+      date: `May \n13`,
+      name: 'lizzo',
+      details: 'sat, 8 pm | ppg paints arena, pittsburgh',
+    },
+  ];
+  const musicData = [
+    {
+      image: require('../Assets/Images/music1.png'),
+      name: 'future dust',
+      details: 'the amazons',
     },
     {
-      id: 4,
-      image: require('../Assets/Images/link.png'),
+      image: require('../Assets/Images/music2.png'),
+      name: 'weight of the world',
+      details: 'maxo kream',
+    },
+    {
+      image: require('../Assets/Images/music3.png'),
+      name: 'optimist (deluxe)',
+      details: 'finneas',
     },
   ];
 
@@ -55,87 +70,269 @@ const DetailedScreen = () => {
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
-            paddingBottom: moderateScale(50, 0.6),
+            paddingBottom: moderateScale(80, 0.6),
           }}
-          style={{
-            width: '100%',
-            flexGrow: 0,
-          }}>
-          <CustomHeader leftIcon  text={'Oliver tree'} subtext={''} />
-          <ImageBackground
-            source={require('../Assets/Images/texturebgc.png')}
-            style={styles.container}
-            imageStyle={styles.image}>
-            <View style={styles.artist_image}>
-              <CustomImage
-                style={{
-                  height: '100%',
-                  width: '100%',
-                }}
-                source={require('../Assets/Images/artist.png')}
-              />
+          style={styles.container}>
+          <CustomHeader leftIcon 
+          showBack
+          text={''} subtext={''} />
+
+          <View
+            style={{
+              flexDirection: 'row',
+              width: windowWidth * 0.74,
+              marginTop: moderateScale(20, 0.6),
+              //   justifyContent: 'space-between',
+              paddingHorizontal: moderateScale(10, 0.6),
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: windowWidth * 0.7,
+              }}>
+              <View style={styles.image_circle}>
+                <CustomImage
+                  source={require('../Assets/Images/artist6.png')}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                />
+              </View>
+              <View
+                style={[
+                  styles.image_circle,
+                  {marginLeft: moderateScale(-17, 0.6)},
+                ]}>
+                <CustomImage
+                  source={require('../Assets/Images/artist4.png')}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                />
+              </View>
+              <View
+                style={[
+                  styles.image_circle,
+                  {marginLeft: moderateScale(-15, 0.6)},
+                ]}>
+                <CustomImage
+                  source={require('../Assets/Images/artist5.png')}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                />
+              </View>
             </View>
-            <View style={styles.text_con}>
-              <CustomText isBold style={styles.title}>
-                24,419,528
-              </CustomText>
-              <CustomText style={styles.sub_text}>monthly listeners</CustomText>
-            </View>
-            <LinearGradient
-              style={styles.btn_Con}
-              colors={['#333333', '#636363']}
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 1}}>
+            <View style={styles.Circle}>
               <CustomText
                 style={{
-                  fontSize: moderateScale(13, 0.6),
+                  fontSize: moderateScale(19, 0.6),
                   color: Color.white,
                 }}>
-                181st in the world
+                {`Jun \n  9`}
               </CustomText>
-            </LinearGradient>
-            <View style={styles.details}>
+            </View>
+          </View>
+
+          <CustomText isBold style={[styles.title]}>
+            lizzo, odesza, kendrick lamar,...
+          </CustomText>
+          <CustomText style={styles.sub_text}>
+            friday, june 9,2023 8:00 pm
+          </CustomText>
+          <CustomText style={styles.sub_text}>
+            flushing meadows park, queens
+          </CustomText>
+          <View style={styles.details}>
+            <CustomText
+              isBold
+              style={[
+                styles.title,
+                {
+                  paddingHorizontal: moderateScale(10, 0.6),
+                },
+              ]}>
+              the lineup
+            </CustomText>
+            <View style={styles.row_con}>
+              <View style={styles.art_image}>
+                <CustomImage
+                  source={require('../Assets/Images/artist6.png')}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  paddingHorizontal: moderateScale(10, 0.6),
+                }}>
+                <CustomText
+                  style={[
+                    styles.title,
+                    {
+                      paddingHorizontal: moderateScale(0, 0.6),
+                    },
+                  ]}>
+                  lizzo
+                </CustomText>
+                <CustomText
+                  style={[
+                    styles.sub_text,
+                    {
+                      paddingVertical: moderateScale(2, 0.6),
+                      paddingHorizontal: moderateScale(0, 0.6),
+                    },
+                  ]}>
+                  view all events
+                </CustomText>
+              </View>
+            </View>
+            <View style={styles.inner_con}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: windowWidth * 0.7,
+                }}>
+                <View style={styles.image_sec}>
+                  <CustomImage
+                    source={require('../Assets/Images/artist4.png')}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                </View>
+                <View
+                  style={[
+                    styles.image_sec,
+                    {marginLeft: moderateScale(-17, 0.6)},
+                  ]}>
+                  <CustomImage
+                    source={require('../Assets/Images/artist5.png')}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                </View>
+                <View
+                  style={[
+                    styles.image_sec,
+                    {marginLeft: moderateScale(-15, 0.6)},
+                  ]}>
+                  <CustomImage
+                    source={require('../Assets/Images/art7.png')}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                </View>
+              </View>
+              <CustomText
+                isBold
+                style={{
+                  paddingHorizontal: moderateScale(10, 0.6),
+                  paddingTop: moderateScale(10, 0.6),
+                  fontSize: moderateScale(18, 0.6),
+                  color: Color.white,
+                }}>
+                odesza
+              </CustomText>
               <CustomText
                 style={[
                   styles.sub_text,
                   {
-                    // paddingRight: moderateScale(10,.6)
+                    paddingHorizontal: moderateScale(10, 0.6),
                   },
-                ]}>{`An internet based vocalist, producer, writer, director and performance artist, Oliver Tree explores the intersection where pop and alternative meet sonically and has arrived where art and entertainment collide visually. From comedy to action sports, mock reality TV drama to WWF wrestling in his live shows, the world of Oliver Tree is unlike any artist who has come before him. \n\nA Santa Cruz, California native, Tree has emerged as a polymath from many different projects and iterations over the last 10 years. As unpredictable as one artist can be, no one can seem to put their finger on what Oliver Tree will do next. Unafraid to make you laugh, cry, think profoundly or feel completely uncomfortable for the length of a 4 minute music video, he is on the road to developing his own blueprint for packaging and marketing pop culture in the internet era. Versatile in every sense of the word, Tree not only explores every type of entertainment but also every type of genre in his music alike. The box he puts himself in is limitless. It has no boundaries. Oliver Tree has built a multimedia project designed to challenge people's perspective of what art is, and he's not the slightest bit concerned what anyone has to say about it!`}</CustomText>
+                ]}>
+                | kendrick lamar | lil uz...
+                <CustomText
+                  style={{
+                    color: Color.white,
+                  }}>{`and 51\n   more`}</CustomText>
+              </CustomText>
             </View>
-
-            <View style={styles.image_con}>
-              <CustomImage
-                style={styles.image}
-                source={require('../Assets/Images/artist1.png')}
-              />
-            </View>
-            <CustomText style={styles.by}>post by</CustomText>
-            <CustomText style={styles.by_value}>oliver tree</CustomText>
-            <View style={styles.row_sec}>
-              {socialData?.map(item => {
-                // console.log('l;sld;fa;sdfkljkasdjfklas' ,item)
-                return (
-                  <View style={styles.social_btn}>
-                    <View
+          </View>
+          <View style={styles.details}>
+            <CustomText
+              isBold
+              style={[
+                styles.title,
+                {
+                  paddingHorizontal: moderateScale(10, 0.6),
+                },
+              ]}>
+              available tickets
+            </CustomText>
+            {events?.map((item, index) => {
+              return <OtherLocation item={item} />;
+            })}
+          </View>
+          <View style={styles.details}>
+            <CustomText
+              isBold
+              style={[
+                styles.title,
+                {
+                  paddingHorizontal: moderateScale(10, 0.6),
+                },
+              ]}>
+              listen to their music
+            </CustomText>
+            {musicData?.map((item, index) => {
+              return (
+                <TouchableOpacity onPress={() =>{
+                    rbRef.current.open()
+                }}   style={styles.card_con}>
+                  <View style={styles.card_image}>
+                    <CustomImage
                       style={{
-                        height: windowHeight * 0.02,
-                        width: windowWidth * 0.04,
-                      }}>
-                      <CustomImage
-                        style={{
-                          height: '100%',
-                          width: '100%',
-                        }}
-                        source={item?.image}
-                      />
-                    </View>
+                        height: '100%',
+                        width: '100%',
+                      }}
+                      source={item?.image}
+                    />
                   </View>
-                );
-              })}
-            </View>
-          </ImageBackground>
+                  <View
+                    style={{
+                      // alignItems:'center',
+                      justifyContent: 'center',
+                    }}>
+                    <CustomText
+                      style={[
+                        styles.title,
+                        {
+                          paddingHorizontal: moderateScale(0, 0.6),
+                          fontSize: moderateScale(16, 0.6),
+                        },
+                      ]}>
+                      {item?.name}
+                    </CustomText>
+                    <CustomText
+                      style={[
+                        styles.sub_text,
+                        {
+                          paddingHorizontal: moderateScale(0, 0.6),
+                          paddingVertical: moderateScale(0, 0.6),
+                        },
+                      ]}>
+                      {item?.details}
+                    </CustomText>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </ScrollView>
+        <MusicModal rbRef={rbRef} />
+        <MinimisedPlayer/>
       </ImageBackground>
     </>
   );
@@ -147,95 +344,86 @@ const styles = ScaledSheet.create({
     height: windowHeight,
   },
   container: {
-    width: windowWidth * 0.87,
-    marginTop: moderateScale(10, 0.6),
-    borderTopEndRadius: 30,
-    borderBottomEndRadius: 30,
-    backgroundColor: '#282C30',
-    shadowColor: '#353A40',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 20,
-    elevation: 10,
-    overflow: 'hidden',
-    borderWidth: 0.2,
-    borderColor: Color.white,
+    width: windowWidth,
+    height: windowHeight,
+    paddingHorizontal: moderateScale(10, 0.6),
   },
   image: {
     width: '100%',
     height: '100%',
   },
 
-  text_con: {
-    alignSelf: 'center',
-    marginTop: moderateScale(20, 0.6),
-  },
-  artist_image: {
-    height: windowHeight * 0.2,
-    width: windowWidth * 0.74,
-    borderRadius: moderateScale(20, 0.6),
-    alignSelf: 'center',
-    marginTop: moderateScale(13, 0.6),
-    overflow: 'hidden',
+  row_con: {
+    flexDirection: 'row',
+    marginTop: moderateScale(10, 0.6),
+    backgroundColor: '#282C30',
+    borderRadius: 20,
+    paddingVertical: moderateScale(10, 0.6),
+    paddingHorizontal: moderateScale(10, 0.6),
   },
   title: {
     color: Color.white,
     fontSize: moderateScale(19, 0.6),
+    paddingHorizontal: moderateScale(20, 0.6),
+    paddingVertical: moderateScale(5, 0.6),
   },
   sub_text: {
     color: '#7F8489',
     fontSize: moderateScale(13, 0.6),
+    padding: moderateScale(2, 0.6),
+    paddingHorizontal: moderateScale(20, 0.6),
   },
   details: {
     paddingVertical: moderateScale(20, 0.6),
-    backgroundColor: '#222529',
-    width: windowWidth * 0.87,
+    backgroundColor: '#1C1F22',
+    width: windowWidth * 0.9,
     marginTop: moderateScale(10, 0.6),
     paddingHorizontal: moderateScale(10, 0.6),
-    borderTopEndRadius: 35,
-    borderBottomEndRadius: 35,
-  },
-  image_con: {
-    height: windowHeight * 0.07,
-    width: windowHeight * 0.07,
-    borderRadius: (windowHeight * 0.07) / 2,
-    overflow: 'hidden',
+    borderRadius: moderateScale(30, 0.6),
     alignSelf: 'center',
-    marginTop: moderateScale(20, 0.6),
   },
-  social_btn: {
-    height: windowHeight * 0.04,
-    width: windowHeight * 0.04,
-    borderRadius: (windowHeight * 0.04) / 2,
-    borderWidth: 0.4,
-    borderColor: Color.white,
-    marginHorizontal: moderateScale(5, 0.6),
+  card_con: {
+    flexDirection: 'row',
+    // backgroundColor: 'red', 
+    backgroundColor: '#222529',
+    paddingVertical: moderateScale(10, 0.6),
+    // height: windowHeight * 0.1,
+    width: windowWidth * 0.85,
+    marginTop: moderateScale(10, 0.6),
+    borderRadius: 20,
+    paddingHorizontal: moderateScale(10, 0.6),
+  },
+  card_image: {
+    height: windowHeight * 0.08,
+    width: windowWidth * 0.158,
+    borderRadius: moderateScale(10, 0.6),
+    overflow: 'hidden',
+    marginRight: moderateScale(10, 0.6),
+  },
+  Circle: {
+    width: windowWidth * 0.18,
+    height: windowWidth * 0.18,
+    borderRadius: (windowWidth * 0.18) / 2,
+    backgroundColor: '#1C1F22',
+    shadowColor: '#FFFFFF',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: moderateScale(10, 0.6),
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 16,
+    // position: 'absolute',
   },
-  by: {
-    color: '#7F8489',
-    fontSize: moderateScale(12, 0.6),
-    alignSelf: 'center',
-    marginTop: moderateScale(8, 0.6),
-  },
-  by_value: {
-    color: Color.white,
-    fontSize: moderateScale(14, 0.6),
-    alignSelf: 'center',
-  },
-  row_sec: {
-    justifyContent: 'center',
-    flexDirection: 'row',
-    paddingVertical: moderateScale(20, 0.6),
-  },
+
   btn_Con: {
     flexDirection: 'row',
-    width: windowWidth * 0.35,
-    height: windowHeight * 0.04,
+    width: windowWidth * 0.28,
+    marginLeft: moderateScale(5, 0.6),
+    height: windowHeight * 0.05,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
@@ -247,9 +435,38 @@ const styles = ScaledSheet.create({
     },
     shadowOpacity: 0.15,
     shadowRadius: 8,
-    // elevation: 6,
+    elevation: 16,
     alignSelf: 'center',
-    marginTop: moderateScale(10, 0.6),
+    backgroundColor: '#1C1F22',
+    // marginTop: moderateScale(20, 0.6),
+  },
+  image_circle: {
+    width: windowHeight * 0.08,
+    height: windowHeight * 0.08,
+    borderRadius: (windowHeight * 0.08) / 2,
+    overflow: 'hidden',
+    backgroundColor: '#1C1F22',
+  },
+
+  image_sec: {
+    width: windowHeight * 0.05,
+    height: windowHeight * 0.05,
+    borderRadius: (windowHeight * 0.05) / 2,
+    overflow: 'hidden',
+    backgroundColor: '#1C1F22',
+  },
+  art_image: {
+    width: windowHeight * 0.065,
+    height: windowHeight * 0.065,
+    borderRadius: (windowHeight * 0.065) / 2,
+    overflow: 'hidden',
+  },
+  inner_con: {
+    backgroundColor: '#282C30',
+    borderRadius: 20,
+    paddingHorizontal: moderateScale(10, 0.6),
+    paddingVertical: moderateScale(10, 0.6),
+    marginTop: moderateScale(15, 0.6),
   },
 });
 

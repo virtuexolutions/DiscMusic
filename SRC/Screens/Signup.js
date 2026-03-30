@@ -1,11 +1,18 @@
-import {Icon, ScrollView, View} from 'native-base';
-import React, {useState} from 'react';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { Icon, ScrollView, View } from 'native-base';
+import React, { useState } from 'react';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import CustomStatusBar from '../Components/CustomStatusBar';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import CustomText from '../Components/CustomText';
-import {ImageBackground, TouchableOpacity} from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  ImageBackground,
+  Platform,
+  ToastAndroid,
+  TouchableOpacity,
+} from 'react-native';
 import CustomHeader from '../Components/CustomHeader';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -14,9 +21,105 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CustomButton from '../Components/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Checkbox from '../Components/CustomCheckbox';
-const SignupScreen = () => {
-  const [agree, setAgree] = useState(false);
+import navigationService from '../navigationService';
+import { Post } from '../Axios/AxiosInterceptorFunction';
+import { setUserToken } from '../Store/slices/auth';
+import { setFavArtist, setProfileCreated, setUserData } from '../Store/slices/common';
+import { validateEmail } from '../Config';
+import { useDispatch } from 'react-redux';
 
+const SignupScreen = () => {
+  const dispatch = useDispatch();
+
+  const [agree, setAgree] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+
+
+
+  // const getCurrentLocation = async () => {
+  //   try {
+  //     const position = await new Promise((resolve, reject) => {
+  //       Geolocation.getCurrentPosition(
+  //         position => {
+  //           const coords = {
+  //             latitude: position.coords.latitude,
+  //             longitude: position.coords.longitude,
+  //           };
+  //           resolve(coords);
+  //           // cg
+  //           // console.log('first from current location ================== >>>>', position)
+  //           getAddressFromCoordinates(
+  //             position.coords.latitude,
+  //             position.coords.longitude,
+  //           );
+  //         },
+  //         error => {
+  //           reject(new Error(error.message));
+  //         },
+  //         {
+  //           enableHighAccuracy: true,
+  //           timeout: 15000,
+  //           maximumAge: 10000,
+  //         },
+  //       );
+  //     });
+  //     setCurrentPosition(position);
+  //   } catch (error) {
+  //     console.error('Error getting location:', error);
+  //     throw error;
+  //   }
+  // };
+
+
+  const signup = async () => {
+    const body = {
+      role: 'user',
+      email: email,
+      password: password,
+      confirm_password: password,
+      // lat : 
+      // lng:
+    };
+    const url = 'register';
+    if (email == '') {
+      Platform.OS == 'android'
+        ? ToastAndroid.show('email is required', ToastAndroid.SHORT)
+        : Alert.alert('email is required');
+    }
+    if (!validateEmail(email)) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show('email is not validate', ToastAndroid.SHORT)
+        : Alert.alert('email is not validate');
+    }
+    if (password.length < 8) {
+      return Platform.OS == 'android'
+        ? ToastAndroid.show(
+          'Password should atleast 8 character long',
+          ToastAndroid.SHORT,
+        )
+        : Alert.alert('Password should atleast 8 character long');
+    }
+    setIsLoading(true);
+    const response = await Post(url, body, apiHeader());
+    setIsLoading(false);
+    if (response != undefined) {
+      dispatch(setUserToken({ token: response?.data?.token }));
+      dispatch(setUserData(response?.data?.user_info));
+      dispatch(setProfileCreated(response?.data?.user_info?.isProfileCreated));
+      dispatch(setFavArtist(response?.data?.user_info?.liked_artist));
+
+      // navigationService.navigate('Profile');
+    }
+  };
+
+
+
+  // useEffect(() => {
+  //   getCurrentLocation()
+  // }, [])
   return (
     <>
       <CustomStatusBar
@@ -39,7 +142,7 @@ const SignupScreen = () => {
             flexGrow: 0,
           }}>
           <View style={styles.container}>
-            <CustomHeader leftIcon RightIcon />
+            <CustomHeader showBack={true} dots={true} leftIcon RightIcon />
             <View style={styles.text_view}>
               <CustomText isBold style={styles.Heading}>
                 Join The D.I.S.
@@ -56,9 +159,9 @@ const SignupScreen = () => {
               color={Color.lightGrey}
               titleText={'First Name'}
               secureText={false}
-              placeholder={' aidenparker@gm   ail.com'}
-              // setText={setFirstName}
-              // value={firstName}
+              placeholder={' aidenparker@gmail.com'}
+              setText={setEmail}
+              value={email}
               border
               viewHeight={0.07}
               viewWidth={0.9}
@@ -75,9 +178,9 @@ const SignupScreen = () => {
               color={Color.lightGrey}
               titleText={'First Name'}
               secureText={true}
-              placeholder={' aidenparker@gmail.com'}
-              // setText={setFirstName}
-              // value={firstName}
+              placeholder={'........'}
+              setText={setPassword}
+              value={password}
               border
               viewHeight={0.07}
               viewWidth={0.9}
@@ -117,17 +220,25 @@ const SignupScreen = () => {
             </View>
             <CustomButton
               isGradient
-              text={'Join Now'}
+              text={
+                isLoading ? (
+                  <ActivityIndicator size={'small'} color={Color.white} />
+                ) : (
+                  'Join Now'
+                )
+              }
               textColor={Color.white}
               width={windowWidth * 0.9}
               height={windowHeight * 0.07}
-              // onPress={() => { setIsVisible(false) }}
-              onPress={() => navigationService.navigate('TabNavigation')}
+              // onPress={() => navigationService.navigate('TabNavigation')}
+              onPress={() => {
+                signup();
+              }}
               marginTop={moderateScale(20, 0.3)}
               borderRadius={windowWidth / 2}
               fontSize={moderateScale(16, 0.3)}
             />
-            <View style={[styles.row_view, {marginTop: windowWidth * 0.12}]}>
+            <View style={[styles.row_view, { marginTop: windowWidth * 0.12 }]}>
               <View style={styles.line} />
               <CustomText style={styles.text_1}>Or Sign in with</CustomText>
               <View style={styles.line} />
@@ -196,13 +307,16 @@ const SignupScreen = () => {
                 },
               ]}>
               <CustomText
-                style={[styles.text_1, {textAlign: 'right', width: '80%'}]}>
+                style={[styles.text_1, { textAlign: 'right', width: '80%' }]}>
                 Already Have an account?
               </CustomText>
               <CustomText
+                onPress={() => {
+                  navigationService.navigate('LoginScreen');
+                }}
                 style={[
                   styles.text_1,
-                  {color: Color.veryLightGray, textAlign: 'left'},
+                  { color: Color.veryLightGray, textAlign: 'left' },
                 ]}>
                 {' '}
                 Sign In

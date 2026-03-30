@@ -6,23 +6,25 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {windowWidth} from '../Utillity/utils';
-import {moderateScale} from 'react-native-size-matters';
+import { windowWidth } from '../Utillity/utils';
+import { moderateScale } from 'react-native-size-matters';
 import CustomText from './CustomText';
 import Color from '../Assets/Utilities/Color';
 import navigationService from '../navigationService';
+import { baseUrl, imageUrl } from '../Config';
 
-const EventCard = ({data}) => {
+const EventCard = ({ data }) => {
+  // console.log('data from event card ', `${baseUrl}/storage/` + data?.image)
   return (
     <TouchableOpacity
-      onPress={() => navigationService.navigate('PlaylistScreen')}>
+      onPress={() => navigationService.navigate('EventScreen')}>
       <ImageBackground
-        source={data?.image}
+        source={data?.image ? { uri: `${baseUrl}/storage/` + data?.image } : require('../Assets/Images/event3.png')}
         style={styles.card_view}
         imageStyle={styles.image}>
         <View style={styles.card_inner_view}>
-          <CustomText style={styles.heading}>{data?.name}</CustomText>
-          <CustomText style={styles.desc}>{data?.text}</CustomText>
+          <CustomText style={styles.heading}>{data?.title}</CustomText>
+          <CustomText style={styles.desc}>{data?.promotional_details}</CustomText>
         </View>
       </ImageBackground>
     </TouchableOpacity>
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
   card_view: {
     width: windowWidth * 0.32,
     height: windowWidth * 0.29,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     marginRight: moderateScale(10, 0.6),
     borderRadius: moderateScale(10, 0.6),
   },

@@ -17,62 +17,19 @@ const SplashScreen = () => {
         style={{
           flex: 1,
           alignItems: 'center',
+          justifyContent:"center",
         }}
         resizeMode={'stretch'}
         source={require('../Assets/Images/bg.png')}>
-        <View style={styles.container}>
+        {/* <View style={styles.container}> */}
           <View style={styles.imageContainer}>
             <CustomImage
               source={require('../Assets/Images/logoSplash.png')}
               style={styles.bottomImage}
             />
           </View>
-          <View style={styles.sec_imageContainer}>
-            <CustomImage
-              source={require('../Assets/Images/image123.png')}
-              resizeMode={'stretch'}
-              style={{
-                height: '100%',
-                width: '100%',
-              }}
-            />
-          </View>
-          <CustomText isBold style={styles.h1}>
-            discover
-            <CustomText
-              isBold
-              style={{
-                color: Color.mediumGray,
-                marginHorizontal: moderateScale(15, 0.3),
-              }}>
-              Music
-            </CustomText>
-            that moves you
-          </CustomText>
-          <CustomText
-            style={{
-              color: Color.white,
-              marginHorizontal: moderateScale(15, 0.3),
-              textAlign: 'center',
-              fontSize: moderateScale(14, 0.3),
-              width: windowWidth * 0.8,
-              marginTop: moderateScale(10, 0.3),
-            }}>
-            explore curated playlists and top tracks that match your mood and
-            keep you vibing all day long.
-          </CustomText>
-
-          <CustomButton
-            text={'Get Start'}
-            textColor={Color.white}
-            width={windowWidth * 0.9}
-            height={windowHeight * 0.08}
-            marginTop={moderateScale(40, 0.3)}
-            onPress={() => {}}
-            borderRadius={moderateScale(30, 0.3)}
-            isGradient
-          />
-        </View>
+         
+        {/* </View> */}
       </ImageBackground>
     </ScreenBoiler>
   );

@@ -6,14 +6,14 @@
  * @flow strict-local
  */
 
-import {StripeProvider} from '@stripe/stripe-react-native';
-import {NativeBaseProvider} from 'native-base';
-import React, {useEffect, useState} from 'react';
-import {LogBox} from 'react-native';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/integration/react';
+import { StripeProvider } from '@stripe/stripe-react-native';
+import { NativeBaseProvider } from 'native-base';
+import React, { useEffect, useState } from 'react';
+import { LogBox } from 'react-native';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import SplashScreen from './SRC/Screens/SplashScreen';
-import {persistor, store} from './SRC/Store/index';
+import { persistor, store } from './SRC/Store/index';
 import {
   requestBackgroundLocationPermission,
   requestCameraPermission,
@@ -21,10 +21,12 @@ import {
   requestWritePermission,
 } from './SRC/Utillity/utils';
 import AppNavigator from './SRC/appNavigation';
+
 const App = () => {
   LogBox.ignoreLogs([
     'Warning: ...',
     'VirtualizedLists should never be nested',
+    'NativeBase:'
   ]);
   LogBox.ignoreAllLogs();
   return (
@@ -58,10 +60,13 @@ const MainContainer = () => {
 
   const [isloading] = useloader(true);
   if (isloading == true) {
-    return <SplashScreen />;
+    return <SplashScreen />
+    // return <SplashScreen />
   }
 
+  // return <SplashScreen />
   return <AppNavigator />;
+
   // return <PostLoadScreen />
 };
 

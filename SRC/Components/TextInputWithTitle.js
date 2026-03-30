@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -9,32 +9,36 @@ import {
   Platform,
 } from 'react-native';
 
-import { Icon } from 'native-base';
+import {Icon} from 'native-base';
 import Color from '../Assets/Utilities/Color';
-import { useState } from 'react';
-import { moderateScale, scale, ScaledSheet } from 'react-native-size-matters';
+import {useState} from 'react';
+import {moderateScale, scale, ScaledSheet} from 'react-native-size-matters';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import { windowHeight, windowWidth } from '../Utillity/utils';
+import {windowHeight, windowWidth} from '../Utillity/utils';
 import CustomText from './CustomText';
 
 const TextInputWithTitle = props => {
   const [showPassword, setShowPassword] = useState(false);
   return (
     <>
-      {props?.title &&
+      {props?.title && (
         <CustomText
-        isBold={props?.isBold}
-        style={{
-          color: Color.white,
-          fontSize: props?.titleFontSize ? props.titleFontSize : moderateScale(12, 0.3),
-          marginBottom: moderateScale(5, 0.3),
-          width: windowWidth * props.viewWidth,
-          marginTop: props.marginTop,
-          marginTop: moderateScale(10, 0.3)
-        }}>{props?.title}</CustomText>
-      }
+          isBold={props?.isBold}
+          style={{
+            color: Color.white,
+            fontSize: props?.titleFontSize
+              ? props.titleFontSize
+              : moderateScale(12, 0.3),
+            marginBottom: moderateScale(5, 0.3),
+            width: windowWidth * props.viewWidth,
+            marginTop: props.marginTop,
+            marginTop: moderateScale(10, 0.3),
+          }}>
+          {props?.title}
+        </CustomText>
+      )}
       <View
         style={[
           styles.fieldSet,
@@ -56,10 +60,10 @@ const TextInputWithTitle = props => {
             elevation: 9,
           },
           props.marginBottom && {
-            marginBottom: props.marginBottom
+            marginBottom: props.marginBottom,
           },
           props.autoCapitalize && {
-            textTransform: props.autoCapitalize
+            textTransform: props.autoCapitalize,
           },
           props.borderRadius && {
             borderRadius: props.borderRadius,
@@ -81,11 +85,11 @@ const TextInputWithTitle = props => {
           props.alignItems && {
             alignItems: props.alignItems,
           },
-          props.iconName && !props.rightIcon && {
-            paddingLeft: moderateScale(40, 0.3),
-          },
-        ]}
-      >
+          props.iconName &&
+            !props.rightIcon && {
+              paddingLeft: moderateScale(40, 0.3),
+            },
+        ]}>
         {props.iconName && (
           <Icon
             name={props.iconName}
@@ -105,10 +109,9 @@ const TextInputWithTitle = props => {
                 height: windowHeight * props.iconHeigth,
               },
               props.rightIcon && {
-
                 position: 'absolute',
                 right: moderateScale(10, 0.3),
-              }
+              },
             ]}
             size={moderateScale(18, 0.3)}
             onPress={props.onPressLeft}
@@ -125,9 +128,11 @@ const TextInputWithTitle = props => {
                 },
                 Platform.OS === 'android'
                   ? styles.inputBox
-                  : [styles.inputBox, { paddingBottom: 0 }],
+                  : [styles.inputBox, {paddingBottom: 0}],
+                props.color && {
+                  color: props?.color ? props?.color : Color.black,
+                },
               ]}
-
               onChangeText={text => props.setText(text)}
               value={props.value}
               secureTextEntry={!showPassword}
@@ -136,8 +141,7 @@ const TextInputWithTitle = props => {
                 props.placeholderColor ? props.placeholderColor : Color.white
               }
               keyboardType={props.keyboardType}
-              autoCapitalize='none'
-
+              autoCapitalize="none"
             />
             <TouchableOpacity
               onPress={() => {
@@ -154,8 +158,7 @@ const TextInputWithTitle = props => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 // backgroundColor: "red",
-              }}
-            >
+              }}>
               <Icon
                 name={showPassword ? 'eye' : 'eye-slash'}
                 as={FontAwesome}
@@ -166,16 +169,14 @@ const TextInputWithTitle = props => {
           </>
         ) : (
           <TouchableOpacity activeOpacity={1} onPress={props.onPressLeft}>
-
             <TextInput
-
               style={[
                 {
                   width: windowWidth * props.inputWidth,
                 },
                 Platform.OS === 'android'
                   ? styles.inputBox
-                  : [styles.inputBox, { paddingBottom: 0 }],
+                  : [styles.inputBox, {paddingBottom: 0}],
                 props.numberOfLines > 1 && {
                   textAlignVertical: 'top',
                 },
@@ -191,11 +192,9 @@ const TextInputWithTitle = props => {
                   marginLeft: moderateScale(15, 0.3),
                 },
                 props.color && {
-                  color: Color.black,
+                  color: props?.color ? props?.color : Color.black,
                 },
-
               ]}
-
               onChangeText={text => props.setText(text)}
               value={props.value}
               placeholder={`${props.placeholder}`}
@@ -206,13 +205,12 @@ const TextInputWithTitle = props => {
               multiline={props.multiline || false}
               numberOfLines={props.numberOfLines || 1}
               editable={props.disable ? false : true}
-              autoCapitalize='none'
-            // onPressIn={()=>{console.log('fdadsas');}}
-            // textAlignVertical={props.textAlignVertical}
+              autoCapitalize="none"
+              // onPressIn={()=>{console.log('fdadsas');}}
+              // textAlignVertical={props.textAlignVertical}
             />
           </TouchableOpacity>
         )}
-
       </View>
     </>
   );
