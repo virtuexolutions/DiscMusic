@@ -22,16 +22,59 @@ import { baseUrl } from '../Config';
 const PlaylistScreen = props => {
   const data = props?.route?.params?.item;
   const allTracks = props?.route?.params?.allTracks;
-  console.log('🚀 ~ PlaylistScreen ~ data >>>>>>>>>>>>>>>>>>>>>>>>>>>> :', data?.cover_image);
+  console.log('🚀 ~ PlaylistScreen ~ data >>>>>>>>>>>>>>>>>>>>>>>>>>>> :', data?.is_liked);
 
 
   // Use the reactive hook to track the actual play state
   const playbackState = usePlaybackState();
   const isPlaying = playbackState.state === State.Playing;
-  console.log('mmmmmmmmmmmmmmmmmmmm ', playbackState.state)
+  // console.log('mmmmmmmmmmmmmmmmmmmm ', playbackState.state)
   const currentTrack = useActiveTrack();
   const artistName = getArtistNameFromTrack(currentTrack);
 
+
+  const [liked, setLiked] = useState(data?.is_liked);
+  console.log('djhfjksdhkfhskdfh kshdj skdfh', liked)
+
+  const likeTrack = async () => {
+    const url = 'auth/liked-songs/store'
+    const body = {
+      track_id: track?.id,
+      // is_liked: true
+    }
+    return console.log('body====================== >>>>>>> here from music player screen',)
+    const response = await Post(url, { track_id: track?.id }, apiHeader(token));
+    if (response != undefined) {
+      console.log('you liked this song')
+    }
+    console.log('response====================== >>>>>>> here from music player screen', response?.data);
+  }
+
+  const unlikeTrack = async () => {
+    const url = 'auth/liked-songs/remove'
+
+    // return console.log('body====================== >>>>>>> here from music player screen',)
+    const response = await Post(url, { track_id: track?.id }, apiHeader(token));
+    if (response != undefined) {
+      console.log('you liked this song')
+    }
+    console.log('response====================== >>>>>>> here from music player screen', response?.data);
+  }
+
+
+
+  const handleLike = async () => {
+    // ✅ UI turant update
+    setLiked(!liked);
+
+    try {
+      await
+        liked || data?.is_liked ? unlikeTrack() : likeTrack(); // API call
+    } catch (error) {
+      // ❌ agar API fail ho jaye to revert
+      setLiked(false);
+    }
+  };
   useEffect(() => {
     // Play the full list but start from the selected track
     if (data && allTracks) {
@@ -100,13 +143,16 @@ const PlaylistScreen = props => {
                   {artistName}
                 </CustomText>
               </View>
-              <Icon
-                style={{ alignSelf: 'center' }}
-                color={Color.white}
-                size={moderateScale(20, 0.6)}
-                name="hearto"
-                as={AntDesign}
-              />
+              <TouchableOpacity style={{ padding: 5, borderRadius: 5, paddingHorizontal: moderateScale(10, 0.6) }} onPress={() => handleLike()}>
+                <Icon
+                  onPress={() => handleLike()}
+                  style={{ alignSelf: 'center' }}
+                  color={liked || data?.is_liked ? Color.red : Color.white}
+                  size={moderateScale(20, 0.6)}
+                  name={liked || data?.is_liked ? "heart" : "hearto"}
+                  as={AntDesign}
+                />
+              </TouchableOpacity>
             </View>
             <AudioSlider width={windowWidth * 0.9} />
             <View style={styles.player_btn}>

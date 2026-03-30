@@ -158,7 +158,7 @@ const HomeScreen = () => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground
@@ -174,7 +174,7 @@ const HomeScreen = () => {
             alignItems: 'center',
             paddingBottom: moderateScale(120, 0.2),
           }}>
-          <TrendingView />
+          <TrendingView trackData={trending} from={'home'} />
 
 
 
@@ -242,8 +242,11 @@ const HomeScreen = () => {
               }}
               renderItem={({ item, index }) => {
                 const key = Object.keys(item)[0]
+                console.log('key==================================== >>>>>>>>>>>>> key', key)
                 const section = item[key]
                 if (key === "week_summary") return null;
+                if (key === "similar_artists") return null;
+
                 if (!section?.items || section?.items?.length === 0) return null
                 return <RecommendedArtist from={'home'} item={section} title={section?.title} image={section?.image} index={index} />
 
@@ -291,7 +294,7 @@ const HomeScreen = () => {
           </View>
           {/* <MinimisedPlayer /> */}
         </ScrollView>}
-        {activeTrack && <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.2 }} />}
+        {activeTrack && <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.25 }} />}
       </ImageBackground >
     </>
   );
@@ -301,6 +304,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   bg_container: {
+    backgroundColor: 'green',
     width: windowWidth,
     height: windowHeight,
   },

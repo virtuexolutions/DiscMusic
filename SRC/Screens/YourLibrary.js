@@ -150,7 +150,7 @@ const YourLibrary = () => {
           <ArtistCard
             item={{ id: "add", title: "Add podcasts & shows", onPress: () => { }, }}
           /></ScrollView>
-        {activeTrack && <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.2 }} />}
+        {activeTrack && <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.25 }} />}
       </ImageBackground>
     </>
   )

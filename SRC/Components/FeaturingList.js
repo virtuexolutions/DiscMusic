@@ -8,12 +8,8 @@ import ArtistCard from './ArtistCard';
 import Color from '../Assets/Utilities/Color';
 import { baseUrl } from '../Config';
 
-const FeaturingList = ({ data }) => {
-  const featuredData = [
-    { id: "1", title: "this is abhijeet", image: require("../Assets/Images/recent2.png") },
-    { id: "2", title: "abhijeet radio", image: require("../Assets/Images/featured2.png") },
-    { id: "3", title: "hot hits hot", image: require("../Assets/Images/featured3.png") },
-  ]
+const FeaturingList = ({ data, onArtistPress }) => {
+
   return (
     <View style={styles.container}>
       <CustomText
@@ -36,6 +32,9 @@ const FeaturingList = ({ data }) => {
               image={{ uri: `${baseUrl}/storage/${item?.profile_image}` }}
               title={item.artist_name}
               key={item.id}
+              onPress={() => {
+                onArtistPress(item)
+              }}
             />
           );
         }}

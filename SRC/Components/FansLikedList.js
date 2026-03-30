@@ -8,7 +8,11 @@ import ArtistCard from './ArtistCard';
 import Color from '../Assets/Utilities/Color';
 import { baseUrl } from '../Config';
 
-const FansLikedList = ({ data }) => {
+const FansLikedList = ({ data, onArtistPress }) => {
+  const similarArtists = data.find(item => item.similar_artists)?.similar_artists;
+
+  console.log(similarArtists);
+  console.log('data====================== >>>>>>>>>>>>>> hereeeeeeeeeeeee', JSON.stringify(data?.similar_artists, null, 2));
   const featuredData = [
     { id: "1", title: "Folguni Pathak", image: require("../Assets/Images/artist11.png") },
     { id: "2", title: "Pankaj udhas", image: require("../Assets/Images/artist12.png") },
@@ -21,7 +25,7 @@ const FansLikedList = ({ data }) => {
         style={styles.heading}
       />
       <FlatList
-        data={data}
+        data={similarArtists?.items}
         contentContainerStyle={{
           gap: scale(20)
         }}
@@ -35,6 +39,7 @@ const FansLikedList = ({ data }) => {
               image={{ uri: `${baseUrl}/storage/${item?.profile_image}` }}
               title={item.artist_name}
               key={item.id}
+              onPress={() => onArtistPress(item)}
             />
           );
         }}

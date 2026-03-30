@@ -65,10 +65,9 @@ const RecommendedArtist = ({ item, from, title, image }) => {
                 width: windowHeight * 0.12,
                 borderRadius: 5,
                 overflow: 'hidden',
-
                 // marginTop: moderateScale(15, .6)
             }}>
-                <CustomImage
+                <CustomImage onPress={onPress}
                     source={{ uri: cover_image }}
                     style={styles.image}
                 />

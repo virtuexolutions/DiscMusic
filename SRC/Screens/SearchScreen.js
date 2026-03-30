@@ -180,6 +180,7 @@ const SearchScreen = () => {
           data={search}
           setData={setSearch}
           input
+          placeholderTextColor={Color.white}
         />
         <CustomText style={styles.text} children={'Browse All'} />
         {
@@ -194,7 +195,7 @@ const SearchScreen = () => {
               }}
             />
         }
-        <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.18 }} />
+        <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.25 }} />
       </ImageBackground>
     </>
   );

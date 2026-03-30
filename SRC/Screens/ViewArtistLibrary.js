@@ -1,4 +1,4 @@
-import { ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomStatusBar from '../Components/CustomStatusBar'
 import Color from '../Assets/Utilities/Color'
@@ -27,18 +27,54 @@ import LinearGradient from 'react-native-linear-gradient'
 
 
 
+
+
 const ViewArtistLibrary = (props) => {
-  const data = props?.route?.params?.artistData
+  const [data, setData] = useState(props?.route?.params?.artistData)
   const token = useSelector(state => state.authReducer.token)
   const playbackState = usePlaybackState();
   const activeTrack = useActiveTrack();
   console.log('activeTrack', JSON.stringify(activeTrack, null, 2))
   const isPlaying = playbackState.state === State.Playing;
 
-  // console.log(JSON.stringify(data, null, 2), '------------------ >>>>> data')
   const [featuringArtists, setFeaturingArtists] = useState([])
   const [fanAlsoLike, setFanAlsoLike] = useState([])
   const [loading, setLoading] = useState(false)
+
+  const handleArtistClick = async (item) => {
+    // Show activity indicator
+    setLoading(true);
+
+    try {
+      // Fetch full artist list as it contains the populated all_tracks for properties
+      const url = 'auth/artists-list';
+      const response = await Get(url, token);
+
+      let fullArtistInfo = item;
+
+      if (response && response?.data?.data?.artists) {
+        const matchingArtist = response.data.data.artists.find(a => a.id === item.id);
+        if (matchingArtist) {
+          fullArtistInfo = matchingArtist;
+        }
+      }
+
+      setData(fullArtistInfo);
+
+      // Also refetch related artists
+      await getFeaturingArtists();
+      await getFansAlsoLike();
+
+    } catch (err) {
+      console.log('Error fetching full artist data on click: ', err);
+      setData(item);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
+  const [bgColor, setBgColor] = useState('#9e0042ff')
 
 
 
@@ -87,30 +123,27 @@ const ViewArtistLibrary = (props) => {
   }
 
 
-  const [bgColor, setBgColor] = useState('#9e0042ff')
-  console.log('------------------ >>>>> bgColor ', bgColor)
-
   useEffect(() => {
     getFeaturingArtists()
     getFansAlsoLike()
   }, [])
 
-  useEffect(() => {
-    const fetchColor = async () => {
-      console.log('------------------ >>>>> fullImageUrl ', '------------------ >>>>>   fullImageUrl ')
-      if (data?.profile_image) {
-        try {
-          const fullImageUrl = `${imageUrl}${data?.profile_image}`
-          const palette = await Vibrant.from(fullImageUrl).getPalette()
-          const color = palette?.LightVibrant?.hex || palette?.Vibrant?.hex || '#ffbcbfff'
-          setBgColor(color)
-        } catch (error) {
-          console.log("Color extraction error: ", error)
-        }
-      }
-    }
-    fetchColor()
-  }, [data?.profile_image])
+  // useEffect(() => {
+  //   const fetchColor = async () => {
+  //     console.log('------------------ >>>>> fullImageUrl ', '------------------ >>>>>   fullImageUrl ')
+  //     if (data?.profile_image) {
+  //       try {
+  //         const fullImageUrl = `${imageUrl}${data?.profile_image}`
+  //         const palette = await Vibrant.from(fullImageUrl).getPalette()
+  //         const color = palette?.LightVibrant?.hex || palette?.Vibrant?.hex || '#ffbcbfff'
+  //         setBgColor(color)
+  //       } catch (error) {
+  //         console.log("Color extraction error: ", error)
+  //       }
+  //     }
+  //   }
+  //   fetchColor()
+  // }, [data?.profile_image])
 
   return (
     <>
@@ -137,78 +170,85 @@ const ViewArtistLibrary = (props) => {
           }}
           leftIcon={true}
           showBack={true}
-          text={"Abhijeet"}
+          text={data?.artist_name || "Artist"}
           RightIcon={true}
           dots={true}
         // text= 
         />
         {/* bgc */}
         {/* </LinearGradient> */}
-        <ScrollView
-          scrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          removeClippedSubviews={true}
-          style={{
-            // backgroundColor: Color.black,
-          }}
-          contentContainerStyle={{
-            paddingBottom: verticalScale(100),
-          }}
-        >
-          <View style={styles.info}>
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={Color.white}
+            style={{ marginTop: windowHeight * 0.3 }}
+          />
+        ) : (
+          <ScrollView
+            scrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+            removeClippedSubviews={true}
+            style={{
+              // backgroundColor: Color.black,
+            }}
+            contentContainerStyle={{
+              paddingBottom: verticalScale(100),
+            }}
+          >
+            <View style={styles.info}>
 
-            <View style={[styles.imageContainer, { backgroundColor: bgColor }]}>
-              <CustomImage
-                style={styles.image}
-                source={data?.profile_image ? { uri: `${baseUrl}/storage/${data?.profile_image}` } : require("../Assets/Images/artist.png")}
+              <View style={[styles.imageContainer, { backgroundColor: bgColor }]}>
+                <CustomImage
+                  style={styles.image}
+                  source={data?.profile_image ? { uri: `${baseUrl}/storage/${data?.profile_image}` } : require("../Assets/Images/artist.png")}
+                />
+              </View>
+              <TitleWithDescription
+                style={{ alignItems: "center" }}
+                titleStyle={{ fontSize: moderateScale(14, 0.2) }}
+                descriptionStyle={{ fontSize: moderateScale(14, 0.2) }}
+                title='7,910,613'
+                description='Monthly Listeners'
               />
             </View>
-            <TitleWithDescription
-              style={{ alignItems: "center" }}
-              titleStyle={{ fontSize: moderateScale(14, 0.2) }}
-              descriptionStyle={{ fontSize: moderateScale(14, 0.2) }}
-              title='7,910,613'
-              description='Monthly Listeners'
-            />
-          </View>
-          <View style={styles.actions}>
-            <CustomButton
-              isGradient
-              text={'Following'}
-              textColor={Color.white}
-              width={windowWidth * 0.4}
-              height={windowHeight * 0.05}
-              onPress={() => { }}
-              // marginTop={moderateScale(20, 0
-              // .3)}
-              style={{ marginRight: scale(25), }}
-              borderRadius={windowWidth / 2}
-              fontSize={moderateScale(16, 0.3)}
+            <View style={styles.actions}>
+              <CustomButton
+                isGradient
+                text={'Following'}
+                textColor={Color.white}
+                width={windowWidth * 0.4}
+                height={windowHeight * 0.05}
+                onPress={() => { }}
+                // marginTop={moderateScale(20, 0
+                // .3)}
+                style={{ marginRight: scale(25), }}
+                borderRadius={windowWidth / 2}
+                fontSize={moderateScale(16, 0.3)}
 
-            />
-            <ThemeIconButton
-              isGradient
-              gradientColors={Color.themeGradient}
-              iconName={"dots-three-vertical"}
-            />
-            <ThemeIconButton
-              isGradient={true}
-              gradientColors={Color.themeGradient}
-              iconSource={require("../Assets/Images/shuffle.png")}
-            />
-            <ThemeIconButton
-              onPress={() => {
-                if (isPlaying) {
-                  TrackPlayer.pause();
-                } else {
-                  handlePlayAll();
-                }
-              }}
-              isGradient={true}
-              gradientColors={Color.themeGradient2}
-              iconSource={isPlaying ? require("../Assets/Images/pause.png") : require("../Assets/Images/play-circle.png")}
-            />
-            {/* <ThemeIconButton
+              />
+              <ThemeIconButton
+                isGradient
+                gradientColors={Color.themeGradient}
+                iconName={"dots-three-vertical"}
+              />
+              <ThemeIconButton
+                isGradient={true}
+                gradientColors={Color.themeGradient}
+                iconSource={require("../Assets/Images/shuffle.png")}
+              />
+              <ThemeIconButton
+                onPress={() => {
+                  if (isPlaying) {
+                    TrackPlayer.pause();
+                  } else {
+                    handlePlayAll();
+                  }
+                }}
+                isGradient={true}
+                gradientColors={Color.themeGradient2}
+                iconSource={isPlaying ? require("../Assets/Images/pause.png") : require("../Assets/Images/play-circle.png")}
+              />
+              {/* <ThemeIconButton
               onPress={() => {
                 console.log('first');
               }}
@@ -216,19 +256,20 @@ const ViewArtistLibrary = (props) => {
               gradientColors={Color.themeGradient2}
               iconSource={require("../Assets/Images/pause.png")}
             /> */}
-          </View>
-          {(data?.track_categories?.most_popular || data?.track_categories?.top_tracks) && <PlayList trackData={data?.track_categories?.most_popular ? data?.track_categories?.most_popular : data?.track_categories?.top_tracks} title={'top hits'} isSearch={false} isViewAll={false} />}
-          {![undefined, [], null].includes(data?.track_categories?.recently_released) && <PlayList trackData={data?.track_categories?.recently_released} title={'new Rleases'} isSearch={false} isViewAll={false} />}
-          {data?.all_tracks && <PlayList trackData={data?.all_tracks} title={'all tracks'} isSearch={false} isViewAll={false} />}
+            </View>
+            {(data?.track_categories?.most_popular || data?.track_categories?.top_tracks) && <PlayList trackData={data?.track_categories?.most_popular ? data?.track_categories?.most_popular : data?.track_categories?.top_tracks} title={'top hits'} isSearch={false} isViewAll={false} />}
+            {![undefined, [], null].includes(data?.track_categories?.recently_released) && <PlayList trackData={data?.track_categories?.recently_released} title={'new Rleases'} isSearch={false} isViewAll={false} />}
+            {data?.all_tracks && <PlayList trackData={data?.all_tracks} title={'all tracks'} isSearch={false} isViewAll={false} />}
 
-          {/* <PopularSongs data={trackData?.top_tracks} title={'top hits'} />
+            {/* <PopularSongs data={trackData?.top_tracks} title={'top hits'} />
           <PopularReleases data={trackData?.recently_released} title={'new Rleases'} />
           <PopularReleases data={trackData?.all_tracks} title={'all tracks'} /> */}
 
-          <FeaturingList data={featuringArtists} title={'featuring artists'} />
-          <ArtistAboutInfo data={data} />
-          <FansLikedList data={featuringArtists} />
-        </ScrollView>
+            <FeaturingList data={featuringArtists} title={'featuring artists'} onArtistPress={handleArtistClick} />
+            <ArtistAboutInfo data={data} />
+            <FansLikedList data={fanAlsoLike} onArtistPress={handleArtistClick} />
+          </ScrollView>
+        )}
         {activeTrack && <MinimisedPlayer
           data={data}
           style={styles.player}

@@ -27,9 +27,11 @@ import { baseUrl } from '../Config';
 import CustomButton from '../Components/CustomButton';
 import navigationService from '../navigationService';
 import { setFavArtist } from '../Store/slices/common';
+import { position } from 'native-base/lib/typescript/theme/styled-system';
 
 const SearchArtist = (props) => {
     const { from } = '' || props?.route?.params
+    console.log('from====================== >>>>>>> here from search artist', from);
     // props?.route?.params
     //  props?.route?.params
     const dispatch = useDispatch()
@@ -39,7 +41,7 @@ const SearchArtist = (props) => {
     console.log('======================= isLoading', isLoading)
     const [artistList, setArtistList] = useState([]);
     const [isSelected, setIsSelected] = useState([])
-    console.log('======================= isSelected', isSelected)
+    console.log('======================= isSelected', isSelected?.length)
     const [loading, setLoading] = useState(false)
 
     const getArtist = async () => {
@@ -97,6 +99,7 @@ const SearchArtist = (props) => {
                 <SearchContainer
                     placeholder={'Search Artist'}
                     data={search}
+                    placeholderTextColor={Color.white}
                     setData={setSearch}
                     input
                     style={{
@@ -129,28 +132,34 @@ const SearchArtist = (props) => {
                                 }}
                             />
 
-                            {isSelected.length >= 3 && (
-                                <CustomButton
-                                    text={
-                                        loading ? (
-                                            <ActivityIndicator size="small" color={Color.black} />
-                                        ) : (
-                                            'done'
-                                        )
-                                    }
-                                    textColor={Color.black}
-                                    width={windowWidth * 0.3}
-                                    height={windowHeight * 0.04}
-                                    marginBottom={moderateScale(15, 0.6)}
-                                    onPress={() => {
-                                        addArtist();
-                                    }}
-                                    bgColor={Color.white}
-                                    marginTop={moderateScale(20, 0.3)}
-                                    borderRadius={windowWidth / 2}
-                                    fontSize={moderateScale(16, 0.3)}
-                                />
-                            )}
+                            {(
+                                (from === 'library' && isSelected.length >= 1) ||
+                                (from !== 'library' && isSelected.length >= 3)
+                            ) && (
+                                    <CustomButton
+                                        text={
+                                            loading ? (
+                                                <ActivityIndicator size="small" color={Color.black} />
+                                            ) : (
+                                                'done'
+                                            )
+                                        }
+                                        textColor={Color.black}
+                                        width={windowWidth * 0.3}
+                                        height={windowHeight * 0.05}
+                                        marginBottom={moderateScale(15, 0.6)}
+                                        onPress={addArtist}
+                                        bgColor={Color.white}
+                                        // marginTop={moderateScale(20, 0.3)}
+                                        borderRadius={windowWidth / 2}
+                                        fontSize={moderateScale(16, 0.3)}
+                                        style={{
+                                            position: 'absolute',
+                                            bottom: 35,
+                                            alignSelf: 'center',
+                                        }}
+                                    />
+                                )}
                         </>
                     )
                 }

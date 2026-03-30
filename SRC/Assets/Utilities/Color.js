@@ -34,8 +34,7 @@ export default Color = {
   // themeLightGray: '#8D8D8D',
   themeBlack: '#3A3838',
   themebgBusinessQbidder: ['#CD5C5C', '#7E191B'],
-
-  themeGradient: ["#2F353A", "#1C1F22"],
+  statusColor: '#202228', themeGradient: ["#2F353A", "#1C1F22"],
   themeGradient2: ["#016BB8", "#11A8FD"],
 
   //gradientColors

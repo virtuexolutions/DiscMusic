@@ -1,5 +1,5 @@
-import {View, TouchableOpacity, TextInput} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import { View, TouchableOpacity, TextInput } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   moderateScale,
   ScaledSheet,
@@ -10,9 +10,9 @@ import Constants from '../Assets/Utilities/Constants';
 import Color from '../Assets/Utilities/Color';
 import TextInputWithTitle from './TextInputWithTitle';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Icon} from 'native-base';
+import { Icon } from 'native-base';
 // import {TextInput} from 'react-native-gesture-handler';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import LinearGradient from 'react-native-linear-gradient';
 // import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
@@ -23,19 +23,22 @@ const SearchContainer = ({
   onPress,
   placeholder,
   data = '',
-  setData = () => {},
+  setData = () => { },
   style,
   places,
   inputStyle,
+  placeholderTextColor,
+
 }) => {
+  console.log('placeholderTextColor====================== >>>>>>> here', placeholderTextColor);
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
       <LinearGradient
         colors={Color.themeGradient}
         style={[
           styles.container,
-          width && {width: width},
-          input && {padding: 0},
+          width && { width: width },
+          input && { padding: 0 },
           style && style,
         ]}>
         {text && (
@@ -43,7 +46,7 @@ const SearchContainer = ({
             <CustomText
               style={[
                 Constants.h4,
-                {color: Color.black, lineHeight: moderateScale(20, 0.3)},
+                { color: Color.black, lineHeight: moderateScale(20, 0.3) },
               ]}>
               {'Where to? \n'}
               <CustomText style={[Constants.h5]}>Anytime anyWhere</CustomText>
@@ -52,7 +55,7 @@ const SearchContainer = ({
               name="search"
               as={FontAwesome}
               size={moderateScale(20)}
-              style={{alignSelf: 'center'}}
+              style={{ alignSelf: 'center' }}
               color={Color.themeColor}
             />
           </>
@@ -65,12 +68,12 @@ const SearchContainer = ({
               as={FontAwesome}
               size={moderateScale(17, 0.3)}
               color={Color.themeLightGray}
-              // style={{backgroundColor : 'red'}}
+            // style={{backgroundColor : 'red'}}
             />
 
             <TextInput
               placeholder={placeholder ?? 'Search here'}
-              placeholderTextColor={Color.themeLightGray}
+              placeholderTextColor={Color.white}
               numberOfLines={1}
               value={data}
               onChangeText={text => {
@@ -80,7 +83,7 @@ const SearchContainer = ({
                 {
                   marginLeft: moderateScale(10, 0.3),
                   width: windowWidth * 0.6,
-                  color: Color.black,
+                  color: placeholderTextColor ? placeholderTextColor : Color.black,
                 },
                 inputStyle && inputStyle,
               ]}

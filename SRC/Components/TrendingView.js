@@ -1,6 +1,6 @@
 import { Icon } from 'native-base';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -13,9 +13,16 @@ import CustomImage from './CustomImage';
 import CustomText from './CustomText';
 import WeatherCard from './WeatherCard';
 import axios from 'axios';
+import { baseUrl } from '../Config';
+import { playNext, playPlaylist } from './MusicPlayerController';
+import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player';
 
-const TrendingView = () => {
+const TrendingView = ({ trackData, from }) => {
+  console.log('trackData', trackData)
   const [weather, setWeather] = useState(null);
+
+  const playbackState = usePlaybackState();
+  const isPlaying = playbackState.state === State.Playing;
   const play_list = [
     require('../Assets/Images/playlist_1.png'),
     require('../Assets/Images/playlist_2.png'),
@@ -23,7 +30,11 @@ const TrendingView = () => {
     require('../Assets/Images/playlist_4.png'),
   ];
 
-
+  const handlePlayAll = async () => {
+    // if (isPlayerReady) {
+    await playPlaylist(trackData);
+    // }
+  };
 
   const getWeather = async (city = 'karachi') => {
     try {
@@ -57,14 +68,14 @@ const TrendingView = () => {
       <View style={styles.main_view_1}>
         <View style={styles.sub_view_1}>
           <FlatList
-            data={play_list}
+            data={trackData}
             horizontal
             scrollEnabled={false}
             renderItem={({ item }) => {
               // console.log('itemmmmmm', item);
               return (
                 <View style={styles.inner_view}>
-                  <CustomImage source={item} style={styles.image} />
+                  <CustomImage source={{ uri: `${baseUrl}/storage/${item?.cover_image} ` }} style={styles.image} />
                 </View>
               );
             }}
@@ -72,7 +83,7 @@ const TrendingView = () => {
           <CustomText isBold style={styles.heading}>
             Trending
           </CustomText>
-          <CustomText style={styles.text}>384 songs</CustomText>
+          <CustomText style={styles.text}>{trackData?.length} songs</CustomText>
           <AudioSlider width={windowWidth * 0.45} />
         </View>
         <View style={styles.sub_view_2}>
@@ -85,32 +96,45 @@ const TrendingView = () => {
                 color={Color.white}
               />
             </View>
-            <View style={styles.icon_View}>
+            <TouchableOpacity onPress={() => {
+              if (isPlaying) {
+                TrackPlayer.pause();
+              } else {
+                handlePlayAll();
+              }
+            }} style={styles.icon_View}>
               <Icon
-                name="pause"
+                name={isPlaying ? "pause" : "play-arrow"}
                 as={MaterialIcons}
                 size={moderateScale(25, 0.6)}
                 color={Color.white}
               />
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={[styles.row_view, { marginTop: moderateScale(5, 0.6) }]}>
-            <View style={styles.icon_View}>
+            <TouchableOpacity
+              disabled={true}
+              style={styles.icon_View}>
               <Icon
                 name="step-backward"
                 as={FontAwesome5}
                 size={moderateScale(20, 0.6)}
-                color={Color.white}
+                color={Color.grey}
               />
-            </View>
-            <View style={styles.icon_View}>
+            </TouchableOpacity>
+            <TouchableOpacity
+
+              onPress={() => {
+                playNext()
+              }}
+              style={styles.icon_View}>
               <Icon
                 name="step-forward"
                 as={FontAwesome5}
                 size={moderateScale(20, 0.6)}
                 color={Color.white}
               />
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -148,6 +172,7 @@ const styles = StyleSheet.create({
   container: {
     width: windowWidth * 0.9,
     height: windowWidth * 0.65,
+    marginTop: moderateScale(5, .6)
   },
   main_view_1: {
     width: windowWidth * 0.9,

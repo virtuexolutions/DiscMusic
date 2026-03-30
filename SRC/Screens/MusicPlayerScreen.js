@@ -1,5 +1,5 @@
 import { ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomStatusBar from '../Components/CustomStatusBar'
 import Color from '../Assets/Utilities/Color'
 import CustomHeader from '../Components/CustomHeader'
@@ -24,7 +24,10 @@ import { Post } from '../Axios/AxiosInterceptorFunction'
 const MusicPlayerScreen = () => {
     const token = useSelector((state) => state.authReducer.token);
     const track = useActiveTrack();
-    console.log('track====================== >>>>>>> here from music player screen', track);
+    const [lyrics, setLyrics] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    // console.log('track====================== >>>>>>> here from music player screen', track);
 
 
     const likeTrack = async () => {
@@ -51,6 +54,46 @@ const MusicPlayerScreen = () => {
         }
         console.log('response====================== >>>>>>> here from music player screen', response?.data);
     }
+
+    useEffect(() => {
+        const fetchLyrics = async () => {
+            // Input check: agar artist ya song missing ho toh call na karein
+            if (!track?.artist || !track?.url) return;
+
+            setLoading(true);
+            setError(null);
+
+            try {
+                console.log('track====================== >>>>>>> here from try ,');
+                const url = `https://lrclib.net/api/get?artist_name=${encodeURIComponent(track?.artist)}&track_name=${encodeURIComponent(track?.title)}`;
+                // const url = `https://lrclib.net/api/get?artist_name=Michael Jackson&track_name=They dont really care about us`;
+                console.log('response====================== >>>>>>> here from music url ', url);
+
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error("Sorry, lyrics are not available at the moment.");
+                }
+
+                const data = await response.json();
+                console.log('data====================== >>>>>>> here from music player screen', data);
+                setLyrics(data.syncedLyrics || data.plainLyrics || "Sorry, lyrics are not available at the moment.");
+            } catch (err) {
+                setError(err.message);
+                setLyrics("");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchLyrics();
+
+        // Dependency array mein artist aur song daalna zaroori hai
+    }, [track?.artist, track?.title]);
+
+    // if (loading) return <p>Loading lyrics...</p>;
+    // if (error) return <p style={{ color: 'red' }}>{error}</p>;
+
 
     return (
         <>
@@ -122,7 +165,7 @@ const MusicPlayerScreen = () => {
                     </View>
                     <PlayerSliderWithActions item={track} />
                     {/* <AudioSlider /> */}
-                    <LyricsContainer />
+                    <LyricsContainer lyrics={lyrics} loading={loading} error={error} />
                     <CircularMenu
                         containerStyle={styles.circularButton}
                     />
@@ -139,7 +182,7 @@ const styles = StyleSheet.create({
     bg_container: {
         width: windowWidth,
         height: windowHeight,
-        alignItems: "center",
+        // alignItems: "center",
         // paddingHorizontal:scale(5)
     },
 
@@ -169,12 +212,12 @@ const styles = StyleSheet.create({
         elevation: 0,
         shadowColor: "transparent",
     },
-    bg_container: {
-        width: windowWidth,
-        height: windowHeight,
-        alignItems: "center",
-        // paddingHorizontal:scale(5)
-    },
+    // bg_container: {
+    //     width: windowWidth,
+    //     height: windowHeight,
+    //     alignItems: "center",
+    //     // paddingHorizontal:scale(5)
+    // },
     button: {
         borderWidth: 1,
         paddingHorizontal: scale(15),

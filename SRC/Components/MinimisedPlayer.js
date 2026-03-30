@@ -1,15 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomImage from './CustomImage';
 import TitleWithDescription from './TitleWithDescription';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { windowHeight, windowWidth } from '../Utillity/utils';
+
+
 import ThemeIconButton from './ThemeIconButton';
 import Slider from '@react-native-community/slider';
 import Color from '../Assets/Utilities/Color';
 import TrackPlayer, { State, useActiveTrack, usePlaybackState, useProgress } from 'react-native-track-player';
 import navigationService from '../navigationService';
 import AudioSlider from './AudioSlider';
+import { useSelector } from 'react-redux';
+import { Get } from '../Axios/AxiosInterceptorFunction';
 
 const MinimisedPlayer = ({ style, data }) => {
 
@@ -18,6 +22,33 @@ const MinimisedPlayer = ({ style, data }) => {
   const [isSliding, setIsSliding] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
   const { position, duration } = useProgress();
+  const token = useSelector((state) => state.authReducer.token);
+
+  // useEffect(() => {
+  //   let isMounted = true;
+
+  //   const recordPlay = async () => {
+  //     if (track?.id && token) {
+  //       try {
+  //         const url = `auth/track/${track.id}/play`;
+  //         await Get(url, token);
+  //         if (isMounted) console.log(`✅ Track play recorded: ${track.id}`);
+  //       } catch (error) {
+  //         if (isMounted) console.log(`❌ Failed to record play for track: ${track.id}`);
+  //       }
+  //     }
+  //   };
+
+  //   // Register play if active for > 2 seconds (avoids counting rapid skips)
+  //   const timeout = setTimeout(() => {
+  //     recordPlay();
+  //   }, 2000);
+
+  //   return () => {
+  //     isMounted = false;
+  //     clearTimeout(timeout);
+  //   };
+  // }, [track?.id, token]);
 
   if (!track) return null;
   const isPlaying = playbackState.state === State.Playing;

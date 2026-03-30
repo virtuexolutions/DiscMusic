@@ -60,7 +60,7 @@ const AppNavigator = () => {
         : [null, undefined, ''].includes(token)
           ? 'LoginScreen'
           : isProfileCreated == false || 0
-            ? 'Profile' : favArtist.length === 0
+            ? 'Profile' : favArtist?.length === 0
               ? 'SearchArtist'
               : 'TabNavigation';
 

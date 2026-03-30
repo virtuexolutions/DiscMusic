@@ -1,34 +1,34 @@
 import React from 'react';
-import {ImageBackground, View} from 'react-native';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { ImageBackground, View } from 'react-native';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import CustomButton from '../Components/CustomButton';
 import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
 import ScreenBoiler from '../Components/ScreenBoiler';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 
 const SplashScreen = () => {
   return (
     <ScreenBoiler
-      statusBarBackgroundColor={Color.themeColor}
+      statusBarBackgroundColor={Color.statusColor}
       statusBarContentStyle={'light-content'}>
       <ImageBackground
         style={{
           flex: 1,
           alignItems: 'center',
-          justifyContent:"center",
+          justifyContent: "center",
         }}
         resizeMode={'stretch'}
         source={require('../Assets/Images/bg.png')}>
         {/* <View style={styles.container}> */}
-          <View style={styles.imageContainer}>
-            <CustomImage
-              source={require('../Assets/Images/logoSplash.png')}
-              style={styles.bottomImage}
-            />
-          </View>
-         
+        <View style={styles.imageContainer}>
+          <CustomImage
+            source={require('../Assets/Images/logoSplash.png')}
+            style={styles.bottomImage}
+          />
+        </View>
+
         {/* </View> */}
       </ImageBackground>
     </ScreenBoiler>
