@@ -9,7 +9,7 @@ import { Icon } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const WeatherCard = ({ temperature, weatherType, icon }) => {
-    console.log('=============== >>>>>>weatherType', weatherType)
+    // console.log('=============== >>>>>>weatherType', weatherType)
     const today = new Date();
 
     const formattedDate = today.toLocaleDateString('en-US', {

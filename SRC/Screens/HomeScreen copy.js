@@ -1,13 +1,13 @@
-import {ScrollView, View} from 'native-base';
+import { ScrollView, View } from 'native-base';
 import React from 'react';
-import {FlatList, ImageBackground} from 'react-native';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { FlatList, ImageBackground } from 'react-native';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import CustomHeader from '../Components/CustomHeader';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 import TrendingView from '../Components/TrendingView';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import EventCard from '../Components/EventCard';
 import CarouselView from '../Components/CarouselView';
 
@@ -65,24 +65,24 @@ const HomeScreen = () => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}
         imageStyle={styles.image}>
-          <CustomHeader leftIcon RightIcon 
+        <CustomHeader leftIcon RightIcon
           dots
           showBack={true}
-          />
+        />
         <ScrollView
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
             // alignSelf: 'center',
             alignItems: 'center',
-            paddingBottom:moderateScale(80,0.2)
+            paddingBottom: moderateScale(80, 0.2)
           }}
           style={{
             width: '100%',
@@ -95,7 +95,7 @@ const HomeScreen = () => {
               <FlatList
                 horizontal
                 data={events}
-                renderItem={({item, index}) => {
+                renderItem={({ item, index }) => {
                   return <EventCard data={item} />;
                 }}
               />
@@ -103,7 +103,7 @@ const HomeScreen = () => {
               <FlatList
                 numColumns={4}
                 data={musicCategories}
-                renderItem={({item, index}) => {
+                renderItem={({ item, index }) => {
                   return (
                     <View style={styles.category_view}>
                       <CustomText
@@ -118,15 +118,15 @@ const HomeScreen = () => {
               <CustomText
                 style={[
                   styles.heading,
-                  {width: windowWidth * 0.8, textAlign: 'center'},
+                  { width: windowWidth * 0.8, textAlign: 'center' },
                 ]}>
                 Artist
               </CustomText>
-              
+
               <CarouselView data={artist} />
             </View>
-           
-        
+
+
           </View>
         </ScrollView>
       </ImageBackground>

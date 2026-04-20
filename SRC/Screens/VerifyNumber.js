@@ -1,5 +1,5 @@
-import {ScrollView, View} from 'native-base';
-import React, {useEffect, useState} from 'react';
+import { ScrollView, View } from 'native-base';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -15,22 +15,22 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import {moderateScale} from 'react-native-size-matters';
+import { moderateScale } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
-import {Post} from '../Axios/AxiosInterceptorFunction';
+import { Post } from '../Axios/AxiosInterceptorFunction';
 import CustomButton from '../Components/CustomButton';
 import CustomHeader from '../Components/CustomHeader';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 import navigationService from '../navigationService';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 
 const VerifyNumber = props => {
   const phoneNumber = props?.route?.params?.email;
-  console.log('🚀 ~ VerifyNumber ~ phoneNumber:', phoneNumber);
+  // console.log('🚀 ~ VerifyNumber ~ phoneNumber:', phoneNumber);
 
   const CELL_COUNT = 4;
-  const ref = useBlurOnFulfill({code, cellCount: CELL_COUNT});
+  const ref = useBlurOnFulfill({ code, cellCount: CELL_COUNT });
   const [abcd, getCellOnLayoutHandler] = useClearByFocusCell({
     code,
     setCode,
@@ -54,9 +54,9 @@ const VerifyNumber = props => {
   const sendOTP = async () => {
     const url = 'password/email';
     setLoading(true);
-    const response = await Post(url, {email: phoneNumber}, apiHeader());
+    const response = await Post(url, { email: phoneNumber }, apiHeader());
     setLoading(false);
-    console.log('🚀 ~ sendOTP ~ response:', response?.data);
+    // console.log('🚀 ~ sendOTP ~ response:', response?.data);
     if (response != undefined) {
       Platform.OS == 'android'
         ? ToastAndroid.show(`OTP sent to ${phoneNumber}`, ToastAndroid.SHORT)
@@ -75,17 +75,17 @@ const VerifyNumber = props => {
     setIsLoading(true);
     const response = await Post(
       url,
-      {email: phoneNumber, code: code},
+      { email: phoneNumber, code: code },
       apiHeader(),
     );
-    console.log('----------------------- >>>>>>>>>>>> ', response?.data);
+    // console.log('----------------------- >>>>>>>>>>>> ', response?.data);
     setIsLoading(false);
     if (response != undefined) {
       Platform.OS == 'android'
         ? ToastAndroid.show(`otp verified`, ToastAndroid.SHORT)
         : Alert.alert(`otp verified`);
 
-      navigationService.navigate('ResetPassword', {phoneNumber: phoneNumber});
+      navigationService.navigate('ResetPassword', { phoneNumber: phoneNumber });
     }
   };
 
@@ -96,7 +96,7 @@ const VerifyNumber = props => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground
@@ -123,7 +123,7 @@ const VerifyNumber = props => {
               <CustomText style={styles.txt3}>
                 Enter four digit code we have sent to{' '}
                 {
-                  <CustomText style={{color: Color.white}}>
+                  <CustomText style={{ color: Color.white }}>
                     {phoneNumber}
                   </CustomText>
                 }
@@ -139,7 +139,7 @@ const VerifyNumber = props => {
               rootStyle={styles.codeFieldRoot}
               keyboardType="number-pad"
               textContentType="oneTimeCode"
-              renderCell={({index, symbol, isFocused}) => (
+              renderCell={({ index, symbol, isFocused }) => (
                 <View
                   onLayout={getCellOnLayoutHandler(index)}
                   key={index}
@@ -147,7 +147,7 @@ const VerifyNumber = props => {
                   <CustomText
                     style={[
                       styles.cellText,
-                      isFocused && {color: Color.white},
+                      isFocused && { color: Color.white },
                     ]}>
                     {symbol || (isFocused ? <Cursor /> : null)}
                   </CustomText>

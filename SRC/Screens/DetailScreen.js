@@ -36,7 +36,7 @@ const DATA = [
 // Main Screen Component
 const DetailScreen = ({ route }) => {
     const { item_id, title } = route.params;
-    console.log('item_id====================== >>>>>>> here from detail', title);
+    // console.log('item_id====================== >>>>>>> here from detail', title);
     const token = useSelector(state => state.authReducer.token)
     const [isLoading, setIsLoading] = useState(false)
     const [genreList, setGenreList] = useState([]);
@@ -91,7 +91,7 @@ const DetailScreen = ({ route }) => {
     return (
         <>
             <CustomStatusBar
-                backgroundColor={Color.black}
+                backgroundColor={Color.statusColor}
                 barStyle={'light-content'}
             />
             <ImageBackground

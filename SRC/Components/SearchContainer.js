@@ -30,7 +30,7 @@ const SearchContainer = ({
   placeholderTextColor,
 
 }) => {
-  console.log('placeholderTextColor====================== >>>>>>> here', placeholderTextColor);
+  // console.log('placeholderTextColor====================== >>>>>>> here', placeholderTextColor);
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
       <LinearGradient

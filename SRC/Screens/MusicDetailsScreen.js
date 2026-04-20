@@ -18,17 +18,24 @@ import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player'
 import { baseUrl } from '../Config'
 import { Get } from '../Axios/AxiosInterceptorFunction'
 import { useSelector } from 'react-redux'
+import { useLikeTrack } from '../Hooks/useLikeTrack'
+import LikeButton from '../Components/LikeButton'
+// import { useLikeTrack } from '../Components/useLikeTrack'
+
 
 const MusicDetailsScreen = ({ route }) => {
     const { item } = route.params;
+
+    console.log('item====================== >>>>>>> item from music detailscreen ', item, `${baseUrl}/storage/${item?.cover_image}`);
     const token = useSelector(state => state.authReducer.token)
     const playbackState = usePlaybackState();
     const isPlaying = playbackState.state === State.Playing;
 
 
-    // console.log('item====================== >>>>>>> item from music detailscreen ', item?.cover_image, `${baseUrl}/storage/${item?.cover_image}`);
     const [recentlyPlayedSongs, setRecentlyPlayedSongs] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const { toggleLike, loading: likeLoading, isLiked } = useLikeTrack(item);
+
     // console.log('mmmmmmmmmmmmmmmmmmmm ', playbackState.state)
     // const songsList = [
     //     {
@@ -110,7 +117,7 @@ const MusicDetailsScreen = ({ route }) => {
         const url = 'auth/recently-played'
         setIsLoading(true)
         const response = await Get(url, token)
-        console.log('recentlyPlayedSongs====================== >>>>>>> ', response?.data?.data?.recently_played)
+        console.log('recentlyPlayedSongs====================== >>>>>>> ', JSON.stringify(response?.data?.data?.recently_played, null, 2))
         setIsLoading(false)
 
         if (response != undefined) {
@@ -125,7 +132,7 @@ const MusicDetailsScreen = ({ route }) => {
     return (
         <>
             <CustomStatusBar
-                backgroundColor={Color.black}
+                backgroundColor={Color.statusColor}
                 barStyle={'light-content'}
             />
             <ImageBackground
@@ -162,13 +169,17 @@ const MusicDetailsScreen = ({ route }) => {
                             description='oliver tree, robin schulz'
                         /> */}
 
-                        <ThemeIconButton
+                        <LikeButton track={item} style={styles.iconButton2} />
+                        {/* <ThemeIconButton
                             isGradient={true}
                             gradientColors={Color.themeGradient}
-                            iconName={"hearto"}
+                            iconName={isLiked ? "heart" : "hearto"}
                             iconType={AntDesign}
+                            onPress={toggleLike}
+                            disabled={likeLoading}
+                            iconColor={isLiked ? Color.red : Color.white}
+                        /> */}
 
-                        />
                         <ThemeIconButton
                             onPress={() => {
                                 if (isPlaying) {
@@ -210,7 +221,7 @@ const MusicDetailsScreen = ({ route }) => {
                         />
                     </View>
                     <PlayList trackData={item} />
-                    <RecentlyPlayedSongsList />
+                    <RecentlyPlayedSongsList data={recentlyPlayedSongs} isLoading={isLoading} />
                 </ScrollView>
                 {/* <MinimisedPlayer /> */}
             </ImageBackground>
@@ -230,6 +241,7 @@ const styles = StyleSheet.create({
         width: windowWidth * 0.45,
         height: windowWidth * 0.45,
         overflow: "hidden",
+        // backgroundColor: 'red',
         borderRadius: moderateScale(50, 0.3),
     },
 

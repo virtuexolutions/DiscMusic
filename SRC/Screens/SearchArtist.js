@@ -30,25 +30,22 @@ import { setFavArtist } from '../Store/slices/common';
 import { position } from 'native-base/lib/typescript/theme/styled-system';
 
 const SearchArtist = (props) => {
-    const { from } = '' || props?.route?.params
+
+    const from = props?.route?.params?.from ?? 'default';
     console.log('from====================== >>>>>>> here from search artist', from);
-    // props?.route?.params
-    //  props?.route?.params
+
     const dispatch = useDispatch()
     const token = useSelector(state => state.authReducer.token)
     const [search, setSearch] = useState('');
     const [isLoading, setIsLoading] = useState(false)
-    console.log('======================= isLoading', isLoading)
     const [artistList, setArtistList] = useState([]);
     const [isSelected, setIsSelected] = useState([])
-    console.log('======================= isSelected', isSelected?.length)
     const [loading, setLoading] = useState(false)
 
     const getArtist = async () => {
         const url = 'auth/artists-list'
         setIsLoading(true)
         const response = await Get(url, token)
-        console.log('response====================== >>>>>>> here from genre', JSON.stringify(response?.data, null, 2));
         setIsLoading(false)
         if (response != undefined) {
             setArtistList(response?.data?.data?.artists)
@@ -65,15 +62,15 @@ const SearchArtist = (props) => {
         isSelected?.forEach((item, index) => {
             formatData.append(`artist_id[${index}]`, item?.id)
         })
-        // return console.log('response====================== >>>>>>> here from add artist  { artist_id: isSelected?.map(item => item.id) }', formatData);
         const url = 'auth/liked-artist/store'
         setLoading(true)
         const response = await Post(url, formatData, apiHeader(token, true))
-        // return console.log('response====================== >>>>>>> here from add artist', JSON.stringify(response?.data, null, 2));
         setLoading(false)
         if (response != undefined) {
-            dispatch(setFavArtist(response?.data?.already_liked))
-            // navigationService.navigate('TabNavigation')
+            if (from == 'library') {
+                navigationService.navigate('TabNavigation', { screen: 'YourLibrary' });
+            }
+            dispatch(setFavArtist(response?.data?.liked_artist))
         }
     }
 
@@ -83,7 +80,7 @@ const SearchArtist = (props) => {
     return (
         <>
             <CustomStatusBar
-                backgroundColor={Color.black}
+                backgroundColor={Color.statusColor}
                 barStyle={'light-content'}
             />
             <ImageBackground
@@ -133,8 +130,8 @@ const SearchArtist = (props) => {
                             />
 
                             {(
-                                (from === 'library' && isSelected.length >= 1) ||
-                                (from !== 'library' && isSelected.length >= 3)
+                                // (from === 'library' && isSelected.length >= 1) ||
+                                from == 'default' ? isSelected.length >= 3 : isSelected.length >= 1
                             ) && (
                                     <CustomButton
                                         text={
@@ -169,7 +166,7 @@ const SearchArtist = (props) => {
     );
 };
 function ArtistComponent({ item, isLoading, isSelected, setIsSelected }) {
-    console.log('item====================== >>>>>>> here from artist', JSON.stringify(item, null, 2));
+    // console.log('item====================== >>>>>>> here from artist', JSON.stringify(item, null, 2));
     const navigation = useNavigation();
 
     const handleSelect = () => {

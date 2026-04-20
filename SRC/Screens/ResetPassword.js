@@ -1,5 +1,5 @@
-import {ScrollView} from 'native-base';
-import React, {useState} from 'react';
+import { ScrollView } from 'native-base';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -9,18 +9,18 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import {moderateScale} from 'react-native-size-matters';
+import { moderateScale } from 'react-native-size-matters';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Color from '../Assets/Utilities/Color';
-import {Post} from '../Axios/AxiosInterceptorFunction';
+import { Post } from '../Axios/AxiosInterceptorFunction';
 import CustomButton from '../Components/CustomButton';
 import CustomHeader from '../Components/CustomHeader';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import navigationService from '../navigationService';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 
 const ResetPassword = props => {
   const phoneNumber = props?.route?.params?.phoneNumber;
@@ -59,7 +59,7 @@ const ResetPassword = props => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground

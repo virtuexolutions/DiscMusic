@@ -1,5 +1,5 @@
-import {ScrollView, View} from 'native-base';
-import React, {useState} from 'react';
+import { ScrollView, View } from 'native-base';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -8,16 +8,16 @@ import {
   StyleSheet,
   ToastAndroid,
 } from 'react-native';
-import {moderateScale} from 'react-native-size-matters';
+import { moderateScale } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
-import {Post} from '../Axios/AxiosInterceptorFunction';
+import { Post } from '../Axios/AxiosInterceptorFunction';
 import CustomButton from '../Components/CustomButton';
 import CustomHeader from '../Components/CustomHeader';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 import TextInputWithTitle from '../Components/TextInputWithTitle';
 import navigationService from '../navigationService';
-import {apiHeader, windowHeight, windowWidth} from '../Utillity/utils';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 
 
 
@@ -42,21 +42,21 @@ const EnterEmail = props => {
     setIsLoading(true);
     const response = await Post(url, body, apiHeader());
     setIsLoading(false);
-    console.log('🚀 ~ EnterOTP ~ response:', response?.data?.data);
+    // console.log('🚀 ~ EnterOTP ~ response:', response?.data?.data);
 
     if (response != undefined) {
       Platform.OS === 'android'
         ? ToastAndroid.show('Your OTP is Send', ToastAndroid.SHORT)
         : Alert.alert('OTP is Send');
-      navigationService.navigate('VerifyNumber', {email: email}), 
-      setEmail('');
+      navigationService.navigate('VerifyNumber', { email: email }),
+        setEmail('');
     }
   };
 
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground

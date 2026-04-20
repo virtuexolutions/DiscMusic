@@ -13,8 +13,8 @@ import CircularMenu from '../Components/CircularMenu';
 import CustomImage from '../Components/CustomImage';
 import TitleWithDescription from '../Components/TitleWithDescription';
 import CarouselView from '../Components/CarouselView';
-import Animated from 'react-native-reanimated';
-import { useSelector } from 'react-redux';
+import Animated, { dispatchCommand } from 'react-native-reanimated';
+import { useDispatch, useSelector } from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { Get } from '../Axios/AxiosInterceptorFunction';
@@ -25,24 +25,35 @@ import { baseUrl } from '../Config';
 import PlayList from '../Components/PlayList';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
 import { useActiveTrack } from 'react-native-track-player';
+import { setAtiveSong } from '../Store/slices/common';
+
+
+
+
 
 const HomeScreen = () => {
   const token = useSelector(state => state.authReducer.token)
   const user = useSelector(state => state.commonReducer.userData)
-  console.log('user==================================== >>>>>>>>>>>>> user', user)
+  const activeSong = useSelector(state => state.commonReducer.activeSong)
+  console.log('------------------------------------------------ active song', activeSong)
 
   const activeTrack = useActiveTrack()
-  console.log('activeTrack==================================== >>>>>>>>>>>>> activeTrack', activeTrack)
+  const dispatch = useDispatch()
 
   const [Loading, setLoading] = useState(false)
   const [currentLocation, setCurrentLocation] = useState(null);
   const [events, setEvents] = useState([])
   const [artist, setArtist] = useState([])
   const [recommendedArtist, setRecommendedArtist] = useState([])
+  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ', recommendedArtist)
   const [bestArtist, setBestArtist] = useState([])
   const [trending, setTrending] = useState([])
+
+  // console.log('activeTrack==================================== >>>>>>>>>>>>> activeTrack', activeTrack)
+  // console.log('bestArtist==================================== >>>>>>>>>>>>> bestArtist', JSON.stringify(bestArtist, null, 2))
   // console.log('recommendedArtist', JSON.stringify(recommendedArtist, null, 2), 'recommendedArtist')
   // console.log(JSON.stringify(events, null, 2), 'events')
+  // return console.log('------------------ >>>>response artist', JSON.stringify(response?.data, null, 2), '------------------ >>>>response artist')
 
 
 
@@ -96,7 +107,6 @@ const HomeScreen = () => {
     const url = 'auth/artists-list'
     setLoading(true)
     const response = await Get(url, token)
-    // return console.log('------------------ >>>>response artist', JSON.stringify(response?.data, null, 2), '------------------ >>>>response artist')
     setLoading(false)
     if (response != undefined) {
       setArtist(response?.data?.data?.artists)
@@ -118,17 +128,16 @@ const HomeScreen = () => {
     const url = 'auth/recommendations/recommended-artict'
     setLoading(true)
     const response = await Get(url, token)
-    // return console.log(JSON.stringify(response?.data, null, 2), '------------------ >>>>> recommended artist response')
+    // return console.log('------------------ >>>>> recommended artist response ', JSON.stringify(response?.data?.data, null, 2), '------------------ >>>>> recommended artist response ')
     setLoading(false)
     if (response != undefined) {
-      setRecommendedArtist(response?.data?.data[0])
+      setRecommendedArtist(response?.data?.data)
     }
   }
   const getBestArtist = async () => {
     const url = 'auth/recommendations/best-artists'
     setLoading(true)
     const response = await Get(url, token)
-    // return console.log('------------------ >>>>> best artist response ', JSON.stringify(response?.data?.data, null, 2), '------------------ >>>>> recommended artist response ')
     setLoading(false)
     if (response != undefined) {
       setBestArtist(response?.data?.data)
@@ -140,7 +149,7 @@ const HomeScreen = () => {
     const url = 'auth/trending-tracks'
     setLoading(true)
     const response = await Get(url, token)
-    // return console.log('------------------ >>>>> treanding track response ', JSON.stringify(response?.data?.data, null, 2), '------------------ >>>>> recommended artist response ')
+    // return console.log('------------------ >>>>> treanding track response ', JSON.stringify(response?.data, null, 2), '------------------ >>>>> recommended artist response ')
     setLoading(false)
     if (response != undefined) {
       // setBestArtist(response?.data?.data)
@@ -154,6 +163,7 @@ const HomeScreen = () => {
     getRecommendedArtist()
     getBestArtist()
     getTrendingTracks()
+
   }, [])
   return (
     <>
@@ -177,34 +187,10 @@ const HomeScreen = () => {
           <TrendingView trackData={trending} from={'home'} />
 
 
-
-          {/* <View style={[styles.eventListContainer, {
-            backgroundColor: 'red',
-            marginTop: verticalScale(35),
-            height: windowHeight * 0.26,
-            marginLeft: moderateScale(0, 0.6),
-
-          }]}>
-            <CustomText style={styles.heading}>trending</CustomText>
-            <FlatList
-              horizontal
-              data={trending}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingRight: moderateScale(25, 0.6),
-              }}
-              renderItem={({ item, index }) => {
-                return <RecommendedArtist from={'home'} item={item} title={item?.title} image={item?.image} index={index} />
-
-              }} />
-          </View> */}
           <View style={{
-            // width: windowWidth * 0.9,
             marginTop: moderateScale(20, .6),
-            //  backgroundColor: 'red' 
             height: windowHeight * 0.255
           }}>
-
             <PlayList title={'Trending'} trackData={trending} from={'home'} />
           </View>
 
@@ -214,7 +200,6 @@ const HomeScreen = () => {
           }]}>
             <CustomText style={styles.heading}>Artists</CustomText>
             <CarouselView data={artist}
-            // data={[1,2,,3,4,]}
             />
           </View>
           <View style={[styles.eventListContainer]}>
@@ -241,21 +226,19 @@ const HomeScreen = () => {
                 paddingRight: moderateScale(25, 0.6),
               }}
               renderItem={({ item, index }) => {
+                console.log('======================== >>>>>>>>>', recommendedArtist)
                 const key = Object.keys(item)[0]
-                console.log('key==================================== >>>>>>>>>>>>> key', key)
                 const section = item[key]
                 if (key === "week_summary") return null;
                 if (key === "similar_artists") return null;
+                if (key === "featured_artists") return null;
+
 
                 if (!section?.items || section?.items?.length === 0) return null
                 return <RecommendedArtist from={'home'} item={section} title={section?.title} image={section?.image} index={index} />
 
               }} />
           </View>
-          {/* <View style={styles.eventListContainer}>
-            <CustomText style={styles.heading}>Trending</CustomText>
-            <AnimatedCard from={'home'} item={recommendedArtist?.your_weekly_top} />
-          </View> */}
           <View style={styles.eventListContainer}>
             <CustomText style={styles.heading}>best artist</CustomText>
 
@@ -267,11 +250,6 @@ const HomeScreen = () => {
                 paddingRight: moderateScale(25, 0.6),
               }}
               renderItem={({ item, index }) => {
-                const itemData = item?.tracks?.map((t) => {
-                  // console.log('itemData==================================== >>>>>>>>>>>>> track best artist', baseUrl + '/' + t?.audio_file)
-
-                })
-
                 return <BestArtistCard from={'home'} item={item} index={index} />
 
               }} />

@@ -1,7 +1,7 @@
-import {ScrollView, View} from 'native-base';
-import React, {useRef, useState} from 'react';
-import {ImageBackground, TouchableOpacity} from 'react-native';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { ScrollView, View } from 'native-base';
+import React, { useRef, useState } from 'react';
+import { ImageBackground, TouchableOpacity } from 'react-native';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 
 import Color from '../Assets/Utilities/Color';
 import CustomHeader from '../Components/CustomHeader';
@@ -10,16 +10,16 @@ import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {windowHeight, windowWidth} from '../Utillity/utils';
-import {Circle} from 'react-native-svg';
-import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
+import { windowHeight, windowWidth } from '../Utillity/utils';
+import { Circle } from 'react-native-svg';
+import { Custom } from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
 import OtherLocation from '../Components/OtherLocation';
-import {mode} from 'native-base/lib/typescript/theme/tools';
+import { mode } from 'native-base/lib/typescript/theme/tools';
 import MusicModal from '../Components/MusicModal';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
 
 const DetailedScreen = () => {
-    const rbRef = useRef(null)
+  const rbRef = useRef(null)
   const events = [
     {
       date: `May \n13`,
@@ -58,7 +58,7 @@ const DetailedScreen = () => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground
@@ -73,9 +73,9 @@ const DetailedScreen = () => {
             paddingBottom: moderateScale(80, 0.6),
           }}
           style={styles.container}>
-          <CustomHeader leftIcon 
-          showBack
-          text={''} subtext={''} />
+          <CustomHeader leftIcon
+            showBack
+            text={''} subtext={''} />
 
           <View
             style={{
@@ -102,7 +102,7 @@ const DetailedScreen = () => {
               <View
                 style={[
                   styles.image_circle,
-                  {marginLeft: moderateScale(-17, 0.6)},
+                  { marginLeft: moderateScale(-17, 0.6) },
                 ]}>
                 <CustomImage
                   source={require('../Assets/Images/artist4.png')}
@@ -115,7 +115,7 @@ const DetailedScreen = () => {
               <View
                 style={[
                   styles.image_circle,
-                  {marginLeft: moderateScale(-15, 0.6)},
+                  { marginLeft: moderateScale(-15, 0.6) },
                 ]}>
                 <CustomImage
                   source={require('../Assets/Images/artist5.png')}
@@ -211,7 +211,7 @@ const DetailedScreen = () => {
                 <View
                   style={[
                     styles.image_sec,
-                    {marginLeft: moderateScale(-17, 0.6)},
+                    { marginLeft: moderateScale(-17, 0.6) },
                   ]}>
                   <CustomImage
                     source={require('../Assets/Images/artist5.png')}
@@ -224,7 +224,7 @@ const DetailedScreen = () => {
                 <View
                   style={[
                     styles.image_sec,
-                    {marginLeft: moderateScale(-15, 0.6)},
+                    { marginLeft: moderateScale(-15, 0.6) },
                   ]}>
                   <CustomImage
                     source={require('../Assets/Images/art7.png')}
@@ -288,9 +288,9 @@ const DetailedScreen = () => {
             </CustomText>
             {musicData?.map((item, index) => {
               return (
-                <TouchableOpacity onPress={() =>{
-                    rbRef.current.open()
-                }}   style={styles.card_con}>
+                <TouchableOpacity onPress={() => {
+                  rbRef.current.open()
+                }} style={styles.card_con}>
                   <View style={styles.card_image}>
                     <CustomImage
                       style={{
@@ -332,7 +332,7 @@ const DetailedScreen = () => {
           </View>
         </ScrollView>
         <MusicModal rbRef={rbRef} />
-        <MinimisedPlayer/>
+        <MinimisedPlayer />
       </ImageBackground>
     </>
   );

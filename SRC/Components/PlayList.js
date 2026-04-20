@@ -24,14 +24,13 @@ import { useSelector } from 'react-redux';
 import { baseUrl } from '../Config';
 
 const PlayList = ({ data, trackData, isSearch, isViewAll, title, from }) => {
-  // console.log('trackData==================================', trackData)
+
   const token = useSelector(state => state.authReducer.token);
   const [search, setSearch] = useState('');
   const [trackTitle, setTrackTitle] = useState('');
   const [isPlaying, setIsPlaying] = useState('');
   const [songsListArray, setSongsListArray] = useState([])
 
-  // console.log('trackDatatrackDatatrackDatatrackDatatrackData', trackData)
 
   const songsList = [
     {
@@ -105,7 +104,6 @@ const PlayList = ({ data, trackData, isSearch, isViewAll, title, from }) => {
   const Songdata = async () => {
     const url = 'auth/track-list'
     const response = await Get(url, token)
-    // console.log('response====================== >>>>>>> here from playlist', JSON.stringify(response?.data, null, 2));
     if (response?.status) {
       setSongsListArray(response?.data)
     }
@@ -146,7 +144,6 @@ const PlayList = ({ data, trackData, isSearch, isViewAll, title, from }) => {
       />}
       {
         title && <CustomText style={[styles.title, {
-          // color: Color.white,
 
           fontSize: from == 'home' ? moderateScale(20, .6) : moderateScale(15, .6),
         }]}>
@@ -155,12 +152,10 @@ const PlayList = ({ data, trackData, isSearch, isViewAll, title, from }) => {
       }
       <FlatList
         showsVerticalScrollIndicator={false}
-        // scrollEnabled={false}
         data={trackData}
         contentContainerStyle={[styles.contentContainer]}
         keyExtractor={item => item.id}
         renderItem={({ item, index }) => {
-          // console.log('item====================== >>>>>>> item from playlist', `${baseUrl}/storage/${item?.audio_file}`);
           return (
             <SongListTile
 

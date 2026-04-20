@@ -1,15 +1,53 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { baseUrl } from '../Config';
 import { moderateScale } from 'react-native-size-matters';
 import { windowHeight, windowWidth } from '../Utillity/utils';
 import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
+import { useNavigation } from '@react-navigation/native';
+import navigationService from '../navigationService';
 
 const SpotifyArtistCard = ({ artistName, bgColor, imageUri, item }) => {
+    const navigation = useNavigation();
+    // const softColors = [
+    //     // background: "#0F172A",     // deep night (like a studio)
+    //     "#1E293B",        // panels / cards
+    //     "#7DD3FC",        // soft sky blue (controls, links)
+    //     "#F9A8D4",      // soft pink (highlights)
+    //     "#C4B5FD",         // dreamy lavender (active states)
+    //     "#86EFAC",      // soft green (playing / success)
+    //     "#0055c550",    // main text
+    //     "#00429eff",  // muted text
+    //     "#334155"          // subtle dividers
+    // ];
+    const softColors = [
+        "#ff384cff", // soft pink
+        "#c27e00ff", // peach
+        "#7e6f00ff", // light yellow
+        "#005a66ff", // light cyan
+        "#9d9dffff", // lavender
+        "#725b00ff", // vanilla
+        "#004d3cff", // soft green
+        "#f17e86ff", // blush pink
+        "#6dcdfdff", // powder blue
+        "#ff917dff"  // pale rose
+    ];
     // console.log('item==================== >>>>>>>>>>>>>>>>>>>>>>>>', item)
+    const colorIndex = item?.title
+        ? item.title.charCodeAt(0) % softColors.length
+        : Math.floor(Math.random() * softColors.length);
+    const cardColor = softColors[colorIndex];
     return (
-        <View style={styles.container}>
+        <TouchableOpacity
+            onPress={() => {
+
+                navigationService.navigate('MusicDetailsScreen', { item: item?.tracks });
+            }}
+            style={[styles.container, {
+                backgroundColor: cardColor,
+
+            }]}>
             {/* 1. Main Card Body */}
             <View style={[styles.card, { backgroundColor: bgColor }]}>
 
@@ -22,6 +60,10 @@ const SpotifyArtistCard = ({ artistName, bgColor, imageUri, item }) => {
                 <View style={styles.artistImage}>
 
                     <CustomImage
+                        onPress={() => {
+
+                            navigationService.navigate('MusicDetailsScreen', { item: item?.tracks });
+                        }}
                         source={{ uri: `${baseUrl}/storage/${item?.profile_image}` }}
                         style={{
                             height: '100%',
@@ -39,7 +81,7 @@ const SpotifyArtistCard = ({ artistName, bgColor, imageUri, item }) => {
 
             {/* Card ke neeche ka subtitle */}
             <CustomText numberOfLines={1} style={styles.subTitle}>This is {item?.name}.</CustomText>
-        </View>
+        </TouchableOpacity >
     );
 };
 
@@ -48,7 +90,6 @@ const styles = StyleSheet.create({
         marginHorizontal: moderateScale(10, .6),
         // margin: 10,
         // width: 160,
-        backgroundColor: 'red',
         borderRadius: 8,
     },
     card: {
@@ -92,7 +133,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     subTitle: {
-        color: '#b3b3b3',
+        color: Color.black,
         fontSize: moderateScale(12, .6),
         marginTop: moderateScale(8, .6),
         width: windowWidth * 0.4,

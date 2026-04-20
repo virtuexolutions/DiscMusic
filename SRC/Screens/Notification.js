@@ -1,17 +1,17 @@
-import {Icon, ScrollView, View} from 'native-base';
-import React, {useRef} from 'react';
-import {FlatList, ImageBackground, TouchableOpacity} from 'react-native';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { Icon, ScrollView, View } from 'native-base';
+import React, { useRef } from 'react';
+import { FlatList, ImageBackground, TouchableOpacity } from 'react-native';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 
 import Color from '../Assets/Utilities/Color';
 import CustomHeader from '../Components/CustomHeader';
 import CustomImage from '../Components/CustomImage';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Custom} from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
+import { Custom } from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
 import navigationService from '../navigationService';
 import NotificationCard from '../Components/NotificationCard';
@@ -83,14 +83,14 @@ const Notification = () => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}
         imageStyle={styles.image}>
-          <CustomHeader leftIcon  
+        <CustomHeader leftIcon
           showBack={true}
           text={'notifications'} subtext={''} />
         <ScrollView
@@ -134,26 +134,26 @@ const Notification = () => {
           </View>
           <CustomText
             isBold
-            style={[styles.title, {marginTop: moderateScale(20, 0.6)}]}>
+            style={[styles.title, { marginTop: moderateScale(20, 0.6) }]}>
             new
           </CustomText>
 
           <FlatList
             showsVerticalScrollIndicator={false}
-            style={{marginTop: moderateScale(10, 0.6)}}
+            style={{ marginTop: moderateScale(10, 0.6) }}
             contentContainerStyle={{
               paddingBottom: moderateScale(30, 0.6),
             }}
             data={musicList}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               return (
-                <NotificationCard item={item}/>
-                
+                <NotificationCard item={item} />
+
               );
             }}
           />
         </ScrollView>
-        <MinimisedPlayer/>
+        <MinimisedPlayer />
       </ImageBackground>
     </>
   );
@@ -233,7 +233,7 @@ const styles = ScaledSheet.create({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: [{translateX: -20}, {translateY: -18}],
+    transform: [{ translateX: -20 }, { translateY: -18 }],
     height: windowHeight * 0.037,
     width: windowHeight * 0.042,
     shadowColor: '#000000ff',

@@ -100,7 +100,7 @@ const Settings = ({ navigation }) => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground
@@ -233,13 +233,13 @@ const Settings = ({ navigation }) => {
               // style={{backgroundColor: 'red'}}
               onPress={() => {
                 // dispatch(setUserLogoutAuth());
-                console.log('first =============== >>>>> log out hereeeeeeeee');
+                // console.log('first =============== >>>>> log out hereeeeeeeee');
               }}>
               <TitleWithDescription
                 onPress={() => {
                   dispatch(setUserLogoutAuth());
                   console.log(
-                    'first =============== >>>>> log out hereeeeeeeee',
+                    // 'first =============== >>>>> log out hereeeeeeeee',
                   );
                 }}
                 title="Log Out"

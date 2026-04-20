@@ -19,7 +19,7 @@ const PremiumScreen = () => {
     return (
         <>
             <CustomStatusBar
-                backgroundColor={Color.black}
+                backgroundColor={Color.statusColor}
                 barStyle={'light-content'}
             />
             <ImageBackground

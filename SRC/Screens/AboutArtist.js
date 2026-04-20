@@ -15,7 +15,7 @@ import { baseUrl } from '../Config';
 
 const AboutArtist = ({ route }) => {
   const { artistData } = route?.params;
-  console.log(JSON.stringify(artistData, null, 2), '------------------ >>>>artistData')
+  // console.log(JSON.stringify(artistData, null, 2), '------------------ >>>>artistData')
   const [countryCode, setCountryCode] = useState('ID'); // For flag
   const [callingCode, setCallingCode] = useState('62'); // For +62
   const [visible, setVisible] = useState(false);
@@ -46,7 +46,7 @@ const AboutArtist = ({ route }) => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground

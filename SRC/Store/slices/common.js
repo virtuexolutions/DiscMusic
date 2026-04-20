@@ -47,7 +47,9 @@ const initialState = {
   selectedRole: '',
   location: '',
   isProfile: 0,
-  favArtist: [],
+  favArtist: false,
+  likedSongs: [],
+  activeSong: {},
 };
 
 const CommonSlice = createSlice({
@@ -86,13 +88,31 @@ const CommonSlice = createSlice({
     },
     setProfileCreated(state, action) {
       state.isProfile = action.payload;
-      console.log('🚀 ~ action.payload:', action.payload);
+      // console.log('🚀 ~ action.payload:', action.payload);
     },
     setFavArtist(state, action) {
       state.favArtist = action.payload;
     },
+    setLikedSongs(state, action) {
+      state.likedSongs = action.payload || [];
+    },
+    toggleLikedSong(state, action) {
+      const trackId = Number(action.payload);
+      const isAlreadyLiked = state.likedSongs.some(id => Number(id) === trackId);
+      if (isAlreadyLiked) {
+        state.likedSongs = state.likedSongs.filter(id => Number(id) !== trackId);
+      } else {
+        state.likedSongs.push(trackId);
+        // console.log('state.likedSongs==================== >>>>>>>>>>>>>>>>>>>>>>>>', state.likedSongs)
+      }
+    },
+
+    setAtiveSong(state, action) {
+      state.activeSong = action.payload
+    }
   },
 });
+
 
 export const {
   setUserData,
@@ -106,6 +126,9 @@ export const {
   setBidDetail,
   setProfileCreated,
   setFavArtist,
+  setLikedSongs,
+  toggleLikedSong,
+  setAtiveSong,
 } = CommonSlice.actions;
 
 export default CommonSlice.reducer;

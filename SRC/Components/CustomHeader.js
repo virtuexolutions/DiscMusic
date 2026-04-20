@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { windowHeight, windowWidth } from '../Utillity/utils';
 import { moderateScale, scale } from 'react-native-size-matters';
@@ -29,6 +29,7 @@ const CustomHeader = ({ leftIcon, RightIcon,
   premium,
   rightIconComponent,
   titlStyle,
+  fromMusic,
   text, style, text1, subtext }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -80,7 +81,7 @@ const CustomHeader = ({ leftIcon, RightIcon,
             iconSize={scale(14)}
             onPress={() => {
               navigation.navigate("MusicCodeScreen")
-              console.log("first")
+              // console.log("first")
             }}
           />)}
           {search && <ThemeIconButton
@@ -104,28 +105,44 @@ const CustomHeader = ({ leftIcon, RightIcon,
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             colors={Color.themeBgColor}
+
             style={{
               width: windowWidth * 0.12,
               height: windowWidth * 0.12,
               borderRadius: windowWidth / 2,
-              justifyContent: 'ceneter',
-              alignItems: 'center',
-            }}>
-            <Icon
-              name="dots-three-vertical"
-              as={Entypo}
-              size={moderateScale(20, 0.3)}
-              color={Color.white}
-              style={{
-                position: 'absolute',
-                top: moderateScale(12, 0.3),
-              }}
+            }}
+          >
+
+            <TouchableOpacity
               onPress={() => {
                 navigationService.navigate("Settings")
                 // dispatch(setUserLogOut());
                 // dispatch(setUserLogoutAuth());
               }}
-            />
+              style={{
+                width: windowWidth * 0.12,
+                height: windowWidth * 0.12,
+                borderRadius: windowWidth / 2,
+                justifyContent: 'ceneter',
+                alignItems: 'center',
+              }}>
+
+              <Icon
+                name="dots-three-vertical"
+                as={Entypo}
+                size={moderateScale(20, 0.3)}
+                color={Color.white}
+                style={{
+                  position: 'absolute',
+                  top: moderateScale(12, 0.3),
+                }}
+                onPress={() => {
+                  navigationService.navigate("Settings")
+                  // dispatch(setUserLogOut());
+                  // dispatch(setUserLogoutAuth());
+                }}
+              />
+            </TouchableOpacity>
           </LinearGradient>
 
           }

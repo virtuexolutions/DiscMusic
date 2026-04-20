@@ -34,7 +34,7 @@ const ViewArtistLibrary = (props) => {
   const token = useSelector(state => state.authReducer.token)
   const playbackState = usePlaybackState();
   const activeTrack = useActiveTrack();
-  console.log('activeTrack', JSON.stringify(activeTrack, null, 2))
+  // console.log('activeTrack', JSON.stringify(activeTrack, null, 2))
   const isPlaying = playbackState.state === State.Playing;
 
   const [featuringArtists, setFeaturingArtists] = useState([])
@@ -66,7 +66,7 @@ const ViewArtistLibrary = (props) => {
       await getFansAlsoLike();
 
     } catch (err) {
-      console.log('Error fetching full artist data on click: ', err);
+      // console.log('Error fetching full artist data on click: ', err);
       setData(item);
     } finally {
       setLoading(false);
@@ -148,7 +148,7 @@ const ViewArtistLibrary = (props) => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground
@@ -207,7 +207,7 @@ const ViewArtistLibrary = (props) => {
                 style={{ alignItems: "center" }}
                 titleStyle={{ fontSize: moderateScale(14, 0.2) }}
                 descriptionStyle={{ fontSize: moderateScale(14, 0.2) }}
-                title='7,910,613'
+                title='7,910,613 hfh jg'
                 description='Monthly Listeners'
               />
             </View>
@@ -267,7 +267,7 @@ const ViewArtistLibrary = (props) => {
 
             <FeaturingList data={featuringArtists} title={'featuring artists'} onArtistPress={handleArtistClick} />
             <ArtistAboutInfo data={data} />
-            <FansLikedList data={fanAlsoLike} onArtistPress={handleArtistClick} />
+            {/* <FansLikedList data={fanAlsoLike} onArtistPress={handleArtistClick} /> */}
           </ScrollView>
         )}
         {activeTrack && <MinimisedPlayer

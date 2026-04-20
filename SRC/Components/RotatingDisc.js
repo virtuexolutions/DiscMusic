@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { View, Image, Animated, Easing, StyleSheet } from "react-native";
 
 const RotatingDisc = ({ isPlaying, image }) => {
-  console.log('image====================== >>>>>>>>>>>>>> hereeeeeeeeeeeee', image);
+  // console.log('image====================== >>>>>>>>>>>>>> hereeeeeeeeeeeee', image);
   const rotateAnim = useRef(new Animated.Value(0)).current;
   const animationRef = useRef(null);
 
@@ -43,6 +43,7 @@ const RotatingDisc = ({ isPlaying, image }) => {
   return (
     <View style={styles.container}>
       <Animated.Image
+
         source={image ? { uri: image } : require("../Assets/Images/disc.png")} // 👈 your disc image
         style={[
           styles.disc,

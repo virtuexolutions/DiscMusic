@@ -12,7 +12,7 @@ import SongListTile from './SongListTile';
 import { baseUrl } from '../Config';
 
 const PopularReleases = ({ data, title }) => {
-    console.log('.........................////////////////////', data)
+    // console.log('.........................////////////////////', data)
     const songsList = [
         {
             id: '1',
@@ -52,7 +52,7 @@ const PopularReleases = ({ data, title }) => {
             />}
             keyExtractor={item => item.id}
             renderItem={({ item, index }) => {
-                console.log(JSON.stringify(item, null, 2), '------------------ >>>>item')
+                // console.log(JSON.stringify(item, null, 2), '------------------ >>>>item')
                 return (
                     <SongListTile
                         image={item?.cover_image_path ? { uri: baseUrl + item?.cover_image_path } : item?.image}

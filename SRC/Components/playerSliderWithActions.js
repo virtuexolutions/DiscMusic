@@ -10,7 +10,7 @@ import AudioSlider from './AudioSlider'
 import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player'
 import { playPlaylist, playNext, playPrevious } from './MusicPlayerController'
 const PlayerSliderWithActions = ({ item }) => {
-    console.log('item====================== >>>>>>> here from player slider with actions', item);
+    // console.log('item====================== >>>>>>> here from player slider with actions', item);
     const playbackState = usePlaybackState();
     const isPlaying = playbackState.state === State.Playing;
     const handlePlayAll = async () => {

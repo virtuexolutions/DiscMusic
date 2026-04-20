@@ -12,7 +12,7 @@ import SongListTile from './SongListTile';
 import { baseUrl } from '../Config';
 
 const PopularSongs = ({ data, title }) => {
-    console.log('///////////////////////////////////', data)
+    // console.log('///////////////////////////////////', data)
     // const songsList = [
     //     {
     //         id: '1',

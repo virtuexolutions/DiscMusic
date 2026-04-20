@@ -18,7 +18,7 @@ import { playNext, playPlaylist } from './MusicPlayerController';
 import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player';
 
 const TrendingView = ({ trackData, from }) => {
-  console.log('trackData', trackData)
+  // console.log('trackData', trackData)
   const [weather, setWeather] = useState(null);
 
   const playbackState = usePlaybackState();

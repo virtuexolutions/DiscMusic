@@ -8,6 +8,9 @@ import CustomText from '../Components/CustomText';
 import ScreenBoiler from '../Components/ScreenBoiler';
 import { windowHeight, windowWidth } from '../Utillity/utils';
 
+
+
+
 const SplashScreen = () => {
   return (
     <ScreenBoiler

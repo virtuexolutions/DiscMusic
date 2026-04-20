@@ -40,14 +40,11 @@ const RecommendedArtist = ({ item, from, title, image }) => {
         navigationService.navigate('MusicDetailsScreen', { item: tracksData, data: item?.weekly_trending, from: from });
     };
 
-    // Calculate a deterministic color based on the item title or index
     const colorIndex = item?.title
         ? item.title.charCodeAt(0) % backgroundColors.length
         : Math.floor(Math.random() * backgroundColors.length);
-    // const cardColor = backgroundColors[colorIndex];
 
     const cover_image = item?.items?.length > 0 ? `${baseUrl}/storage/${item?.items[0]?.cover_image}` : '';
-    console.log('item====================== >>>>>>> item from recommended artist', cover_image);
     return (
         <TouchableOpacity
             activeOpacity={0.9} onPress={onPress}
@@ -92,7 +89,6 @@ const styles = StyleSheet.create({
         borderColor: '#424750',
         borderWidth: 0.5,
         alignItems: 'center',
-        // justifyContent: 'center',
         shadowColor: "#e3ecd2ff",
         shadowOffset: {
             width: 0,
@@ -109,10 +105,7 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: moderateScale(12, 0.6),
         width: windowWidth * 0.35,
-        // paddingTop: moderateScale(2, .6),
         color: Color.black,
-        // textAlign: 'center',
-        // alignSelf: 'center',
 
     },
     image: {
@@ -122,7 +115,6 @@ const styles = StyleSheet.create({
     sub_title: {
         fontSize: moderateScale(11, .6),
         color: Color.black,
-        // fontWeight: '7',
         textAlign: 'center',
         marginTop: moderateScale(5, .6)
     }

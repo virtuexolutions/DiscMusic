@@ -1,4 +1,4 @@
-import { FlatList, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomStatusBar from '../Components/CustomStatusBar'
 import Color from '../Assets/Utilities/Color'
@@ -22,7 +22,7 @@ import { baseUrl } from '../Config'
 
 const YourLibrary = () => {
   const token = useSelector(state => state.authReducer.token)
-  console.log('token====================== >>>>>>> here from YourLibrary', token);
+  // console.log('token====================== >>>>>>> here from YourLibrary', token);
   const activeTrack = useActiveTrack()
   const navigation = useNavigation();
 
@@ -57,7 +57,7 @@ const YourLibrary = () => {
     setIsLoading(true)
     const resposnse = await Get(url, token)
     setIsLoading(false)
-    console.log('response====================== >>>>>>> here from addArtist', JSON.stringify(resposnse?.data?.artist_list, null, 2));
+    // console.log('response====================== >>>>>>> here from addArtist', JSON.stringify(resposnse?.data?.artist_list, null, 2));
     if (resposnse != undefined) {
       setArtistList(resposnse?.data?.artist_list)
     }
@@ -70,7 +70,7 @@ const YourLibrary = () => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground
@@ -113,30 +113,34 @@ const YourLibrary = () => {
           />
         </View>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: moderateScale(90, .6) }}>
-          <FlatList
-            style={{
-              // height: windowHeight * 0.3,
-              paddingVertical: moderateScale(10, .6)
-            }}
-            // data={[1, 3, 6, 6, 6, 6]}
-            data={artistList}
-            keyExtractor={item => item} z
-            contentContainerStyle={{
-              // paddingHorizontal: moderateScale(10, .6),
-              // marginTop: verticalScale(5),
-              // paddingBottom: scale(50),
-              // gap: verticalScale(10),
-            }}
-            renderItem={({ item, index }) => {
-              console.log('item====================== >>>>>>> here from renderItem', `${baseUrl}/storage/${item?.user?.profile_image}`);
-              return (
-                <ArtistCard
-                  item={item}
-                />
-              );
+          {
 
-            }}
-          />
+            isLoading ? <ActivityIndicator size={'large'} color={Color.white} /> :
+              <FlatList
+                style={{
+                  // height: windowHeight * 0.3,
+                  paddingVertical: moderateScale(10, .6)
+                }}
+                // data={[1, 3, 6, 6, 6, 6]}
+                data={artistList}
+                keyExtractor={item => item} z
+                contentContainerStyle={{
+                  // paddingHorizontal: moderateScale(10, .6),
+                  // marginTop: verticalScale(5),
+                  // paddingBottom: scale(50),
+                  // gap: verticalScale(10),
+                }}
+                renderItem={({ item, index }) => {
+                  // console.log('item====================== >>>>>>> here from renderItem', `${baseUrl}/storage/${item?.user?.profile_image}`);
+                  return (
+                    <ArtistCard
+                      item={item}
+                    />
+                  );
+
+                }}
+              />
+          }
 
 
           <ArtistCard

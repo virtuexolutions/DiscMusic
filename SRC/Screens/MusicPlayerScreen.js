@@ -15,45 +15,27 @@ import PlayerSliderWithActions from '../Components/playerSliderWithActions'
 import LyricsContainer from '../Components/LyricsContainer'
 import RotatingDisc from '../Components/RotatingDisc'
 import CircularMenu from '../Components/CircularMenu'
-import { useActiveTrack, usePlaybackState } from 'react-native-track-player'
+import { State, useActiveTrack, usePlaybackState } from 'react-native-track-player'
 import { playPlaylist } from '../Components/MusicPlayerController'
 import AudioSlider from '../Components/AudioSlider'
 import { useSelector } from 'react-redux'
 import { Post } from '../Axios/AxiosInterceptorFunction'
+import LikeButton from '../Components/LikeButton'
 
 const MusicPlayerScreen = () => {
     const token = useSelector((state) => state.authReducer.token);
     const track = useActiveTrack();
+    // console.log('   fdhfkj sdf jksdhfkjshdkjfhksjdhfkjshdf hsdjk fhksdhkfhskdhf', track)
+
+    const playbackState = usePlaybackState();
+    const isPlaying = playbackState.state === State.Playing;
+    // console.log('afaghfha gdfagdhfahf hag fhga fahdg ghdf', isPlaying)
     const [lyrics, setLyrics] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     // console.log('track====================== >>>>>>> here from music player screen', track);
 
 
-    const likeTrack = async () => {
-        const url = 'auth/liked-songs/store'
-        const body = {
-            track_id: track?.id,
-            // is_liked: true
-        }
-        // return console.log('body====================== >>>>>>> here from music player screen',)
-        const response = await Post(url, { track_id: track?.id }, apiHeader(token));
-        if (response != undefined) {
-            console.log('you liked this song')
-        }
-        console.log('response====================== >>>>>>> here from music player screen', response?.data);
-    }
-
-    const unlikeTrack = async () => {
-        const url = 'auth/liked-songs/remove'
-
-        // return console.log('body====================== >>>>>>> here from music player screen',)
-        const response = await Post(url, { track_id: track?.id }, apiHeader(token));
-        if (response != undefined) {
-            console.log('you liked this song')
-        }
-        console.log('response====================== >>>>>>> here from music player screen', response?.data);
-    }
 
     useEffect(() => {
         const fetchLyrics = async () => {
@@ -64,19 +46,20 @@ const MusicPlayerScreen = () => {
             setError(null);
 
             try {
-                console.log('track====================== >>>>>>> here from try ,');
+                // console.log('track====================== >>>>>>> here from try ,');
                 const url = `https://lrclib.net/api/get?artist_name=${encodeURIComponent(track?.artist)}&track_name=${encodeURIComponent(track?.title)}`;
-                // const url = `https://lrclib.net/api/get?artist_name=Michael Jackson&track_name=They dont really care about us`;
-                console.log('response====================== >>>>>>> here from music url ', url);
+                // const url = `https://lrclib.net/api/get?artist_name=${'Michael Jackson'}&track_name=${'They dont really care about us'}`;
+                // console.log('response====================== >>>>>>> here from music url ', url, 'sdffsadfsdfsdfsdfsdf');
 
                 const response = await fetch(url);
+                // console.log("reeeeeeeeeeeeeeeeeeeeesssssssssssssssssponnnnnnnnnnnse", response)
 
                 if (!response.ok) {
                     throw new Error("Sorry, lyrics are not available at the moment.");
                 }
 
                 const data = await response.json();
-                console.log('data====================== >>>>>>> here from music player screen', data);
+                // console.log('data====================== >>>>>>> here from music player screen', data);
                 setLyrics(data.syncedLyrics || data.plainLyrics || "Sorry, lyrics are not available at the moment.");
             } catch (err) {
                 setError(err.message);
@@ -98,7 +81,7 @@ const MusicPlayerScreen = () => {
     return (
         <>
             <CustomStatusBar
-                backgroundColor={Color.black}
+                backgroundColor={Color.statusColor}
                 barStyle={'light-content'}
             />
             <ImageBackground
@@ -117,7 +100,7 @@ const MusicPlayerScreen = () => {
                         paddingTop: verticalScale(10),
                         paddingBottom: verticalScale(100),
                     }}>
-                    <RotatingDisc isPlaying={true} image={track?.artwork} />
+                    <RotatingDisc isPlaying={isPlaying ? true : false} image={track?.artwork} />
                     {/* <View style={styles.actions}>
                         <CustomButton
                             //   isGradient
@@ -146,14 +129,7 @@ const MusicPlayerScreen = () => {
                         />
                         <View style={styles.innerView}>
 
-                            <ThemeIconButton
-                                onPress={() => likeTrack()}
-                                style={styles.iconButton2}
-                                iconType={AntDesign}
-                                iconName={"heart"}
-                                iconSize={moderateScale(22, 0.2)}
-                                iconColor={Color.themeDarkGray}
-                            />
+                            <LikeButton track={track} style={styles.iconButton2} />
                             <ThemeIconButton
                                 style={styles.iconButton2}
                                 iconType={Feather}
@@ -210,7 +186,7 @@ const styles = StyleSheet.create({
         width: "auto",
         height: "auto",
         elevation: 0,
-        shadowColor: "transparent",
+        // shadowColor: "transparent",
     },
     // bg_container: {
     //     width: windowWidth,

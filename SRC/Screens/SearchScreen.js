@@ -25,7 +25,7 @@ const SearchScreen = () => {
   const token = useSelector(state => state.authReducer.token)
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false)
-  console.log('======================= isLoading', isLoading)
+  // console.log('======================= isLoading', isLoading)
   const [genreList, setGenreList] = useState([]);
   const browseCategories = [
     {
@@ -158,7 +158,7 @@ const SearchScreen = () => {
     if (response != undefined) {
       setGenreList(response?.data?.track_list?.data)
     }
-    console.log('response====================== >>>>>>> here from genre', JSON.stringify(response?.data, null, 2));
+    // console.log('response====================== >>>>>>> here from genre', JSON.stringify(response?.data, null, 2));
   }
 
   useEffect(() => {
@@ -168,7 +168,7 @@ const SearchScreen = () => {
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground
@@ -186,10 +186,12 @@ const SearchScreen = () => {
         {
           isLoading ? <Loader animation={true} /> :
             <FlatList
-              data={search ? genreList.filter(item => item?.name?.toLowerCase().includes(search.toLowerCase())) : genreList}
+              scrollEnabled={true}
+              // contentContainerStyle=
+              data={search ? genreList?.filter(item => item?.name?.toLowerCase().includes(search.toLowerCase())) : genreList}
               numColumns={2}
               keyExtractor={item => item.id}
-              contentContainerStyle={{ paddingBottom: verticalScale(80) }}
+              contentContainerStyle={{ paddingBottom: moderateScale(80, .6) }}
               renderItem={({ item, index }) => {
                 return <CategoryComponent item={item} isLoading={isLoading} />
               }}
@@ -261,7 +263,8 @@ const styles = StyleSheet.create({
     width: windowWidth * 0.9,
     fontSize: moderateScale(20, 0.2),
     color: Color.white,
-    paddingVertical: verticalScale(20),
+    paddingTop: moderateScale(18, .6),
+    paddingBottom: moderateScale(10, .6),
   },
   imageContainer: {
     width: windowWidth * 0.18,

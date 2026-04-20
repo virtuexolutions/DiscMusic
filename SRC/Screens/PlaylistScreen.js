@@ -18,85 +18,47 @@ import CustomText from '../Components/CustomText';
 import { windowHeight, windowWidth } from '../Utillity/utils';
 import { playNext, playPlaylist, playPrevious, playSingleTrack, getArtistNameFromTrack, playPlaylistFromTrack } from '../Components/MusicPlayerController';
 import { baseUrl } from '../Config';
+import { useLikeTrack } from '../Hooks/useLikeTrack';
+import { setAtiveSong } from '../Store/slices/common';
+import { useDispatch } from 'react-redux';
+
 
 const PlaylistScreen = props => {
+
   const data = props?.route?.params?.item;
   const allTracks = props?.route?.params?.allTracks;
-  console.log('🚀 ~ PlaylistScreen ~ data >>>>>>>>>>>>>>>>>>>>>>>>>>>> :', data?.is_liked);
+  const dispatch = useDispatch()
 
-
-  // Use the reactive hook to track the actual play state
   const playbackState = usePlaybackState();
   const isPlaying = playbackState.state === State.Playing;
-  // console.log('mmmmmmmmmmmmmmmmmmmm ', playbackState.state)
   const currentTrack = useActiveTrack();
   const artistName = getArtistNameFromTrack(currentTrack);
 
 
-  const [liked, setLiked] = useState(data?.is_liked);
-  console.log('djhfjksdhkfhskdfh kshdj skdfh', liked)
-
-  const likeTrack = async () => {
-    const url = 'auth/liked-songs/store'
-    const body = {
-      track_id: track?.id,
-      // is_liked: true
-    }
-    return console.log('body====================== >>>>>>> here from music player screen',)
-    const response = await Post(url, { track_id: track?.id }, apiHeader(token));
-    if (response != undefined) {
-      console.log('you liked this song')
-    }
-    console.log('response====================== >>>>>>> here from music player screen', response?.data);
-  }
-
-  const unlikeTrack = async () => {
-    const url = 'auth/liked-songs/remove'
-
-    // return console.log('body====================== >>>>>>> here from music player screen',)
-    const response = await Post(url, { track_id: track?.id }, apiHeader(token));
-    if (response != undefined) {
-      console.log('you liked this song')
-    }
-    console.log('response====================== >>>>>>> here from music player screen', response?.data);
-  }
-
-
-
-  const handleLike = async () => {
-    // ✅ UI turant update
-    setLiked(!liked);
-
-    try {
-      await
-        liked || data?.is_liked ? unlikeTrack() : likeTrack(); // API call
-    } catch (error) {
-      // ❌ agar API fail ho jaye to revert
-      setLiked(false);
-    }
-  };
+  const TrackObj = currentTrack || data;
+  const { toggleLike, loading: likeLoading, isLiked } = useLikeTrack(TrackObj);
   useEffect(() => {
-    // Play the full list but start from the selected track
     if (data && allTracks) {
       playPlaylistFromTrack(allTracks, data);
+      dispatch(setAtiveSong(data))
+
     } else if (data) {
       playPlaylist(data);
+      dispatch(setAtiveSong(data))
     }
   }, [data?.id]);
 
   useEffect(() => {
-    // Add playback error listener
     const errorListener = TrackPlayer.addEventListener('playback-error', error => {
       console.error('Playback error:', error);
     });
 
-    // Cleanup listener on unmount
     return () => errorListener.remove();
   }, []);
   return (
     <>
       <CustomStatusBar
-        backgroundColor={Color.black}
+        backgroundColor={Color.statusColor}
         barStyle={'light-content'}
       />
       <ImageBackground
@@ -143,16 +105,20 @@ const PlaylistScreen = props => {
                   {artistName}
                 </CustomText>
               </View>
-              <TouchableOpacity style={{ padding: 5, borderRadius: 5, paddingHorizontal: moderateScale(10, 0.6) }} onPress={() => handleLike()}>
+              <TouchableOpacity
+                style={{ padding: 5, borderRadius: 5, paddingHorizontal: moderateScale(10, 0.6) }}
+                onPress={toggleLike}
+                disabled={likeLoading}
+              >
                 <Icon
-                  onPress={() => handleLike()}
                   style={{ alignSelf: 'center' }}
-                  color={liked || data?.is_liked ? Color.red : Color.white}
+                  color={isLiked ? Color.red : Color.white}
                   size={moderateScale(20, 0.6)}
-                  name={liked || data?.is_liked ? "heart" : "hearto"}
+                  name={isLiked ? "heart" : "hearto"}
                   as={AntDesign}
                 />
               </TouchableOpacity>
+
             </View>
             <AudioSlider width={windowWidth * 0.9} />
             <View style={styles.player_btn}>
@@ -189,7 +155,6 @@ const PlaylistScreen = props => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  // If we have a track in Context, we want to play/pause appropriately
                   if (isPlaying) {
                     TrackPlayer.pause();
                   } else {
@@ -206,7 +171,6 @@ const PlaylistScreen = props => {
                 ]}>
                 <Icon
                   onPress={() => {
-                    // If we have a track in Context, we want to play/pause appropriately
                     if (isPlaying) {
                       TrackPlayer.pause();
                     } else {
@@ -358,7 +322,6 @@ const styles = ScaledSheet.create({
   },
   container: {
     width: windowWidth,
-    // height: windowHeight,
     paddingHorizontal: moderateScale(20, 0.6),
   },
   image: {
@@ -481,7 +444,6 @@ const styles = ScaledSheet.create({
     },
     shadowOpacity: 0.4,
     shadowRadius: 25,
-    // Android Shadow
     elevation: 8,
   },
   lyrics: {
@@ -505,7 +467,6 @@ const styles = ScaledSheet.create({
   artist_image: {
     height: windowHeight * 0.2,
     width: windowWidth * 0.8,
-    // backgroundColor: 'red',
     borderRadius: moderateScale(20, 0.6),
     overflow: 'hidden',
   },
@@ -530,7 +491,6 @@ const styles = ScaledSheet.create({
   },
   text_container: {
     width: windowWidth * 0.6,
-    // backgroundColor :'red',
     paddingHorizontal: moderateScale(20, 0.6),
     paddingVertical: moderateScale(10, 0.6),
   },
@@ -540,8 +500,6 @@ const styles = ScaledSheet.create({
     width: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
-
-    // backgroundColor: 'red',
   },
 });
 

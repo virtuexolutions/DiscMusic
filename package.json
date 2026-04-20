@@ -46,6 +46,7 @@
     "react-native-modal": "^14.0.0-rc.0",
     "react-native-multiple-select": "^0.5.12",
     "react-native-permissions": "^5.4.0",
+    "react-native-qrcode-svg": "^6.3.21",
     "react-native-ratings": "^8.1.0",
     "react-native-raw-bottom-sheet": "^3.0.0",
     "react-native-reanimated": "^3.17.0",

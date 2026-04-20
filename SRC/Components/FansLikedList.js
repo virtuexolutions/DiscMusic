@@ -11,8 +11,8 @@ import { baseUrl } from '../Config';
 const FansLikedList = ({ data, onArtistPress }) => {
   const similarArtists = data.find(item => item.similar_artists)?.similar_artists;
 
-  console.log(similarArtists);
-  console.log('data====================== >>>>>>>>>>>>>> hereeeeeeeeeeeee', JSON.stringify(data?.similar_artists, null, 2));
+  // console.log(similarArtists);
+  // console.log('data====================== >>>>>>>>>>>>>> hereeeeeeeeeeeee', JSON.stringify(data?.similar_artists, null, 2));
   const featuredData = [
     { id: "1", title: "Folguni Pathak", image: require("../Assets/Images/artist11.png") },
     { id: "2", title: "Pankaj udhas", image: require("../Assets/Images/artist12.png") },

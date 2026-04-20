@@ -1,35 +1,36 @@
-import {Icon, ScrollView, View} from 'native-base';
-import React, {useRef} from 'react';
+import { Icon, ScrollView, View } from 'native-base';
+import React, { useRef } from 'react';
 import {
   FlatList,
   ImageBackground,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {moderateScale, ScaledSheet} from 'react-native-size-matters';
+import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 
 import Color from '../Assets/Utilities/Color';
 import CustomHeader from '../Components/CustomHeader';
 import CustomImage from '../Components/CustomImage';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const RecentCard = ({item}) => {
-  console.log('🚀 ~==== RecentCard ~ item:', item);
+const RecentCard = ({ item }) => {
+  // console.log('🚀 ~==== RecentCard ~ item:', item);
   return (
     <View style={styles.card_con}>
       <View style={styles.card_image}>
         <CustomImage
-          style={{height: '100%', width: '100%'}}
+          style={{ height: '100%', width: '100%' }}
           source={item.image}
         />
       </View>
 
       <View
-        style={{flex: 1,
+        style={{
+          flex: 1,
           justifyContent: 'center',
         }}>
         <CustomText
@@ -55,9 +56,9 @@ const RecentCard = ({item}) => {
       <Icon
         activeopacity={0.7}
         onPress={() => {
-          console.log('first================= >>>>');
+          // console.log('first================= >>>>');
         }}
-        style={{marginLeft: moderateScale(10, 0.6)}}
+        style={{ marginLeft: moderateScale(10, 0.6) }}
         name="dots-three-vertical"
         as={Entypo}
         size={moderateScale(18, 0.6)}
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: [{translateX: -20}, {translateY: -18}],
+    transform: [{ translateX: -20 }, { translateY: -18 }],
     height: windowHeight * 0.037,
     width: windowHeight * 0.042,
     shadowColor: '#000000ff',

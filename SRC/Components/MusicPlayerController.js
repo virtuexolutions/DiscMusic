@@ -25,10 +25,11 @@ export const getArtistNameFromTrack = (track) => {
  * Helper to format dynamic track data for TrackPlayer
  */
 export const formatTrack = (track) => {
+  // console.log('track====================== >>>>>>>>>>>>>> hereeeeeeeeeeeee', track)
   if (!track) return null;
   // If it's already formatted, just return it
   if (track.url?.startsWith('http')) return track;
-  console.log('url====================== >>>>>>>>>>>>>> hereeeeeeeeeeeee', `${baseUrl}/storage/${JSON.stringify(track, null, 2)}`)
+  // console.log('url====================== >>>>>>>>>>>>>> hereeeeeeeeeeeee', `${baseUrl}/storage/${JSON.stringify(track?.is_liked, null, 2)}`)
   return {
     id: track.id.toString(),
     // Important: Include /storage/ for the audio file path
@@ -88,7 +89,7 @@ export const setupPlayer = async () => {
 
 
 export const playSingleTrack = async (track) => {
-  console.log('🚀 Playing Single Track (Input):', track);
+  console.log('🚀 Playing Single Track (Input)======================= >>>>>>>>>>>>>>>:', track);
   try {
     // Map dynamic data to TrackPlayer format
     const formattedTrack = formatTrack(track);
@@ -141,7 +142,7 @@ export const playPlaylist = async (tracks) => {
 
     // Format all tracks before adding to queue
     const formattedTracks = trackArray.map(t => formatTrack(t)).filter(t => t !== null);
-
+    console.log('formattedTracks====================== >>>>>>>>>>>>>> hereeeeeeeeeeeee', formattedTracks)
     await TrackPlayer.reset();
     await TrackPlayer.add(formattedTracks);
     await TrackPlayer.setRepeatMode(RepeatMode.Queue);
@@ -163,6 +164,7 @@ export const playPlaylistFromTrack = async (tracks, startTrack) => {
 
     // Format all tracks
     const formattedTracks = trackArray.map(t => formatTrack(t)).filter(t => t !== null);
+    console.log('formattedTracks====================== >>>>>>>>>>>>>> hereeeeeeeeeeeeesssssssssssssss', formattedTracks)
 
     // Find the index of the start track
     const startIndex = formattedTracks.findIndex(t => t.id === startTrack.id.toString());

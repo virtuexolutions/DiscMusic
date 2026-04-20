@@ -120,7 +120,7 @@ const LyricsContainer = ({ lyrics, loading, error }) => {
                 style={[
                   styles.text,
                   {
-                    color: isActive ? Color.white : Color.lightGrey,
+                    color: isActive ? Color.green : Color.lightGrey,
                     fontSize: isActive ? moderateScale(15, 0.2) : moderateScale(11, 0.2),
                     lineHeight: verticalScale(22)
                   }

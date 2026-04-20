@@ -20,6 +20,7 @@ const ThemeIconButton = ({
   isGradient,
   gradientColors
 }) => {
+  // console.log('iconColor==================== >>>>>>>>>>>>>>>>>>>>>>>>', iconColor)
   const icon = iconName
     ? iconName
     : arrowRight
@@ -33,15 +34,19 @@ const ThemeIconButton = ({
 
   if (iconSource) {
     iconComponent = <CustomImage
+
       onPress={onPress}
       source={iconSource} style={[{ width: iconSize ?? scale(20), height: iconSize ?? scale(20) }, iconColor && { tintColor: iconColor }]} />
   } else {
     iconComponent = <Icon
       as={type}
       name={icon}
-      onPress={onPress}
-      size={iconSize ?? moderateScale(20, 0.6)}
-      color={iconColor ?? Color.white}
+      size={iconSize ?? moderateScale(20, 0.6)
+
+      }
+
+
+      color={iconColor ? iconColor : Color.white}
     />
   }
 

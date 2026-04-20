@@ -10,7 +10,7 @@ import { baseUrl, imageUrl } from '../Config'
 import navigationService from '../navigationService'
 
 export const AnimatedCard = ({ item, from }) => {
-    console.log('item====================== >>>>>>> item from detail', `${baseUrl}/storage/${item?.cover_image}`);
+    // console.log('item====================== >>>>>>> item from detail', `${baseUrl}/storage/${item?.cover_image}`);
     // Use Animated.Value to handle the scale transform
     // const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
     const scaleValue = useRef(new Animated.Value(1)).current;

@@ -4,8 +4,6 @@ import CustomImage from './CustomImage';
 import TitleWithDescription from './TitleWithDescription';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import { windowHeight, windowWidth } from '../Utillity/utils';
-
-
 import ThemeIconButton from './ThemeIconButton';
 import Slider from '@react-native-community/slider';
 import Color from '../Assets/Utilities/Color';
@@ -14,6 +12,8 @@ import navigationService from '../navigationService';
 import AudioSlider from './AudioSlider';
 import { useSelector } from 'react-redux';
 import { Get } from '../Axios/AxiosInterceptorFunction';
+import LikeButton from './LikeButton';
+
 
 const MinimisedPlayer = ({ style, data }) => {
 
@@ -102,12 +102,14 @@ const MinimisedPlayer = ({ style, data }) => {
             iconSource={isPlaying ? require('../Assets/Images/pause.png') : require('../Assets/Images/play-circle.png')}
             onPress={togglePlayback}
           />
-          <ThemeIconButton
+
+          <LikeButton track={track} style={styles.iconButton2} />
+          {/* <ThemeIconButton
             style={styles.iconBtn}
             iconSize={scale(20)}
             iconColor={'#7F8489'}
             iconSource={require('../Assets/Images/heartVector.png')}
-          />
+          /> */}
           <ThemeIconButton
             iconSize={scale(20)}
             style={styles.iconBtn}
@@ -198,6 +200,13 @@ const styles = StyleSheet.create({
   },
   text2: {
     fontSize: moderateScale(10, 0.2),
+  },
+  iconButton2: {
+    backgroundColor: "transparent",
+    width: "auto",
+    height: "auto",
+    elevation: 0,
+    // shadowColor: "transparent",
   },
   iconBtn: {
     elevation: 0,

@@ -16,7 +16,6 @@ const SIDE_SIZE = 90;
 const CarouselView = ({
   data
 }) => {
-  console.log('data from carousel view', JSON.stringify(data?.profile_image, null, 2))
   const navigation = useNavigation();
   return (
     <GestureHandlerRootView>
@@ -31,7 +30,7 @@ const CarouselView = ({
           return (
             <TouchableOpacity
               onPress={() => {
-                console.log('first');
+                // console.log('first');
                 // navigation.navigate('MusicPlayerScreen');
                 navigation.navigate('ViewArtistLibrary', { artistData: item });
 
@@ -39,7 +38,7 @@ const CarouselView = ({
               style={styles.circleContainer}>
               <CustomImage
                 onPress={() => {
-                  console.log('first');
+                  // console.log('first');
                   navigation.navigate('ViewArtistLibrary', { artistData: item });
 
                   // navigation.navigate('MusicPlayerScreen');

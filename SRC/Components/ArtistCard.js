@@ -9,11 +9,17 @@ const ArtistCard = ({
     image,
     title,
     onPress,
+    fromrecent,
 }) => {
     return (
         <TouchableOpacity
             onPress={onPress}
-            style={styles.container}>
+            style={[styles.container,
+            fromrecent && {
+                marginHorizontal: moderateScale(3, .6),
+                marginVertical: moderateScale(10, .6),
+
+            }]}>
             <View style={styles.imageContainer}>
                 <CustomImage
                     onPress={onPress}
@@ -22,6 +28,9 @@ const ArtistCard = ({
                 />
             </View>
             <CustomText
+                numberOfLines={
+                    1
+                }
                 style={styles.text}
                 children={title}
             />
