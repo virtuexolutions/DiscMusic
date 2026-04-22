@@ -29,7 +29,8 @@ const CustomHeader = ({ leftIcon, RightIcon,
   premium,
   rightIconComponent,
   titlStyle,
-  fromMusic,
+  fromPlaylist,
+  rbref,
   text, style, text1, subtext }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -115,7 +116,10 @@ const CustomHeader = ({ leftIcon, RightIcon,
 
             <TouchableOpacity
               onPress={() => {
-                navigationService.navigate("Settings")
+
+                fromPlaylist ?
+                  rbref.current.open() :
+                  navigationService.navigate("Settings")
                 // dispatch(setUserLogOut());
                 // dispatch(setUserLogoutAuth());
               }}
@@ -137,7 +141,9 @@ const CustomHeader = ({ leftIcon, RightIcon,
                   top: moderateScale(12, 0.3),
                 }}
                 onPress={() => {
-                  navigationService.navigate("Settings")
+                  fromPlaylist ?
+                    rbref.current.open() :
+                    navigationService.navigate("Settings")
                   // dispatch(setUserLogOut());
                   // dispatch(setUserLogoutAuth());
                 }}

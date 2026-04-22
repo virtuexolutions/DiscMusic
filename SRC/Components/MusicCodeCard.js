@@ -5,6 +5,7 @@ import { Avatar, CircleIcon } from 'native-base'
 import Color from '../Assets/Utilities/Color'
 import { windowWidth } from '../Utillity/utils'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
+import MusicBarcode from './MusicBarcode'
 
 const MusicCodeCard = ({ image, style, imageContainerStyle, secondContainerStyle }) => {
   // console.log("first  === ",image)
@@ -26,10 +27,7 @@ const MusicCodeCard = ({ image, style, imageContainerStyle, secondContainerStyle
             source={require("../Assets/Images/shapes2.png")} />}
         />
 
-        <CustomImage
-          source={require('../Assets/Images/waves.png')}
-          style={styles.wave}
-        />
+        <MusicBarcode trackId={image?.toString() || 'default'} />
       </View>
     </View>
   )

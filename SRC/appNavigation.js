@@ -38,6 +38,7 @@ import Walkthrough from './Screens/Walkthrough';
 import YourLibrary from './Screens/YourLibrary';
 import { windowWidth } from './Utillity/utils';
 import SearchArtist from './Screens/SearchArtist';
+import MusicBarcode from './Components/MusicBarcode';
 
 const AppNavigator = () => {
   const walkThrough = useSelector(state => state.authReducer.userWalkThrough);
@@ -87,6 +88,8 @@ const AppNavigator = () => {
             component={MusicPlayerScreen}
           />
           <RootNav.Screen name="DetailScreen" component={DetailScreen} />
+          <RootNav.Screen name="MusicBarcode" component={MusicBarcode} />
+
 
           <RootNav.Screen name="AboutArtist" component={AboutArtist} />
           <RootNav.Screen name="EventScreen" component={EventScreen} />

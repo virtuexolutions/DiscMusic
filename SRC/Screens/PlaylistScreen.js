@@ -1,5 +1,5 @@
 import { Icon, ScrollView, View } from 'native-base';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ImageBackground, TouchableOpacity } from 'react-native';
 import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 import TrackPlayer, { Event, State, usePlaybackState, useActiveTrack } from 'react-native-track-player';
@@ -21,6 +21,9 @@ import { baseUrl } from '../Config';
 import { useLikeTrack } from '../Hooks/useLikeTrack';
 import { setAtiveSong } from '../Store/slices/common';
 import { useDispatch } from 'react-redux';
+import MinimizedPlayer from '../Components/MinimizedPlayer';
+import PlayerSliderWithActions from '../Components/playerSliderWithActions';
+import MusicModal from '../Components/MusicModal';
 
 
 const PlaylistScreen = props => {
@@ -28,12 +31,14 @@ const PlaylistScreen = props => {
   const data = props?.route?.params?.item;
   const allTracks = props?.route?.params?.allTracks;
   const dispatch = useDispatch()
-
+  const rbRef = useRef(null);
+  console.log('======================================================rbRef', rbRef.current)
   const playbackState = usePlaybackState();
   const isPlaying = playbackState.state === State.Playing;
   const currentTrack = useActiveTrack();
   const artistName = getArtistNameFromTrack(currentTrack);
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const TrackObj = currentTrack || data;
   const { toggleLike, loading: likeLoading, isLiked } = useLikeTrack(TrackObj);
@@ -70,6 +75,8 @@ const PlaylistScreen = props => {
           RightIcon
           showBack={true}
           dots={true}
+          rbref={rbRef}
+          fromPlaylist={true}
           text1={'playing from playlist'}
           subtext={'Mega hit mix'}
         />
@@ -308,6 +315,7 @@ const PlaylistScreen = props => {
               borderRadius={moderateScale(30, 0.3)}
               fontSize={moderateScale(12, 0.3)}
             /> */}
+            <MusicModal rbRef={rbRef} />
           </View>
         </ScrollView>
       </ImageBackground>

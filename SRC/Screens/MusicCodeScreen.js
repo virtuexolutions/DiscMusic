@@ -7,8 +7,11 @@ import { windowHeight, windowWidth } from '../Utillity/utils'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import CustomText from '../Components/CustomText'
 import CustomButton from '../Components/CustomButton'
+import { baseUrl } from '../Config'
 
-const MusicCodeScreen = ({ navigation }) => {
+const MusicCodeScreen = ({ navigation, route }) => {
+  const track = route?.params?.track;
+
   return (
     <>
       <CustomStatusBar
@@ -29,7 +32,7 @@ const MusicCodeScreen = ({ navigation }) => {
             <MusicCodeCard
               secondContainerStyle={styles.container2}
               imageContainerStyle={styles.imgContainer}
-              image={require("../Assets/Images/music5.png")}
+              image={track?.cover_image ? { uri: `${baseUrl}/storage/${track.cover_image}` } : require("../Assets/Images/music5.png")}
               style={styles.card2}
             />
             <MusicCodeCard
@@ -40,11 +43,11 @@ const MusicCodeScreen = ({ navigation }) => {
 
           <CustomText
             style={styles.text1}
-            children={"Music Codes"}
+            children={track?.title ? `Scan ${track.title}` : "Music Codes"}
           />
           <CustomText
             style={styles.text2}
-            children={"Everythig on music has a code for sharing. scan it with your phone and you’ll be sent straight to that song, podcast, artist, or playlist."}
+            children={track?.title ? `Scan this code to listen to ${track.title} by ${track.artist || 'Unknown Artist'}.` : "Everything on music has a code for sharing. scan it with your phone and you’ll be sent straight to that song, podcast, artist, or playlist."}
           />
           <View style={styles.actionsContainer}>
             <CustomButton

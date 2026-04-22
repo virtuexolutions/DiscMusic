@@ -1,22 +1,26 @@
-import {Icon} from 'native-base';
-import React from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import { Icon } from 'native-base';
+import React, { useRef } from 'react';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {moderateScale} from 'react-native-size-matters';
+import { moderateScale } from 'react-native-size-matters';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Color from '../Assets/Utilities/Color';
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import CustomImage from './CustomImage';
 import CustomText from './CustomText';
+import { useNavigation } from '@react-navigation/native';
+import MusicBarcode from './MusicBarcode';
 
-const MusicModal = ({item, setRef, rbRef}) => {
+const MusicModal = ({ item, setRef, rbRef }) => {
+  console.log(item, "itemmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm <<<<<<<<<<<<<<<<<<<<<<<<====================================")
+  const navigation = useNavigation();
   const data = [
     {
       id: 1,
       name: 'listen to music ad-free',
       image: require('../Assets/Images/diamonds.png'),
     },
-    {id: 2, name: 'like', image: require('../Assets/Images/heartVector.png')},
+    { id: 2, name: 'like', image: require('../Assets/Images/heartVector.png') },
     {
       id: 3,
       name: 'hide this song',
@@ -42,7 +46,7 @@ const MusicModal = ({item, setRef, rbRef}) => {
       name: 'view artist',
       image: require('../Assets/Images/profile-2user.png'),
     },
-    {id: 8, name: 'share', image: require('../Assets/Images/share.png')},
+    { id: 8, name: 'share', image: require('../Assets/Images/share.png') },
     {
       id: 9,
       name: 'show credits',
@@ -52,6 +56,10 @@ const MusicModal = ({item, setRef, rbRef}) => {
       id: 10,
       name: 'show spotify code',
       image: require('../Assets/Images/sound.png'),
+      onPress: () => {
+        rbRef.current.close();
+        navigation.navigate('MusicBarcode', { track: item });
+      }
     },
   ];
   return (
@@ -110,8 +118,12 @@ const MusicModal = ({item, setRef, rbRef}) => {
                 color: '#7F8489',
                 fontSize: moderateScale(16, 0.6),
               }}>
-              six 60
+              {item?.artist || 'six 60'}
             </CustomText>
+            {/* <MusicBarcode
+              trackId={item?.id || 'default'}
+              style={{ alignSelf: 'flex-start', marginVertical: 5, paddingVertical: 8, paddingHorizontal: 12 }}
+            /> */}
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -138,9 +150,9 @@ const MusicModal = ({item, setRef, rbRef}) => {
             paddingBottom: moderateScale(30, 0.6),
           }}
           data={data}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
-              <TouchableOpacity style={styles.row_con}>
+              <TouchableOpacity onPress={item?.onPress} style={styles.row_con}>
                 <View style={styles.icon_circle}>
                   <View style={styles.icon_con}>
                     <CustomImage
@@ -175,12 +187,12 @@ const MusicModal = ({item, setRef, rbRef}) => {
                       }}>
                       <View
                         style={{
-                        
+
                           height: windowHeight * 0.02,
                           width: windowWidth * 0.04,
                         }}>
                         <CustomImage
-                          style={{height: '100%', width: '100%'}}
+                          style={{ height: '100%', width: '100%' }}
                           source={require('../Assets/Images/shapes.png')}
                         />
                       </View>
