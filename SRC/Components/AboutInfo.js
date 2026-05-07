@@ -1,8 +1,8 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Label from './Label';
-import {launchCamera} from 'react-native-image-picker';
-import {verticalScale} from 'react-native-size-matters';
+import { launchCamera } from 'react-native-image-picker';
+import { verticalScale } from 'react-native-size-matters';
 import TitleWithDescription from './TitleWithDescription';
 import navigationService from '../navigationService';
 
@@ -35,7 +35,7 @@ const AboutInfo = () => {
     {
       key: 'rules',
       title: 'Platform rules',
-      description: 'Help keep spotify safe for all.',
+      description: 'Help keep discmusic safe for all.',
       type: 'link',
     },
     {
@@ -64,7 +64,7 @@ const AboutInfo = () => {
           key={index}
           title={info.title}
           description={info.description}
-          style={{paddingVertical: verticalScale(8)}}
+          style={{ paddingVertical: verticalScale(8) }}
         />
       ))}
     </View>

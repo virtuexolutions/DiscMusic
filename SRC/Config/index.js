@@ -1,6 +1,6 @@
 // export const baseUrl = "https://071a-103-125-71-60.ngrok-free.app";
 // export const baseUrl = "https://busy-poitras.23-106-85-134.plesk.page";
-export const baseUrl = 'https://spotify.cstmpanel.com';
+export const baseUrl = 'https://disc.cstmpanel.com';
 export const imageUrl = `${baseUrl}/api/images/`;
 export const profilePicUrl = `${baseUrl}/uploads`;
 
@@ -10,3 +10,4 @@ export const validateEmail = email => {
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
+

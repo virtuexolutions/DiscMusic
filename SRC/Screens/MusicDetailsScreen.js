@@ -1,5 +1,5 @@
 import { ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import CustomStatusBar from '../Components/CustomStatusBar'
 import CustomHeader from '../Components/CustomHeader'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
@@ -20,13 +20,15 @@ import { Get } from '../Axios/AxiosInterceptorFunction'
 import { useSelector } from 'react-redux'
 import { useLikeTrack } from '../Hooks/useLikeTrack'
 import LikeButton from '../Components/LikeButton'
+import PermiumModal from '../Components/PermiumModal'
+import MusicModal from '../Components/MusicModal'
 // import { useLikeTrack } from '../Components/useLikeTrack'
 
 
 const MusicDetailsScreen = ({ route }) => {
-    const { item } = route.params;
+    const { item, image_url } = route.params;
 
-    console.log('item====================== >>>>>>> item from music detailscreen ', item, `${baseUrl}/storage/${item?.cover_image}`);
+    console.log('item====================== >>>>>>> item from music detailscreen ', image_url);
     const token = useSelector(state => state.authReducer.token)
     const playbackState = usePlaybackState();
     const isPlaying = playbackState.state === State.Playing;
@@ -34,77 +36,11 @@ const MusicDetailsScreen = ({ route }) => {
 
     const [recentlyPlayedSongs, setRecentlyPlayedSongs] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [isShuffleClicked, setIsShuffleClicked] = useState('')
+
     const { toggleLike, loading: likeLoading, isLiked } = useLikeTrack(item);
-
-    // console.log('mmmmmmmmmmmmmmmmmmmm ', playbackState.state)
-    // const songsList = [
-    //     {
-    //         id: '1',
-    //         image: require('../Assets/Images/bottom.png'),
-    //         title: 'Someone to Be Around',
-    //         type: 'song | Six60',
-    //         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    //         duration: 402,
-    //     },
-    //     {
-    //         id: '2',
-    //         image: require('../Assets/Images/recent1.png'),
-    //         title: 'Miss You',
-    //         type: 'song | Oliver Tree',
-    //         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
-    //         // url: 'https://www.zedge.net/notification-sounds/a03bfc80-eb9c-4fb6-84ec-c3940f10bc0a',
-    //     },
-    //     {
-    //         id: '3',
-    //         image: require('../Assets/Images/artist1.png'),
-    //         title: "Don't remind me i'm minding me",
-    //         type: 'playlist | PlaylistM7',
-    //         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
-    //     },
-    //     {
-    //         id: '4',
-    //         image: require('../Assets/Images/recent2.png'),
-    //         title: 'Mega Hit Mix',
-    //         type: 'playlist | Spotify',
-    //         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
-    //     },
-    //     {
-    //         id: '5',
-    //         image: require('../Assets/Images/recent3.png'),
-    //         title: 'One Kiss (With Dua Lipa)',
-    //         type: 'song | Calvin Harris',
-    //         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
-    //     },
-    //     {
-    //         id: '6',
-    //         image: require('../Assets/Images/recent4.png'),
-    //         title: 'Heather',
-    //         type: 'song | Conan Gray',
-    //         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
-    //     },
-    //     {
-    //         id: '7',
-    //         image: require('../Assets/Images/release2.png'),
-    //         title: 'Catching Feelings',
-    //         type: 'song | Calvin Harris',
-    //         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
-    //     },
-    //     {
-    //         id: '8',
-    //         image: require('../Assets/Images/release3.png'),
-    //         title: "Don't Forget Your Roots - 2021",
-    //         type: 'playlist | PlaylistM7',
-    //         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
-    //     },
-    //     {
-    //         id: '9',
-    //         image: require('../Assets/Images/release4.png'),
-    //         title: 'Before You Leave',
-    //         url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3',
-    //         type: 'song | Conan Gray',
-    //     },
-    // ];
-
+    const rbRef = useRef(null);
+    const rb = useRef(null);
 
     const handlePlayAll = async () => {
         // if (isPlayerReady) {
@@ -157,7 +93,7 @@ const MusicDetailsScreen = ({ route }) => {
                     <View style={styles.imageContainer}>
                         <CustomImage
                             style={styles.image}
-                            source={{ uri: `${baseUrl}/storage/${item?.cover_image}` }}
+                            source={{ uri: image_url }}
                         />
                     </View>
                     <View style={styles.actions}>
@@ -207,14 +143,25 @@ const MusicDetailsScreen = ({ route }) => {
                         />
 
                         <ThemeIconButton
+                            onPress={() => {
+                                rbRef.current.open()
+                                setIsShuffleClicked('shuffle')
+                            }}
                             style={styles.iconBtn}
                             iconSource={require("../Assets/Images/shuffle.png")}
                         />
                         <ThemeIconButton
+                            onPress={() => {
+                                rbRef.current.open(),
+                                    setIsShuffleClicked('import')
+                            }}
                             style={styles.iconBtn}
                             iconSource={require("../Assets/Images/import.png")}
                         />
                         <ThemeIconButton
+                            onPress={() => {
+                                rb.current.open()
+                            }}
                             style={styles.iconBtn}
                             iconName={"dots-three-vertical"}
                             iconType={Entypo}
@@ -223,6 +170,8 @@ const MusicDetailsScreen = ({ route }) => {
                     <PlayList trackData={item} />
                     <RecentlyPlayedSongsList data={recentlyPlayedSongs} isLoading={isLoading} />
                 </ScrollView>
+                <MusicModal rbRef={rb} />
+                <PermiumModal track={item} rbRef={rbRef} from={isShuffleClicked} />
                 {/* <MinimisedPlayer /> */}
             </ImageBackground>
         </>

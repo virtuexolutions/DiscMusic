@@ -1,71 +1,42 @@
 import { ScrollView, View } from 'native-base';
-import React, { useState } from 'react';
-import { ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, ImageBackground, TouchableOpacity } from 'react-native';
 import { moderateScale, ScaledSheet } from 'react-native-size-matters';
-
 import Color from '../Assets/Utilities/Color';
 import CustomHeader from '../Components/CustomHeader';
-import CustomImage from '../Components/CustomImage';
 import CustomStatusBar from '../Components/CustomStatusBar';
 import CustomText from '../Components/CustomText';
-
-import LinearGradient from 'react-native-linear-gradient';
-import { windowHeight, windowWidth } from '../Utillity/utils';
-import { Circle } from 'react-native-svg';
-import { Custom } from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
-import OtherLocation from '../Components/OtherLocation';
+import { useSelector } from 'react-redux';
+import { Get } from '../Axios/AxiosInterceptorFunction';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
+import OtherLocation from '../Components/OtherLocation';
+import { windowHeight, windowWidth } from '../Utillity/utils';
+import navigationService from '../navigationService';
 
-const EventScreen = () => {
-  const [countryCode, setCountryCode] = useState('ID'); // For flag
-  const [callingCode, setCallingCode] = useState('62'); // For +62
-  const [visible, setVisible] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [isVisible, setIsVisible] = useState(false);
+const EventScreen = (prop) => {
+  const { eventId, artist_name } = prop?.route?.params;
+  const token = useSelector(state => state.authReducer.token)
+  const [events, setEvents] = useState([])
+  const [loading, setLoading] = useState(false)
 
-  const socialData = [
-    {
-      id: 1,
-      image: require('../Assets/Images/insta.png'),
-    },
-    {
-      id: 2,
-      image: require('../Assets/Images/twitter.png'),
-    },
-    {
-      id: 3,
-      image: require('../Assets/Images/facebook.png'),
-    },
-    {
-      id: 4,
-      image: require('../Assets/Images/link.png'),
-    },
-  ];
 
-  const events = [
-    {
-      date: `Jun \n9`,
-      name: 'Governors Ball Music Festival',
-      details: 'Fri, 8 PM | Flushing Meadows Park, Queens',
-    },
-    {
-      date: `Jun \n20`,
-      name: 'Oliver Tree, Tai Verdes, Upsahl',
-      details: 'Tue, 7 PM | Red Rocks Amphitheatre, Morrison',
-    },
-    {
-      date: `Aug \n5`,
-      name: 'HARD Summer Music Festival',
-      details: 'Sat, 8 PM | Los Angeles Memorial Coliseum, Los Angeles',
-    },
-    {
-      date: `Aug \n25`,
-      name: 'Wonderbus Music & Arts Festival 2023',
-      details: 'Fri, 8 PM | The Lawn At CAS, Columbus',
-    },
-  ];
+
+
+  const getEvents = async () => {
+    const url = `auth/events-artist-id/${eventId}`
+    setLoading(true)
+    const response = await Get(url, token)
+    setLoading(false)
+    if (response != undefined) {
+      setEvents(response?.data?.event_list)
+    }
+  }
+
+
+
+  useEffect(() => {
+    getEvents()
+  }, [])
 
   return (
     <>
@@ -87,7 +58,9 @@ const EventScreen = () => {
           style={styles.container}>
           <CustomHeader leftIcon
             showBack={true}
-            text={'Oliver tree'} subtext={''} />
+          // text={artist_name || ''} 
+          // subtext={''}
+          />
 
           <View
             style={{
@@ -96,13 +69,15 @@ const EventScreen = () => {
             }}>
             <View style={styles.text_con}>
               <CustomText isBold style={styles.title}>
-                near chennai
+                near Los Angeles
               </CustomText>
               <CustomText style={styles.sub_text}>
-                this artist has no upcomin concerts near chennai
+                this artist has no upcomin concerts near Los Angeles
               </CustomText>
             </View>
-            <TouchableOpacity onPress={() => { }} style={styles.btn_Con}>
+            <TouchableOpacity onPress={() => {
+              navigationService.navigate('SearchLocation')
+            }} style={styles.btn_Con}>
               <CustomText
                 style={{
                   fontSize: moderateScale(11, 0.6),
@@ -124,12 +99,18 @@ const EventScreen = () => {
             ]}>
             other location
           </CustomText>
+          <FlatList
+            data={events}
+            renderItem={({ item, index }) => {
+              return <OtherLocation ocation item={item} />;
+            }}
+            ListEmptyComponent={<CustomText>No Events</CustomText>}
+            keyExtractor={(item, index) => index.toString()}
+          />
 
-          {events?.map((item, index) => {
-            return <OtherLocation item={item} />;
-          })}
+
         </ScrollView>
-        <MinimisedPlayer />
+        <MinimisedPlayer style={{ bottom: -20, height: windowHeight * 0.18 }} />
       </ImageBackground>
     </>
   );

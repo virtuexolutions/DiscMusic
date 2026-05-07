@@ -1,31 +1,24 @@
-import { ActivityIndicator, FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
 import { Avatar, ScrollView } from 'native-base';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, ImageBackground, StyleSheet, View } from 'react-native';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
+import { useActiveTrack } from 'react-native-track-player';
+import { useDispatch, useSelector } from 'react-redux';
+import Color from '../Assets/Utilities/Color';
+import { Get } from '../Axios/AxiosInterceptorFunction';
+import CarouselView from '../Components/CarouselView';
+import CircularMenu from '../Components/CircularMenu';
 import CustomHeader from '../Components/CustomHeader';
 import CustomStatusBar from '../Components/CustomStatusBar';
-import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
-import { windowHeight, windowWidth } from '../Utillity/utils';
-import TrendingView from '../Components/TrendingView';
-import EventCard from '../Components/EventCard';
 import CustomText from '../Components/CustomText';
-import Color from '../Assets/Utilities/Color';
-import CircularMenu from '../Components/CircularMenu';
-import CustomImage from '../Components/CustomImage';
-import TitleWithDescription from '../Components/TitleWithDescription';
-import CarouselView from '../Components/CarouselView';
-import Animated, { dispatchCommand } from 'react-native-reanimated';
-import { useDispatch, useSelector } from 'react-redux';
-import Geolocation from 'react-native-geolocation-service';
-import { PermissionsAndroid, Platform } from 'react-native';
-import { Get } from '../Axios/AxiosInterceptorFunction';
-import { AnimatedCard } from '../Components/DetailedCard';
-import RecommendedArtist from '../Components/RecommendedArtist';
-import BestArtistCard from './BestArtistCard';
-import { baseUrl } from '../Config';
-import PlayList from '../Components/PlayList';
+import EventCard from '../Components/EventCard';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
-import { useActiveTrack } from 'react-native-track-player';
-import { setAtiveSong } from '../Store/slices/common';
+import PlayList from '../Components/PlayList';
+import RecommendedArtist from '../Components/RecommendedArtist';
+import TitleWithDescription from '../Components/TitleWithDescription';
+import TrendingView from '../Components/TrendingView';
+import { windowHeight, windowWidth } from '../Utillity/utils';
+import BestArtistCard from './BestArtistCard';
 
 
 
@@ -35,7 +28,6 @@ const HomeScreen = () => {
   const token = useSelector(state => state.authReducer.token)
   const user = useSelector(state => state.commonReducer.userData)
   const activeSong = useSelector(state => state.commonReducer.activeSong)
-  console.log('------------------------------------------------ active song', activeSong)
 
   const activeTrack = useActiveTrack()
   const dispatch = useDispatch()
@@ -45,49 +37,12 @@ const HomeScreen = () => {
   const [events, setEvents] = useState([])
   const [artist, setArtist] = useState([])
   const [recommendedArtist, setRecommendedArtist] = useState([])
-  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ', recommendedArtist)
   const [bestArtist, setBestArtist] = useState([])
   const [trending, setTrending] = useState([])
 
-  // console.log('activeTrack==================================== >>>>>>>>>>>>> activeTrack', activeTrack)
-  // console.log('bestArtist==================================== >>>>>>>>>>>>> bestArtist', JSON.stringify(bestArtist, null, 2))
-  // console.log('recommendedArtist', JSON.stringify(recommendedArtist, null, 2), 'recommendedArtist')
-  // console.log(JSON.stringify(events, null, 2), 'events')
-  // return console.log('------------------ >>>>response artist', JSON.stringify(response?.data, null, 2), '------------------ >>>>response artist')
 
 
 
-  // const getCurrentLocation = async () => {
-  //   try {
-  //     const position = await new Promise((resolve, reject) => {
-
-  //       Geolocation.getCurrentPosition(
-  //         position => {
-  //           console.log(position, 'position')
-  //           const coords = {
-  //             latitude: position.coords.latitude,
-  //             longitude: position.coords.longitude,
-  //           };
-  //           getWeather(position?.coords?.latitude, position?.coords?.longitude);
-  //           resolve(coords);
-
-  //         },
-  //         error => {
-  //           reject(new Error(error.message));
-  //         },
-  //         {
-  //           enableHighAccuracy: true,
-  //           timeout: 15000,
-  //           maximumAge: 10000,
-  //         },
-  //       );
-  //     });
-  //     // console.log(weather, 'weather')
-  //   } catch (error) {
-  //     console.error('Error getting location:', error);
-  //     throw error;
-  //   }
-  // };
 
   const getWeather = async (lat, lon) => {
     // return console.log('ppppppppppppppppppppppppppppp', lat, lon)
@@ -128,7 +83,7 @@ const HomeScreen = () => {
     const url = 'auth/recommendations/recommended-artict'
     setLoading(true)
     const response = await Get(url, token)
-    // return console.log('------------------ >>>>> recommended artist response ', JSON.stringify(response?.data?.data, null, 2), '------------------ >>>>> recommended artist response ')
+    return console.log('------------------ >>>>> recommended artist response ', JSON.stringify(response?.data?.data, null, 2), '------------------ >>>>> recommended artist response ')
     setLoading(false)
     if (response != undefined) {
       setRecommendedArtist(response?.data?.data)
@@ -149,10 +104,8 @@ const HomeScreen = () => {
     const url = 'auth/trending-tracks'
     setLoading(true)
     const response = await Get(url, token)
-    // return console.log('------------------ >>>>> treanding track response ', JSON.stringify(response?.data, null, 2), '------------------ >>>>> recommended artist response ')
     setLoading(false)
     if (response != undefined) {
-      // setBestArtist(response?.data?.data)
       setTrending(response?.data?.data?.tracks)
     }
   }
@@ -180,7 +133,6 @@ const HomeScreen = () => {
           showsVerticalScrollIndicator={false}
           removeClippedSubviews={true}
           contentContainerStyle={{
-            // alignSelf: 'center',
             alignItems: 'center',
             paddingBottom: moderateScale(120, 0.2),
           }}>
@@ -272,7 +224,7 @@ const HomeScreen = () => {
           </View>
           {/* <MinimisedPlayer /> */}
         </ScrollView>}
-        {activeTrack && <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.25 }} />}
+        {activeSong && <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.25 }} />}
       </ImageBackground >
     </>
   );

@@ -32,7 +32,6 @@ const PlaylistScreen = props => {
   const allTracks = props?.route?.params?.allTracks;
   const dispatch = useDispatch()
   const rbRef = useRef(null);
-  console.log('======================================================rbRef', rbRef.current)
   const playbackState = usePlaybackState();
   const isPlaying = playbackState.state === State.Playing;
   const currentTrack = useActiveTrack();
@@ -40,7 +39,7 @@ const PlaylistScreen = props => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const TrackObj = currentTrack || data;
+  const TrackObj = data;
   const { toggleLike, loading: likeLoading, isLiked } = useLikeTrack(TrackObj);
   useEffect(() => {
     if (data && allTracks) {
@@ -87,11 +86,11 @@ const PlaylistScreen = props => {
           contentContainerStyle={{
             alignSelf: 'center',
             alignItems: 'center',
-            paddingBottom: moderateScale(15, 0.6),
+            paddingBottom: moderateScale(125, 0.6),
           }}
           style={{
             width: '100%',
-            flexGrow: 0,
+            // flexGrow: 0,
             // backgroundColor: 'red'
           }}>
           <View style={styles.container}>
@@ -102,7 +101,7 @@ const PlaylistScreen = props => {
                   height: '100%',
                   width: '100%',
                 }}
-                source={{ uri: data?.cover_image ? `${baseUrl}/storage/${data?.cover_image}` : require('../Assets/Images/playlist_image.png') }}
+                source={data?.cover_image ? { uri: `${baseUrl}/storage/${data?.cover_image}` } : require('../Assets/Images/playlist_image.png')}
               />
             </View>
             <View style={styles.text_con}>
@@ -315,7 +314,7 @@ const PlaylistScreen = props => {
               borderRadius={moderateScale(30, 0.3)}
               fontSize={moderateScale(12, 0.3)}
             /> */}
-            <MusicModal rbRef={rbRef} />
+            <MusicModal rbRef={rbRef} track={TrackObj} />
           </View>
         </ScrollView>
       </ImageBackground>

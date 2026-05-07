@@ -1,68 +1,38 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import CustomImage from './CustomImage';
-import TitleWithDescription from './TitleWithDescription';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
-import { windowHeight, windowWidth } from '../Utillity/utils';
-import ThemeIconButton from './ThemeIconButton';
-import Slider from '@react-native-community/slider';
-import Color from '../Assets/Utilities/Color';
 import TrackPlayer, { State, useActiveTrack, usePlaybackState, useProgress } from 'react-native-track-player';
-import navigationService from '../navigationService';
-import AudioSlider from './AudioSlider';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useSelector } from 'react-redux';
-import { Get } from '../Axios/AxiosInterceptorFunction';
+import Color from '../Assets/Utilities/Color';
+import { baseUrl } from '../Config';
+import navigationService from '../navigationService';
+import { windowWidth } from '../Utillity/utils';
+import AudioSlider from './AudioSlider';
+import CustomImage from './CustomImage';
 import LikeButton from './LikeButton';
+import ThemeIconButton from './ThemeIconButton';
+import TitleWithDescription from './TitleWithDescription';
 
 
 const MinimisedPlayer = ({ style, data }) => {
 
+  const activeSong = useSelector(state => state.commonReducer.activeSong)
+  console.log("activeSong", activeSong);
+
+
   const track = useActiveTrack();
   const playbackState = usePlaybackState();
-  const [isSliding, setIsSliding] = useState(false);
-  const [sliderValue, setSliderValue] = useState(0);
-  const { position, duration } = useProgress();
-  const token = useSelector((state) => state.authReducer.token);
 
-  // useEffect(() => {
-  //   let isMounted = true;
 
-  //   const recordPlay = async () => {
-  //     if (track?.id && token) {
-  //       try {
-  //         const url = `auth/track/${track.id}/play`;
-  //         await Get(url, token);
-  //         if (isMounted) console.log(`✅ Track play recorded: ${track.id}`);
-  //       } catch (error) {
-  //         if (isMounted) console.log(`❌ Failed to record play for track: ${track.id}`);
-  //       }
-  //     }
-  //   };
-
-  //   // Register play if active for > 2 seconds (avoids counting rapid skips)
-  //   const timeout = setTimeout(() => {
-  //     recordPlay();
-  //   }, 2000);
-
-  //   return () => {
-  //     isMounted = false;
-  //     clearTimeout(timeout);
-  //   };
-  // }, [track?.id, token]);
 
   if (!track) return null;
   const isPlaying = playbackState.state === State.Playing;
 
-  const safePosition = !isNaN(position) ? position : 0;
-  const safeDuration = !isNaN(duration) && duration > 0 ? duration : 1;
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-  };
-  // console.log('track====================== >>>>>>> here from minimised player', track);
-  // console.log('isPlaying====================== >>>>>>> here from minimised player', playbackState.state);
+
 
 
   const togglePlayback = async () => {
@@ -82,7 +52,7 @@ const MinimisedPlayer = ({ style, data }) => {
             onPress={() => {
               navigationService.navigate('MusicPlayerScreen')
             }}
-            source={require('../Assets/Images/bottom.png')}
+            source={activeSong?.cover_image ? { uri: baseUrl + '/storage/' + activeSong?.cover_image } : require('../Assets/Images/bottom.png')}
             style={styles.image}
           />
         </View>
@@ -99,44 +69,23 @@ const MinimisedPlayer = ({ style, data }) => {
         <View style={styles.actions}>
           <ThemeIconButton
             style={styles.iconBtn}
-            iconSource={isPlaying ? require('../Assets/Images/pause.png') : require('../Assets/Images/play-circle.png')}
+            iconType={isPlaying ? Ionicons : Entypo}
+            iconName={isPlaying ? 'pause' : 'controller-play'}
             onPress={togglePlayback}
           />
 
           <LikeButton track={track} style={styles.iconButton2} />
-          {/* <ThemeIconButton
-            style={styles.iconBtn}
-            iconSize={scale(20)}
-            iconColor={'#7F8489'}
-            iconSource={require('../Assets/Images/heartVector.png')}
-          /> */}
           <ThemeIconButton
             iconSize={scale(20)}
             style={styles.iconBtn}
-            iconSource={require('../Assets/Images/volume.png')}
+            iconType={Feather}
+            iconName='volume-1'
           />
         </View>
       </View>
       <View>
         <AudioSlider width={'100%'} />
-        {/* <Slider
-          style={
-            [{ width: '100%', height: 30 }]}
-          minimumValue={0}
-          // maximumValue={100}
-          // value={50}
-          maximumValue={safeDuration}
-          value={isSliding ? sliderValue : safePosition}
-          minimumTrackTintColor={Color.white}
-          maximumTrackTintColor={Color.veryLightGray}         
-          thumbTintColor={Color.white}
-          onSlidingStart={() => setIsSliding(true)}
-          onValueChange={(val) => setSliderValue(val)}
-          onSlidingComplete={async (val) => {
-            await TrackPlayer.seekTo(val);
-            setIsSliding(false);
-          }}
-        /> */}
+
       </View>
     </View>
   );
@@ -148,11 +97,8 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     bottom: windowWidth * 0.2,
-    // + moderateScale(15),
     width: windowWidth,
-    // backgroundColor: 'green',
     backgroundColor: '#353A40',
-    // gap: verticalScale(10),
     paddingHorizontal: scale(15),
     paddingTop: verticalScale(10),
     borderTopLeftRadius: moderateScale(30, 0.2),
@@ -173,7 +119,6 @@ const styles = StyleSheet.create({
     gap: scale(10),
     flexDirection: 'row',
     alignItems: 'center',
-    // backgroundColor: 'red'
   },
   imageContainer: {
     width: scale(30),
@@ -206,21 +151,16 @@ const styles = StyleSheet.create({
     width: "auto",
     height: "auto",
     elevation: 0,
-    // shadowColor: "transparent",
   },
   iconBtn: {
     elevation: 0,
     width: 'auto',
-    height: 'auto',
-    // paddingHorizontal: scale(10),
-    backgroundColor: 'transparent',
+    height: 'auto', backgroundColor: 'transparent',
   },
   slider: {
-    // width:windowWidth *0.9,
     height: scale(10),
   },
   sliderContainer: {
-    // paddingHorizontal: moderateScale(10),
     height: verticalScale(30),
   },
 });

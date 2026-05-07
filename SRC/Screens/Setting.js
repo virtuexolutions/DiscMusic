@@ -170,7 +170,7 @@ const Settings = ({ navigation }) => {
             <InfoText
               containerStyle={{ marginTop: verticalScale(10) }}
               text={
-                'Note: video is not streamed when the spotify app is backgrounded.'
+                'Note: video is not streamed when the discmusic app is backgrounded.'
               }
             />
             <Label style={styles.label} text={'PlayBack'} />
@@ -190,7 +190,7 @@ const Settings = ({ navigation }) => {
             <Label style={styles.label} text={'Devices'} />
             <TitleWithDescription
               title="connect to a device"
-              description="listen to and control spotify on your devices."
+              description="listen to and control discmusic on your devices."
             />
             <ToggleSwitchWithInfo
               title="Show local devices only"
@@ -201,8 +201,8 @@ const Settings = ({ navigation }) => {
               }}
             />
             <ToggleSwitchWithInfo
-              title="spotify connect in background"
-              description="Allow spotify connect to keep spotify running when the app is in background"
+              title="discmusic connect in background"
+              description="Allow discmusic connect to keep discmusic running when the app is in background"
               on={false}
               onToggle={() => {
                 // setAudioQuality(prev => !prev)
@@ -220,7 +220,7 @@ const Settings = ({ navigation }) => {
             />
             <Label style={styles.label} text="Advertisements" />
             <ToggleSwitchWithInfo
-              title="Spotify ad partner preferences"
+              title="discmusic ad partner preferences"
               description="Contral how ads are targeted to me based on information gathered from advertising partners."
               on={false}
               onToggle={() => {

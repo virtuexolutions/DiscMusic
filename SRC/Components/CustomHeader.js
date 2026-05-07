@@ -81,7 +81,7 @@ const CustomHeader = ({ leftIcon, RightIcon,
             iconSource={require("../Assets/Images/camera.png")}
             iconSize={scale(14)}
             onPress={() => {
-              navigation.navigate("MusicCodeScreen")
+              navigation.navigate("ScanScreen")
               // console.log("first")
             }}
           />)}

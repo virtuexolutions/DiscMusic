@@ -10,7 +10,7 @@ import { baseUrl, imageUrl } from '../Config'
 import navigationService from '../navigationService'
 
 export const AnimatedCard = ({ item, from }) => {
-    // console.log('item====================== >>>>>>> item from detail', `${baseUrl}/storage/${item?.cover_image}`);
+    console.log('item====================== >>>>>>> item from detail', item);
     // Use Animated.Value to handle the scale transform
     // const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
     const scaleValue = useRef(new Animated.Value(1)).current;
@@ -35,7 +35,7 @@ export const AnimatedCard = ({ item, from }) => {
 
 
     return (
-        <View style={{ marginBottom: moderateScale(13, 0.2), }}>
+        <View style={{ marginBottom: moderateScale(13, 0.2), height: windowHeight * 0.2, width: windowWidth * 0.4, marginTop: moderateScale(15, .6) }}>
             <TouchableOpacity style={[styles.card,
             from == 'home' && {
                 marginTop: moderateScale(10, .6)
@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         borderColor: '#424750',
         borderWidth: 0.5,
+        // backgroundColor: 'red',
 
         // Shadow properties for iOS
         // shadowColor: '#000',

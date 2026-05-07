@@ -35,14 +35,16 @@ const DATA = [
 
 // Main Screen Component
 const DetailScreen = ({ route }) => {
-    const { item_id, title } = route.params;
-    // console.log('item_id====================== >>>>>>> here from detail', title);
+    const { item_id, title, item, from } = route.params;
     const token = useSelector(state => state.authReducer.token)
     const [isLoading, setIsLoading] = useState(false)
     const [genreList, setGenreList] = useState([]);
     const [page, setPage] = useState(2);
     const [hasMore, setHasMore] = useState(true);
     const [isFetchingMore, setIsFetchingMore] = useState(false);
+    const [albumDetail, setAlbumDetail] = useState({})
+    console.log('item_id====================== >>>>>>> here from detail', albumDetail);
+
 
     const getgenredetail = async (pageNumber = 1) => {
         if (!hasMore && pageNumber !== 1) return;
@@ -84,8 +86,23 @@ const DetailScreen = ({ route }) => {
         }
     };
 
+    const getAlbumDetail = async () => {
+        const url = `auth/album/${item?.album?.id}`
+        setIsLoading(true)
+        const response = await Get(url, token)
+        console.log(response?.data, 'album detail===================>>>>')
+        setIsLoading(false)
+        if (response != undefined) {
+            setAlbumDetail(response?.data?.album_list)
+        }
+    }
+
     useEffect(() => {
-        getgenredetail(1)
+        if (from == 'viewAblum') {
+            getAlbumDetail()
+        } else {
+            getgenredetail(1)
+        }
     }, [])
 
     return (
@@ -125,6 +142,7 @@ const DetailScreen = ({ route }) => {
                         title={"Your Favorites"}
                         DATA={DATA}
                     /> */}
+                    {from == 'viewAblum' && isLoading ? <Loader animation={true} /> : <AnimatedCard item={albumDetail} />}
 
                     {isLoading ? <Loader animation={true} /> : <FlatList
                         data={genreList}

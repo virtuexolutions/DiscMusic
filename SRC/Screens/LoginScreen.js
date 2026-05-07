@@ -40,7 +40,7 @@ const LoginScreen = () => {
     const url = 'login';
     setIsLoading(true);
     const response = await Post(url, body, apiHeader(token));
-    // return console.log('response====================== >>>>>>> here from login', JSON.stringify(response?.data?.user_info?.liked_artist, null, 2));
+    // return console.log('response====================== >>>>>>> here from login', JSON.stringify(response?.data?.user_info, null, 2));
     setIsLoading(false);
     if (response != undefined) {
       dispatch(setUserToken({ token: response?.data?.token }));

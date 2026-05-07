@@ -42,7 +42,7 @@ const SpotifyArtistCard = ({ artistName, bgColor, imageUri, item }) => {
         <TouchableOpacity
             onPress={() => {
 
-                navigationService.navigate('MusicDetailsScreen', { item: item?.tracks });
+                navigationService.navigate('MusicDetailsScreen', { item: item?.tracks, image_url: `${baseUrl}/storage/${item?.profile_image}` });
             }}
             style={[styles.container, {
                 backgroundColor: cardColor,
@@ -62,7 +62,7 @@ const SpotifyArtistCard = ({ artistName, bgColor, imageUri, item }) => {
                     <CustomImage
                         onPress={() => {
 
-                            navigationService.navigate('MusicDetailsScreen', { item: item?.tracks });
+                            navigationService.navigate('MusicDetailsScreen', { item: item?.tracks, image_url: `${baseUrl}/storage/${item?.profile_image}` });
                         }}
                         source={{ uri: `${baseUrl}/storage/${item?.profile_image}` }}
                         style={{

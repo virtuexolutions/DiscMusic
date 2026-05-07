@@ -15,7 +15,7 @@ import { baseUrl } from '../Config';
 
 const AboutArtist = ({ route }) => {
   const { artistData } = route?.params;
-  // console.log(JSON.stringify(artistData, null, 2), '------------------ >>>>artistData')
+  console.log(JSON.stringify(artistData, null, 2), '------------------ >>>>artistData')
   const [countryCode, setCountryCode] = useState('ID'); // For flag
   const [callingCode, setCallingCode] = useState('62'); // For +62
   const [visible, setVisible] = useState(false);
@@ -109,13 +109,13 @@ const AboutArtist = ({ route }) => {
                   {
                     // paddingRight: moderateScale(10,.6)
                   },
-                ]}>{artistData?.bio}</CustomText>
+                ]}>{artistData?.bio ? artistData?.bio : 'No bio available'}</CustomText>
             </View>
 
             <View style={styles.image_con}>
               <CustomImage
                 style={styles.image}
-                source={require('../Assets/Images/artist1.png')}
+                source={artistData?.profile_image ? { uri: `${baseUrl}/storage/${artistData?.profile_image}` } : require('../Assets/Images/artist.png')}
               />
             </View>
             <CustomText style={styles.by}>post by</CustomText>

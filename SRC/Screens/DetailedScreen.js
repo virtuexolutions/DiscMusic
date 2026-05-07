@@ -17,8 +17,11 @@ import OtherLocation from '../Components/OtherLocation';
 import { mode } from 'native-base/lib/typescript/theme/tools';
 import MusicModal from '../Components/MusicModal';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
+import { useSelector } from 'react-redux';
 
 const DetailedScreen = () => {
+
+  const activeSong = useSelector(state => state.commonReducer.activeSong)
   const rbRef = useRef(null)
   const events = [
     {
@@ -330,9 +333,9 @@ const DetailedScreen = () => {
               );
             })}
           </View>
+          {activeSong && <MinimisedPlayer style={{ paddingTop: 10, height: windowHeight * 0.15, backgroundColor: 'red' }} />}
         </ScrollView>
         <MusicModal rbRef={rbRef} />
-        <MinimisedPlayer />
       </ImageBackground>
     </>
   );
@@ -342,6 +345,7 @@ const styles = ScaledSheet.create({
   bg_container: {
     width: windowWidth,
     height: windowHeight,
+    // backgroundColor: 'red'
   },
   container: {
     width: windowWidth,

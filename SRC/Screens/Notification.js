@@ -67,7 +67,7 @@ const Notification = () => {
     {
       id: '5',
       title: 'mega hit mix',
-      artist: 'playlist | spotify',
+      artist: 'playlist | discmusic',
       time: '5 day ago',
       image: require('../Assets/Images/recent2.png'),
     },

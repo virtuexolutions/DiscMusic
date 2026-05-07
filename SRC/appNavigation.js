@@ -39,6 +39,8 @@ import YourLibrary from './Screens/YourLibrary';
 import { windowWidth } from './Utillity/utils';
 import SearchArtist from './Screens/SearchArtist';
 import MusicBarcode from './Components/MusicBarcode';
+import SavedPlaylist from './Screens/SavedPlaylist';
+import SearchLocation from './Screens/SearchLocation';
 
 const AppNavigator = () => {
   const walkThrough = useSelector(state => state.authReducer.userWalkThrough);
@@ -78,6 +80,8 @@ const AppNavigator = () => {
           <RootNav.Screen name="TabNavigation" component={TabNavigation} />
           <RootNav.Screen name="Walkthrough" component={Walkthrough} />
           <RootNav.Screen name="PlaylistScreen" component={PlaylistScreen} />
+          <RootNav.Screen name="SearchLocation" component={SearchLocation} />
+
           <RootNav.Screen
             name="MusicDetailsScreen"
             component={MusicDetailsScreen}
@@ -107,6 +111,8 @@ const AppNavigator = () => {
 
 
           <RootNav.Screen name="ReviewYourPlan" component={ReviewYourPlan} />
+          <RootNav.Screen name="PremiumScreen" component={PremiumScreen} />
+
           {/* <RootNav.Screen name="YourLibrary" component={YourLibrary} /> */}
           <RootNav.Screen
             name="ViewArtistLibrary"
@@ -114,6 +120,7 @@ const AppNavigator = () => {
           />
           <RootNav.Screen name="Settings" component={Settings} />
           <RootNav.Screen name="ScanScreen" component={ScanScreen} />
+          <RootNav.Screen name="SavedPlaylist" component={SavedPlaylist} />
         </RootNav.Navigator>
       </NavigationContainer>
     );

@@ -1,54 +1,34 @@
-import { ActivityIndicator, FlatList, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import CustomStatusBar from '../Components/CustomStatusBar'
-import Color from '../Assets/Utilities/Color'
-import CustomHeader from '../Components/CustomHeader'
-import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils'
-import CustomButton from '../Components/CustomButton'
-import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
-import IconWithText from '../Components/IconWithText'
-import CustomImage from '../Components/CustomImage'
-import CustomText from '../Components/CustomText'
-import { Avatar } from 'native-base';
-import Feather from 'react-native-vector-icons/Feather';
-import LinearGradient from 'react-native-linear-gradient'
-import ThemeIconButton from '../Components/ThemeIconButton'
-import MinimisedPlayer from '../Components/MinimisedPlayer'
 import { useNavigation } from '@react-navigation/native'
-import { State, useActiveTrack } from 'react-native-track-player'
-import { Get, Post } from '../Axios/AxiosInterceptorFunction'
+import { Avatar } from 'native-base'
+import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, FlatList, ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
+import { useActiveTrack } from 'react-native-track-player'
+import Feather from 'react-native-vector-icons/Feather'
 import { useSelector } from 'react-redux'
+import Color from '../Assets/Utilities/Color'
+import { Get } from '../Axios/AxiosInterceptorFunction'
+import CustomButton from '../Components/CustomButton'
+import CustomHeader from '../Components/CustomHeader'
+import CustomImage from '../Components/CustomImage'
+import CustomStatusBar from '../Components/CustomStatusBar'
+import CustomText from '../Components/CustomText'
+import IconWithText from '../Components/IconWithText'
+import MinimisedPlayer from '../Components/MinimisedPlayer'
+import ThemeIconButton from '../Components/ThemeIconButton'
 import { baseUrl } from '../Config'
+import navigationService from '../navigationService'
+import { windowHeight, windowWidth } from '../Utillity/utils'
 
 const YourLibrary = () => {
   const token = useSelector(state => state.authReducer.token)
-  // console.log('token====================== >>>>>>> here from YourLibrary', token);
+  const activeSong = useSelector(state => state.commonReducer.activeSong)
+
   const activeTrack = useActiveTrack()
   const navigation = useNavigation();
 
   const [isLoading, setIsLoading] = useState(false)
   const [artistList, setArtistList] = useState([]);
-
-  const array = [
-    {
-      id: 1, title: "Abhijeet", type: "Artist", image: (require("../Assets/Images/artist7.png")),
-    },
-    {
-      id: 2, title: "A.R.Rahman", type: "Artist", image: (require("../Assets/Images/artist8.png")),
-    },
-    {
-      id: 3, title: "Sunidhi Chauhan", type: "Artist", image: (require("../Assets/Images/artist9.png")),
-    },
-  ];
-  const actions = [{
-    id: "add", title: "Add artist", onPress: () => {
-      navigation.navigate("SearchArtist")
-    },
-  },
-  {
-    id: "add", title: "Add podcasts & shows", onPress: () => { },
-  },
-  ];
 
 
 
@@ -57,16 +37,26 @@ const YourLibrary = () => {
     setIsLoading(true)
     const resposnse = await Get(url, token)
     setIsLoading(false)
-    // console.log('response====================== >>>>>>> here from addArtist', JSON.stringify(resposnse?.data?.artist_list, null, 2));
     if (resposnse != undefined) {
       setArtistList(resposnse?.data?.artist_list)
     }
-    // navigation.navigate("SearchArtist")
   }
 
   useEffect(() => {
     addArtist()
   }, [])
+
+
+  const playlists = async () => {
+    const url = 'auth/playlist/list'
+    setIsLoading(true)
+    const resposnse = await Get(url, token)
+    setIsLoading(false)
+    if (resposnse != undefined) {
+      setArtistList(resposnse?.data?.artist_list)
+    }
+  }
+
   return (
     <>
       <CustomStatusBar
@@ -118,20 +108,13 @@ const YourLibrary = () => {
             isLoading ? <ActivityIndicator size={'large'} color={Color.white} /> :
               <FlatList
                 style={{
-                  // height: windowHeight * 0.3,
                   paddingVertical: moderateScale(10, .6)
                 }}
-                // data={[1, 3, 6, 6, 6, 6]}
                 data={artistList}
                 keyExtractor={item => item} z
                 contentContainerStyle={{
-                  // paddingHorizontal: moderateScale(10, .6),
-                  // marginTop: verticalScale(5),
-                  // paddingBottom: scale(50),
-                  // gap: verticalScale(10),
                 }}
                 renderItem={({ item, index }) => {
-                  // console.log('item====================== >>>>>>> here from renderItem', `${baseUrl}/storage/${item?.user?.profile_image}`);
                   return (
                     <ArtistCard
                       item={item}
@@ -151,10 +134,11 @@ const YourLibrary = () => {
             }}
           />
 
-          <ArtistCard
+          {/* <ArtistCard
             item={{ id: "add", title: "Add podcasts & shows", onPress: () => { }, }}
-          /></ScrollView>
-        {activeTrack && <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.25 }} />}
+          /> */}
+        </ScrollView>
+        {activeSong && <MinimisedPlayer style={{ bottom: 0, height: windowHeight * 0.25 }} />}
       </ImageBackground>
     </>
   )
@@ -173,6 +157,10 @@ const ArtistCard = ({
       }}
     >
       {isCreate ? <ThemeIconButton
+        onPress={() => {
+
+          navigationService.navigate('SavedPlaylist')
+        }}
         isGradient={true}
         iconName={"plus"}
         iconType={Feather}
@@ -180,11 +168,9 @@ const ArtistCard = ({
         gradientColors={Color.themeGradient}
         style={styles.imageContainer}
       /> : <Avatar
-        // bgColor={[Color.black, "white"]}
         width={windowWidth * 0.18}
         height={windowWidth * 0.18}
         source={{ uri: `${baseUrl}/storage/${item?.user?.profile_image}` }}
-        // shadow={"9"}
         style={{
           elevation: 16, shadowColor: Color.black,
           shadowOpacity: 0.87,
@@ -197,12 +183,7 @@ const ArtistCard = ({
 
       />}
 
-      {/* <View style={styles.imageContainer}>
-      <CustomImage
-        source={require("../Assets/Images/artist7.png")}
-        style={styles.image}
-      />
-    </View> */}
+
       <View style={styles.info}>
         <CustomText
           children={item?.title ? item?.title : item?.user?.name}
@@ -229,7 +210,6 @@ const styles = StyleSheet.create({
     width: windowWidth,
     height: windowHeight,
     alignItems: "center",
-    // paddingHorizontal:scale(5)
   },
   image: {
     width: "100%",

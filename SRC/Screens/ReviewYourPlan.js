@@ -121,7 +121,7 @@ const ReviewYourPlan = () => {
           <View style={styles.footer}>
             <CustomText
               style={styles.text2}
-              children={"India"}
+              children={"US"}
             />
             <CustomText
               style={styles.text2}

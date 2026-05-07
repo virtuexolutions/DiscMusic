@@ -15,7 +15,9 @@ import OfferCard from '../Components/OfferCard';
 import PremiumPlanList from '../Components/PremiumPlanList';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
 
-const PremiumScreen = () => {
+const PremiumScreen = (props) => {
+    const fromModal = props?.route?.params
+    console.log('fromModal====================== >>>>>>> here from PremiumScreen', props);
     return (
         <>
             <CustomStatusBar
@@ -26,6 +28,7 @@ const PremiumScreen = () => {
                 source={require('../Assets/Images/bg.png')}
                 style={styles.bg_container}>
                 <CustomHeader text={"Premium"}
+                    showBack={fromModal ? true : false}
                     leftIcon={true}
                     premium={true}
                     style={styles.header}

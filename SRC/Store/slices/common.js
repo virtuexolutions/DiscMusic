@@ -50,6 +50,8 @@ const initialState = {
   favArtist: false,
   likedSongs: [],
   activeSong: {},
+  hiddenSongs: [],
+  playlists: [],
 };
 
 const CommonSlice = createSlice({
@@ -97,6 +99,7 @@ const CommonSlice = createSlice({
       state.likedSongs = action.payload || [];
     },
     toggleLikedSong(state, action) {
+      if (!state.likedSongs) state.likedSongs = [];
       const trackId = Number(action.payload);
       const isAlreadyLiked = state.likedSongs.some(id => Number(id) === trackId);
       if (isAlreadyLiked) {
@@ -108,7 +111,26 @@ const CommonSlice = createSlice({
     },
 
     setAtiveSong(state, action) {
-      state.activeSong = action.payload
+      state.activeSong = action.payload;
+      console.log('state.activeSong==================== >>>>>>>>>>>>>>>>>>>>>>>>', state.activeSong)
+    },
+    toggleHiddenSong(state, action) {
+      if (!state.hiddenSongs) state.hiddenSongs = [];
+      const trackId = Number(action.payload);
+      const isAlreadyHidden = state.hiddenSongs.some(id => Number(id) === trackId);
+      if (isAlreadyHidden) {
+        state.hiddenSongs = state.hiddenSongs.filter(id => Number(id) !== trackId);
+      } else {
+        state.hiddenSongs.push(trackId);
+      }
+    },
+    addToPlaylist(state, action) {
+      if (!state.playlists) state.playlists = [];
+      const track = action.payload;
+      const isAlreadyInPlaylist = state.playlists.some(t => Number(t.id) === Number(track.id));
+      if (!isAlreadyInPlaylist) {
+        state.playlists.push(track);
+      }
     }
   },
 });
@@ -129,6 +151,8 @@ export const {
   setLikedSongs,
   toggleLikedSong,
   setAtiveSong,
+  toggleHiddenSong,
+  addToPlaylist,
 } = CommonSlice.actions;
 
 export default CommonSlice.reducer;

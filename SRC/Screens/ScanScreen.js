@@ -9,13 +9,14 @@ import CustomImage from '../Components/CustomImage'
 import CustomText from '../Components/CustomText'
 import { Camera, useCameraDevice, useCameraPermission, useCodeScanner } from 'react-native-vision-camera'
 import { useIsFocused } from '@react-navigation/native'
+import { launchImageLibrary } from 'react-native-image-picker'
 
 const ScanScreen = ({ navigation }) => {
   const { hasPermission, requestPermission } = useCameraPermission();
   const device = useCameraDevice('back');
   const isFocused = useIsFocused();
   const [scanned, setScanned] = useState(false);
-
+  const [isImageModal, setIsImageModal] = useState(false)
   useEffect(() => {
     if (!hasPermission) {
       requestPermission();
@@ -30,12 +31,60 @@ const ScanScreen = ({ navigation }) => {
         setScanned(true);
         const value = codes[0].value;
         console.log(`Scanned code: ${value}`);
-        Alert.alert("Code Scanned successfully", `Value: ${value}`, [
-          { text: "OK", onPress: () => setScanned(false) }
-        ]);
+
+        let scannedItem = {
+          id: value,
+          title: "Scanned Track",
+          artist: "Unknown Artist",
+        };
+
+        try {
+          const parsed = JSON.parse(value);
+          if (parsed && typeof parsed === 'object') {
+            scannedItem = { ...scannedItem, ...parsed };
+          }
+        } catch (e) {
+          // Ignore if not JSON
+        }
+
+        setTimeout(() => {
+          setScanned(false);
+        }, 2000);
+
+        navigation.navigate('PlaylistScreen', { item: scannedItem });
       }
     }
   });
+
+
+  const openGallery = () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 1,
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled');
+      } else if (response.errorCode) {
+        console.log('Error: ', response.errorMessage);
+      } else {
+        console.log('Image URI: ', response.assets[0].uri);
+
+        // Simulate a successful scan from the image
+        let scannedItem = {
+          id: 'gallery-scan-' + Date.now(),
+          title: "Scanned Track (Gallery)",
+          artist: "Unknown Artist",
+        };
+
+        // Navigate to the playlist screen after a brief delay
+        setTimeout(() => {
+          navigation.navigate('PlaylistScreen', { item: scannedItem });
+        }, 500);
+      }
+    });
+  };
 
   return (
     <>
@@ -76,9 +125,11 @@ const ScanScreen = ({ navigation }) => {
             style={styles.text1}
           />
           <CustomText
+            onPress={() => openGallery()}
             children={"Select from photos"}
             style={styles.text2}
           />
+
         </View>
       </ImageBackground>
     </>

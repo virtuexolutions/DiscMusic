@@ -8,6 +8,7 @@ import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
 import { windowHeight, windowWidth } from '../Utillity/utils';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import navigationService from '../navigationService';
 
 const NotificationCard = ({ item }) => {
   return (

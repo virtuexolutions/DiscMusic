@@ -164,7 +164,20 @@ const SearchScreen = () => {
   useEffect(() => {
     getgenre()
   }, [])
+  const cardImage = [
+    { name: 'pop', image: require('../Assets/Images/pop.png') },
+    { name: 'hip-hop', image: require('../Assets/Images/hip-hop.png') },
+    { name: 'classical', image: require('../Assets/Images/classic.jpg') },
+    { name: 'country', image: require('../Assets/Images/country.jpg') },
+    { name: 'bertel', image: require('../Assets/Images/bertel.jpg') },
+    { name: 'reggae', image: require('../Assets/Images/reggae.jpg') },
+    { name: 'rock', image: require('../Assets/Images/rock.jpg') },
+    { name: 'electronic', image: require('../Assets/Images/electronic.jpg') },
+    { name: 'jazz', image: require('../Assets/Images/jazz.jpg') },
+    { name: 'r&b', image: require('../Assets/Images/R&b.jpg') },
+    { name: 'blues', image: require('../Assets/Images/blues.jpg') },
 
+  ]
   return (
     <>
       <CustomStatusBar
@@ -193,7 +206,8 @@ const SearchScreen = () => {
               keyExtractor={item => item.id}
               contentContainerStyle={{ paddingBottom: moderateScale(80, .6) }}
               renderItem={({ item, index }) => {
-                return <CategoryComponent item={item} isLoading={isLoading} />
+                const cardData = cardImage.find(i => i.name.toLowerCase() === item.name.toLowerCase())
+                return <CategoryComponent item={item} isLoading={isLoading} cardData={cardData} />
               }}
             />
         }
@@ -202,9 +216,11 @@ const SearchScreen = () => {
     </>
   );
 };
-function CategoryComponent({ item, isLoading }) {
+function CategoryComponent({ item, isLoading, cardData }) {
   // console.log('item====================== >>>>>>> here from category', JSON.stringify(item, null, 2));
   const navigation = useNavigation();
+
+
   return (
     <TouchableOpacity
       style={styles.category}
@@ -216,7 +232,7 @@ function CategoryComponent({ item, isLoading }) {
           onPress={() => {
             navigation.navigate('DetailScreen', { item_id: item?.id, title: item?.name });
           }}
-          source={require('../Assets/Images/artist7.png')}
+          source={item?.name.toLowerCase() == cardData?.name.toLowerCase() ? cardData?.image : require('../Assets/Images/artist7.png')}
           style={[styles.image, { resizeMode: 'cover' }]}
         />}
       </View>

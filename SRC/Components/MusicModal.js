@@ -1,6 +1,6 @@
 import { Icon } from 'native-base';
 import React, { useRef } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View, Share, Alert, Platform, ToastAndroid } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { moderateScale } from 'react-native-size-matters';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -10,55 +10,129 @@ import CustomImage from './CustomImage';
 import CustomText from './CustomText';
 import { useNavigation } from '@react-navigation/native';
 import MusicBarcode from './MusicBarcode';
+import { baseUrl } from '../Config';
+import { useLikeTrack } from '../Hooks/useLikeTrack';
+import TrackPlayer from 'react-native-track-player';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleHiddenSong, addToPlaylist } from '../Store/slices/common';
+import navigationService from '../navigationService';
 
-const MusicModal = ({ item, setRef, rbRef }) => {
-  console.log(item, "itemmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm <<<<<<<<<<<<<<<<<<<<<<<<====================================")
+const MusicModal = ({ track, setRef, rbRef }) => {
+  console.log(track, "itemmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm <<<<<<<<<<<<<<<<<<<<<<<<====================================")
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const hiddenSongs = useSelector(state => state.commonReducer.hiddenSongs || []);
+  const isHidden = hiddenSongs?.some(id => Number(id) === Number(track?.id));
+  const { toggleLike, isLiked } = useLikeTrack(track);
+
   const data = [
     {
       id: 1,
       name: 'listen to music ad-free',
       image: require('../Assets/Images/diamonds.png'),
+      onPress: () => {
+        rbRef.current.close();
+        navigation.navigate("PremiumScreen", { fromModal: true });
+      }
     },
-    { id: 2, name: 'like', image: require('../Assets/Images/heartVector.png') },
+    {
+      id: 2,
+      name: isLiked ? 'unlike' : 'like',
+      image: require('../Assets/Images/heartVector.png'),
+      onPress: () => {
+        toggleLike();
+      }
+    },
     {
       id: 3,
-      name: 'hide this song',
+      name: isHidden ? 'unhide this song' : 'hide this song',
       image: require('../Assets/Images/minus-cirlce.png'),
+      onPress: () => {
+        rbRef.current.close();
+        if (track) {
+          dispatch(toggleHiddenSong(track.id));
+          Platform.OS === 'android'
+            ? ToastAndroid.show(isHidden ? 'Song unhidden' : 'Song hidden from recommendations', ToastAndroid.SHORT)
+            : Alert.alert(isHidden ? 'Unhidden' : 'Hidden', isHidden ? 'This song is now visible.' : 'This song has been hidden from your recommendations.');
+        }
+      }
     },
     {
       id: 4,
       name: 'add to playlist',
       image: require('../Assets/Images/music-square-add.png'),
+      onPress: () => {
+        rbRef.current.close();
+        if (track) {
+          dispatch(addToPlaylist(track));
+          Platform.OS === 'android'
+            ? ToastAndroid.show('Added to playlist for long term', ToastAndroid.SHORT)
+            : Alert.alert('Added', 'Added to playlist for long term.');
+        }
+      }
     },
     {
       id: 5,
       name: 'add to queue',
       image: require('../Assets/Images/firstline.png'),
+      onPress: async () => {
+        rbRef.current.close();
+        if (track) {
+          const activeTrackIndex = await TrackPlayer.getActiveTrackIndex();
+          if (activeTrackIndex !== undefined && activeTrackIndex !== null) {
+            await TrackPlayer.add([track], activeTrackIndex + 1);
+          } else {
+            await TrackPlayer.add([track]);
+          }
+          Platform.OS == 'android' ? ToastAndroid.show('Added to queue to play next', ToastAndroid.SHORT) : Alert.alert('Added', 'Added to queue to play next.');
+        }
+      }
     },
     {
       id: 6,
       name: 'view album',
       image: require('../Assets/Images/record-circle.png'),
+      onPress: () => {
+        rbRef.current.close();
+        navigationService.navigate('DetailScreen', { item: track, from: 'viewAblum' });
+        // Alert.alert('View Album', 'Album view coming soon!');
+      }
     },
     {
       id: 7,
       name: 'view artist',
       image: require('../Assets/Images/profile-2user.png'),
+      onPress: () => {
+        rbRef.current.close();
+        navigation.navigate('AboutArtist', { artistData: track?.artist })
+        // Alert.alert('View Artist', 'Artist view coming soon!');
+      }
     },
-    { id: 8, name: 'share', image: require('../Assets/Images/share.png') },
+    {
+      id: 8,
+      name: 'share',
+      image: require('../Assets/Images/share.png'),
+      onPress: () => {
+        rbRef.current.close();
+        Share.share({ message: `Listen to ${track?.title || 'this song'} on DiscMusic!` });
+      }
+    },
     {
       id: 9,
       name: 'show credits',
       image: require('../Assets/Images/user-add.png'),
+      onPress: () => {
+        rbRef.current.close();
+        Alert.alert('Credits', `Performed by ${track?.artist || 'Unknown'}`);
+      }
     },
     {
       id: 10,
-      name: 'show spotify code',
+      name: 'show discmusic code',
       image: require('../Assets/Images/sound.png'),
       onPress: () => {
         rbRef.current.close();
-        navigation.navigate('MusicBarcode', { track: item });
+        navigation.navigate('MusicBarcode', { track: track });
       }
     },
   ];
@@ -94,7 +168,7 @@ const MusicModal = ({ item, setRef, rbRef }) => {
           }}>
           <View style={styles.image_con}>
             <CustomImage
-              source={require('../Assets/Images/bottom.png')}
+              // source={track?.artwork ? { uri: track.artwork } : track?.cover_image ? { uri: `${baseUrl}/storage/${track.cover_image}` } : require('../Assets/Images/bottom.png')}
               style={{
                 height: '100%',
                 width: '100%',
@@ -111,14 +185,14 @@ const MusicModal = ({ item, setRef, rbRef }) => {
                 color: Color.white,
                 fontSize: moderateScale(16, 0.6),
               }}>
-              don’t forget your roots - 2021
+              {/* {track?.title || 'Unknown Title'} */}
             </CustomText>
             <CustomText
               style={{
                 color: '#7F8489',
                 fontSize: moderateScale(16, 0.6),
               }}>
-              {item?.artist || 'six 60'}
+              {/* {track?.artist || 'six 60'} */}
             </CustomText>
             {/* <MusicBarcode
               trackId={item?.id || 'default'}

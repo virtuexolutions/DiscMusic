@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
-import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import { moderateScale, scale, ScaledSheet } from 'react-native-size-matters';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Color from '../Assets/Utilities/Color';
 import CustomButton from '../Components/CustomButton';
@@ -23,14 +23,16 @@ import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import navigationService from '../navigationService';
 import { useDispatch, useSelector } from 'react-redux';
 import { Post } from '../Axios/AxiosInterceptorFunction';
-import { setFavArtist, setProfileCreated } from '../Store/slices/common';
+import { setFavArtist, setProfileCreated, setUserData } from '../Store/slices/common';
 import ImagePickerModal from '../Components/ImagePickerModal';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 
 const Profile = () => {
   const token = useSelector(state => state.authReducer.token);
   const dispatch = useDispatch()
-  const [countryCode, setCountryCode] = useState('ID'); // For flag
-  const [callingCode, setCallingCode] = useState('62'); // For +62
+  const [countryCode, setCountryCode] = useState('US'); // For flag
+  const [callingCode, setCallingCode] = useState('1'); // For +62
   const [visible, setVisible] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [phone, setPhone] = useState('');
@@ -66,15 +68,15 @@ const Profile = () => {
     if (image && Object.keys(image).length > 0) {
       formdata.append('profile_image', image);
     }
-    // return console.log('first 0000000000000000' ,formdata)
+    console.log('first =============== >>>>>>>>>', formdata);
+    // return console.log('first 0000000000000000', formdata)
     const url = 'auth/profile';
     setIsLoading(true);
-    const response = await Post(url, formdata, apiHeader(token));
+    const response = await Post(url, formdata, apiHeader(token, true));
     setIsLoading(false);
 
-    console.log('first =============== >>>>>>>>>', response?.data);
     if (response?.data != undefined) {
-      console.log('from conolsoe im hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+      // return console.log('from conolsoe im hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', response?.data)
       dispatch(setProfileCreated(response?.data?.user_info?.isProfileCreated));
       // navigationService.navigate('TabNavigation');
       dispatch(setUserData(response?.data?.user_info));
@@ -92,16 +94,18 @@ const Profile = () => {
         source={require('../Assets/Images/bg.png')}
         style={styles.bg_container}
         imageStyle={styles.image}>
-        <ScrollView
+        <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={true}
-          contentContainerStyle={{
-            alignSelf: 'center',
-            alignItems: 'center',
-          }}
+
+          contentContainerStyle={{ flexGrow: 1, alignItems: 'center', alignSelf: 'center' }}
+          automaticallyAdjustKeyboardInsets
+          enableOnAndroid={true}
+          extraScrollHeight={scale(30)}
+          keyboardShouldPersistTaps="handled"
           style={{
+
             width: '100%',
-            flexGrow: 0,
+            // flexGrow: 0,
           }}>
           <View style={styles.container}>
             <CustomHeader RightIcon dots={true} />
@@ -345,8 +349,8 @@ const Profile = () => {
             show={modalVisible}
             setFileObject={setImage}
           />
-        </ScrollView>
-      </ImageBackground>
+        </KeyboardAwareScrollView>
+      </ImageBackground >
     </>
   );
 };

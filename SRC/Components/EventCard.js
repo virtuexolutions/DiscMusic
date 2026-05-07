@@ -14,10 +14,9 @@ import navigationService from '../navigationService';
 import { baseUrl, imageUrl } from '../Config';
 
 const EventCard = ({ data }) => {
-  // console.log('data from event card ', `${baseUrl}/storage/` + data?.image)
   return (
     <TouchableOpacity
-      onPress={() => navigationService.navigate('EventScreen')}>
+      onPress={() => navigationService.navigate('EventScreen', { eventId: data?.id, artist_name: data?.artist?.name })}>
       <ImageBackground
         source={data?.image ? { uri: `${baseUrl}/storage/` + data?.image } : require('../Assets/Images/event3.png')}
         style={styles.card_view}

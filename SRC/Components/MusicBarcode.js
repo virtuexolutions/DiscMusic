@@ -4,43 +4,26 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Color from '../Assets/Utilities/Color';
 import { windowHeight, windowWidth } from '../Utillity/utils';
 import CustomImage from './CustomImage';
+import { baseUrl } from '../Config';
 import BackButton from './BackButton';
 import { moderateScale } from 'react-native-size-matters';
+import QRCode from 'react-native-qrcode-svg';
 
-const MusicBarcode = ({ trackId = 'random-track-id', style, track }) => {
-  console.log(track, "trackId")
-  // Simple pseudo-random number generator for deterministic heights based on "trackId"
-  const pseudoRandom = (seed) => {
-    let value = seed;
-    return function () {
-      value = (value * 9301 + 49297) % 233280;
-      return value / 233280;
-    };
-  };
+const MusicBarcode = (props) => {
+  const track = props?.route?.params?.track;
+  console.log(track, "<<<<<<<<<<<<<<<<<<<<<<< ============== trackId")
+  // Remove the fake bars generation
+  const qrValue = JSON.stringify({
+    id: track?.id,
+    title: track?.title,
+    artist: track?.artist?.name || 'Unknown Artist'
+  });
 
-  const getSeed = (id) => {
-    if (typeof id === 'string') return id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    if (typeof id === 'number') return id;
-    if (typeof id === 'object' && id !== null) return JSON.stringify(id).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return 123;
-  };
-  const seed = getSeed(track?.id);
-  const rand = pseudoRandom(seed || 123);
-
-  // Generate an array of heights resembling a waveform
-  const generateBars = (count) => {
-    const bars = [];
-    for (let i = 0; i < count; i++) {
-      // More varied heights for a more natural waveform look
-      const heightPercent = 20 + Math.floor(rand() * 80);
-      bars.push(heightPercent);
-    }
-    return bars;
-  };
-
-  const totalBars = 24;
-  const bars = generateBars(totalBars);
-  console.log(bars, "barssssssssssssssssssssssssssssssssssss")
+  const imageSource = track?.artwork
+    ? { uri: track.artwork }
+    : track?.cover_image
+      ? { uri: `${baseUrl}/storage/${track.cover_image}` }
+      : require('../Assets/Images/music4.png');
 
   return (
     <View style={styles.mainContainer}>
@@ -50,23 +33,23 @@ const MusicBarcode = ({ trackId = 'random-track-id', style, track }) => {
           height: '100%',
           width: '100%',
           // resizeMode:'contain'
-        }} source={require('../Assets/Images/music4.png')}
+        }} source={imageSource}
         />
       </View>
 
-      <View style={[styles.container, style]}>
+      <View style={[styles.container,]}>
         <View style={styles.codeWrapper}>
-          <View style={styles.logoContainer}>
-            <MaterialCommunityIcons name="spotify" size={20} color={Color.black} />
-          </View>
-
-          <View style={styles.barsContainer}>
-            {bars.map((heightPercent, index) => (
-              <View
-                key={`bar-${index}`}
-                style={[styles.bar, { height: `${heightPercent}%` }]}
-              />
-            ))}
+          <View style={styles.qrContainer}>
+            <QRCode
+              value={qrValue}
+              size={120}
+              color={Color.white}
+              backgroundColor="transparent"
+              logo={require('../Assets/Images/logoSplash.png')}
+              logoSize={30}
+              logoBackgroundColor={Color.black}
+              logoBorderRadius={15}
+            />
           </View>
         </View>
       </View>
@@ -76,12 +59,12 @@ const MusicBarcode = ({ trackId = 'random-track-id', style, track }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.black, // Pure dark for contrast
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 25, // Pill shape
+    backgroundColor: Color.black,
+    paddingVertical: moderateScale(12.6),
+    paddingHorizontal: moderateScale(16, .6),
+    borderRadius: 25,
     alignSelf: 'center',
-    marginVertical: 12,
+    marginVertical: moderateScale(12, .6),
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
     shadowColor: "#000",
@@ -108,29 +91,16 @@ const styles = StyleSheet.create({
     height: windowHeight,
   },
   codeWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 35, // Compact height
-  },
-  barsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: '100%',
-  },
-  bar: {
-    width: 2.5, // Thinner bars for precision
-    backgroundColor: '#1DB954', // Spotify Green
-    borderRadius: 1.25,
-    marginHorizontal: 1.5,
-  },
-  logoContainer: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#1DB954',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 10,
+    padding: moderateScale(10, 0.6)
+  },
+  qrContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: Color.black,
+    borderRadius: 10,
   }
 });
 

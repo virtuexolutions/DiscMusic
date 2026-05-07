@@ -5,6 +5,8 @@ import TrackPlayer, {
   State
 } from 'react-native-track-player';
 import { baseUrl, getArtistName } from '../Config';
+import { setAtiveSong } from '../Store/slices/common';
+import { useDispatch } from 'react-redux';
 
 export const getArtistNameFromTrack = (track) => {
   if (!track) return 'Unknown Artist';
@@ -135,6 +137,7 @@ export const playSingleTrack = async (track) => {
  * Adds multiple tracks and starts from the first one.
  */
 export const playPlaylist = async (tracks) => {
+  const dispatch = useDispatch();
   console.log('🎵 Playing Playlist (Count):', tracks?.length);
   try {
     if (!tracks) return;
@@ -148,6 +151,8 @@ export const playPlaylist = async (tracks) => {
     await TrackPlayer.setRepeatMode(RepeatMode.Queue);
     await TrackPlayer.play();
     console.log('✅ Playlist Added and Playing');
+    dispatch(setAtiveSong(formattedTracks[0]));
+    // dispatch(setNowPlayingList(formattedTracks));
   } catch (error) {
     console.error('Error playing playlist:', error);
   }
@@ -205,7 +210,7 @@ export const playNext = async () => {
 
 /**
  * 2. Skip to Previous Track
- * If the song is more than 3 seconds in, Spotify usually 
+ * If the song is more than 3 seconds in,  usually 
  * restarts the current song instead of skipping back.
  */
 export const playPrevious = async () => {
