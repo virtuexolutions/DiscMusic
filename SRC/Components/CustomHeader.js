@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { windowHeight, windowWidth } from '../Utillity/utils';
-import { moderateScale, scale } from 'react-native-size-matters';
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import Color from '../Assets/Utilities/Color';
 import CustomText from './CustomText';
 import { Icon } from 'native-base';
@@ -12,7 +12,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import navigationService from '../navigationService';
 import { useNavigation } from '@react-navigation/native';
 import { setUserLogOut } from '../Store/slices/common';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUserLogoutAuth } from '../Store/slices/auth';
 import LinearGradient from 'react-native-linear-gradient';
 import ThemeIconButton from './ThemeIconButton';
@@ -23,6 +23,7 @@ const CustomHeader = ({ leftIcon, RightIcon,
   user,
   showBack,
   search,
+  onSearchPress,
   dots,
   add,
   notifications,
@@ -34,6 +35,7 @@ const CustomHeader = ({ leftIcon, RightIcon,
   text, style, text1, subtext }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const notification = useSelector(state => state.commonReducer.notificationCount)
 
 
   return (
@@ -86,22 +88,36 @@ const CustomHeader = ({ leftIcon, RightIcon,
             }}
           />)}
           {search && <ThemeIconButton
+            onPress={onSearchPress ? onSearchPress : () => {
+              // navigationService.navigate("Search", { from: 'library' })
+            }}
             iconSource={require("../Assets/Images/search.png")}
             iconSize={scale(14)}
           />}
           {add && <ThemeIconButton
+            onPress={() => {
+              rbref.current.open()
+            }}
             iconName={"plus"}
             iconType={Feather}
             iconSize={scale(14)}
           />}
-          {notifications && <ThemeIconButton
-            iconName={"bell-alt"}
-            iconType={Fontisto}
-            onPress={() => {
-              navigation.navigate("Notification")
-            }}
-            iconSize={scale(14)}
-          />}
+          {notifications &&
+
+            // <> 
+            <ThemeIconButton
+
+              iconName={"bell-alt"}
+              iconType={Fontisto}
+              onPress={() => {
+                navigation.navigate("Notification")
+              }}
+              iconSize={scale(14)}
+            />
+            //   {notification == 1 && <View style={styles.dot1} ></View>}
+            // </>
+
+          }
           {dots && <LinearGradient
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -165,6 +181,7 @@ const CustomHeader = ({ leftIcon, RightIcon,
               alignItems: 'center',
             }}></View>
         )}
+
     </View>
   );
 };
@@ -204,5 +221,15 @@ const styles = StyleSheet.create({
     backgroundColor: Color.white,
     width: scale(30),
     height: scale(30)
-  }
+  },
+  dot1: {
+    width: moderateScale(10, 0.3),
+    height: moderateScale(10, 0.3),
+    backgroundColor: Color.red,
+    borderRadius: moderateScale(5, 0.3),
+    position: 'absolute',
+    zIndex: 1,
+    left: moderateScale(1, 0.3),
+    top: verticalScale(-5),
+  },
 });

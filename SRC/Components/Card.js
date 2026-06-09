@@ -10,11 +10,16 @@ import CustomText from '../Components/CustomText';
 import { windowHeight, windowWidth } from '../Utillity/utils';
 import { TouchableOpacity } from 'react-native';
 import navigationService from '../navigationService';
+import { useSelector } from 'react-redux';
+import { baseUrl } from '../Config';
 
-const Card = ({ fromEvent, artistData }) => {
+const Card = ({ fromEvent, artistData, data }) => {
+  console.log("🚀 ~ Card ~ artistData artistData artistData dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa:", artistData?.artist?.user?.name, data)
+  const userData = useSelector((state) => state.commonReducer.userData);
+  console.log("artistData", artistData, `${baseUrl}/storage/${data?.profile_image}` || `${baseUrl}/storage/${artistData?.artist?.user?.profile_image}`)
   return (
     <TouchableOpacity
-      onPress={() => navigationService.navigate('AboutArtist', { artistData: artistData })}
+      onPress={() => navigationService.navigate('AboutArtist', { artistData: artistData, data: data })}
       style={[
         styles.lyrics_con,
         {
@@ -33,6 +38,8 @@ const Card = ({ fromEvent, artistData }) => {
       </CustomText>
       <View style={styles.artist_image}>
         <CustomImage
+          onPress={() => navigationService.navigate('AboutArtist', { artistData: artistData, data: data })}
+
           style={{
             height: '100%',
             width: '100%',
@@ -40,38 +47,41 @@ const Card = ({ fromEvent, artistData }) => {
           source={
             fromEvent
               ? require('../Assets/Images/event.png')
-              : require('../Assets/Images/artist.png')
+              : { uri: data?.profile_image ? `${baseUrl}/storage/${data?.profile_image}` : `${baseUrl}/storage/${artistData?.artist?.user?.profile_image}` }
           }
         />
       </View>
       <View style={styles.row_con}>
         <View style={styles.text_container}>
           <CustomText style={styles.title}>
-            {fromEvent ? 'jun 9 - aug 25' : 'oliver tree'}
+            {fromEvent ? 'jun 9 - aug 25' : artistData?.artist?.user?.name ? artistData?.artist?.user?.name : data?.name}
           </CustomText>
-          <CustomText style={styles.sub_text}>
-            {fromEvent ? '4 events on tour' : '24,419,528 monthly listeners'}
-          </CustomText>
+          {/* <CustomText style={styles.sub_text}>
+            {fromEvent ? '4 events on tour' :
+              artistData?.artist?.monthly_listeners
+            }
+          </CustomText> */}
         </View>
         <CustomButton
-          isGradient
-          text={fromEvent ? 'find tickets' : 'follow'}
+          // isGradient
+          text={fromEvent ? 'find tickets' : userData?.liked_artist?.filter((i) => i?.id == artistData?.artist?.id) ? 'following' : 'follow'}
           textColor={Color.white}
           width={windowWidth * 0.24}
           height={windowHeight * 0.04}
           onPress={() => {
             // setIsVisible(false);
           }}
-          bgColor={Color.lightGrey}
-          marginTop={moderateScale(10, 0.6)}
+          // bgColor={Color.red}
+          // 
+          bgColor={userData?.liked_artist?.filter((i) => i?.id == artistData?.artist?.id) ? Color.themeSkyBlue : Color.lightGrey}
+          // marginTop={moderateScale(-10, 0.6)}
           borderRadius={moderateScale(30, 0.3)}
           fontSize={moderateScale(12, 0.3)}
         />
       </View>
       {!fromEvent && (
-        <CustomText style={styles.sub_text}>
-          An internet based vocalist, producer, writer, director and performance
-          artist, Oliver Tree...
+        <CustomText numberOfLines={2} style={styles.sub_text}>
+          {artistData?.artist?.bio ? artistData?.artist?.bio : data?.bio ? data?.bio : 'No bio available  '}
           <CustomText
             style={{
               color: Color.white,
@@ -88,7 +98,7 @@ const styles = ScaledSheet.create({
   lyrics_con: {
     width: windowWidth * 0.9,
     height: windowWidth * 0.5,
-    marginTop: moderateScale(20, 0.3),
+    marginTop: moderateScale(40, 0.3),
     borderRadius: moderateScale(20, 0.3),
     marginRight: moderateScale(10, 0.3),
     backgroundColor: '#2c2c2cff',
@@ -161,15 +171,19 @@ const styles = ScaledSheet.create({
     // backgroundColor: 'red',
     borderRadius: moderateScale(20, 0.6),
     overflow: 'hidden',
+    marginBottom: moderateScale(5, .6),
   },
   title: {
     color: Color.white,
     fontSize: moderateScale(16, 0.6),
+    paddingTop: moderateScale(5, .6),
+    height: windowHeight * 0.04,
   },
 
   sub_text: {
     color: '#7F8489',
     fontSize: moderateScale(12, 0.6),
+    paddingHorizontal: moderateScale(18, .6)
   },
   follow_btn: {
     width: windowWidth * 0.22,
@@ -179,13 +193,16 @@ const styles = ScaledSheet.create({
   row_con: {
     flexDirection: 'row',
     width: '100%',
-    alignItems: 'center',
+    paddingBottom: moderateScale(10, .6),
+    // backgroundColor: 'red',
+    // alignItems: 'center',
+    // justifyContent: 'space-between',
   },
   text_container: {
     width: windowWidth * 0.6,
     // backgroundColor :'red',
     paddingHorizontal: moderateScale(20, 0.6),
-    paddingVertical: moderateScale(10, 0.6),
+    // paddingVertical: moderateScale(10, 0.6),
   },
 });
 export default Card;

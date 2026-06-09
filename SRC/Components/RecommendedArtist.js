@@ -34,6 +34,8 @@ const backgroundColors = [
 ];
 
 const RecommendedArtist = ({ item, from, title, image }) => {
+    // console.log("🚀 ~ RecommendedArtist ~ item:", item?.image)
+
 
     const onPress = () => {
         const tracksData = from === 'home' ? (item?.items || item?.item) : item?.tracks;
@@ -45,6 +47,7 @@ const RecommendedArtist = ({ item, from, title, image }) => {
         : Math.floor(Math.random() * backgroundColors.length);
 
     const cover_image = item?.items?.length > 0 ? `${baseUrl}/storage/${item?.items[0]?.cover_image}` : '';
+    // console.log("🚀 ~ RecommendedArtist ~ cover_image:", item?.items[0]?.cover_image)
     return (
         <TouchableOpacity
             activeOpacity={0.9} onPress={onPress}

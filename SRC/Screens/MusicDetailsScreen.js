@@ -1,44 +1,50 @@
-import { ImageBackground, ScrollView, StyleSheet, Text, View } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useIsFocused } from '@react-navigation/native'
 import React, { useEffect, useRef, useState } from 'react'
-import CustomStatusBar from '../Components/CustomStatusBar'
-import CustomHeader from '../Components/CustomHeader'
+import { ImageBackground, ScrollView, StyleSheet, View } from 'react-native'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
-import { windowHeight, windowWidth } from '../Utillity/utils'
-import CustomImage from '../Components/CustomImage'
-import ThemeIconButton from '../Components/ThemeIconButton'
-import Color from '../Assets/Utilities/Color'
-import TitleWithDescription from '../Components/TitleWithDescription'
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import RecentlyPlayedSongsList from '../Components/RecentlyPlayedSongsList'
-import PlayList from '../Components/PlayList'
-import MinimisedPlayer from '../Components/MinimisedPlayer'
-import { playPlaylist } from '../Components/MusicPlayerController'
-import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player'
-import { baseUrl } from '../Config'
-import { Get } from '../Axios/AxiosInterceptorFunction'
+import TrackPlayer, { State, useActiveTrack, usePlaybackState } from 'react-native-track-player'
 import { useSelector } from 'react-redux'
-import { useLikeTrack } from '../Hooks/useLikeTrack'
-import LikeButton from '../Components/LikeButton'
-import PermiumModal from '../Components/PermiumModal'
+import Color from '../Assets/Utilities/Color'
+import { Get } from '../Axios/AxiosInterceptorFunction'
+import CustomHeader from '../Components/CustomHeader'
+import CustomImage from '../Components/CustomImage'
+import CustomStatusBar from '../Components/CustomStatusBar'
 import MusicModal from '../Components/MusicModal'
+import { OfflineManager, playPlaylist } from '../Components/MusicPlayerController'
+import PermiumModal from '../Components/PermiumModal'
+import PlayList from '../Components/PlayList'
+import RecentlyPlayedSongsList from '../Components/RecentlyPlayedSongsList'
+import ThemeIconButton from '../Components/ThemeIconButton'
+import TitleWithDescription from '../Components/TitleWithDescription'
+import { useLikeTrack } from '../Hooks/useLikeTrack'
+import { windowHeight, windowWidth } from '../Utillity/utils'
+import ShuffleButton from '../Components/ShuffleButton'
+import { baseUrl } from '../Config'
 // import { useLikeTrack } from '../Components/useLikeTrack'
 
 
 const MusicDetailsScreen = ({ route }) => {
-    const { item, image_url } = route.params;
-
-    console.log('item====================== >>>>>>> item from music detailscreen ', image_url);
+    console.log("🚀 ~ MusicDetailsScreen ~ route:", route.params)
+    const { item, image_url, from, artisdata } = route.params;
+    console.log("🚀 ~ MusicDetailsScreen ~ item:", artisdata)
     const token = useSelector(state => state.authReducer.token)
+    const userData = useSelector(state =>
+        state.commonReducer.userData)
+
     const playbackState = usePlaybackState();
     const isPlaying = playbackState.state === State.Playing;
-
-
+    // const userSub = [{ id: 1, package: 'premium' }]
+    const isFoucs = useIsFocused();
     const [recentlyPlayedSongs, setRecentlyPlayedSongs] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isShuffleClicked, setIsShuffleClicked] = useState('')
+    const [downloadedTracks, setDownloadedTracks] = useState([]);
 
-    const { toggleLike, loading: likeLoading, isLiked } = useLikeTrack(item);
+    const [progress, setProgress] = useState(0);
+    console.log("🚀 ~ MusicDetailsScreen ~ progress:", progress)
+    const [isDownloaded, setIsDownloaded] = useState(false);
+
     const rbRef = useRef(null);
     const rb = useRef(null);
 
@@ -53,7 +59,6 @@ const MusicDetailsScreen = ({ route }) => {
         const url = 'auth/recently-played'
         setIsLoading(true)
         const response = await Get(url, token)
-        console.log('recentlyPlayedSongs====================== >>>>>>> ', JSON.stringify(response?.data?.data?.recently_played, null, 2))
         setIsLoading(false)
 
         if (response != undefined) {
@@ -65,7 +70,43 @@ const MusicDetailsScreen = ({ route }) => {
     useEffect(() => {
         recentlyPlayed()
     }, [])
+
+
+    // const loadDownloadedSongs = async () => {
+    //     const storedMap = await AsyncStorage.getItem('@offline_tracks_map');
+    //     console.log("hfahdfjha sjdfhjah sdkfjhas download", storedMap)
+    //     if (storedMap) {
+    //         const map = JSON.parse(storedMap);
+    //         const tracksArray = Object.keys(map).map(id => {
+    //             const trackData = map[id];
+    //             console.log("🚀 ~ loadDownloadedSongs ~ trackData:", trackData)
+    //             if (typeof trackData === 'string') {
+    //                 return {
+    //                     id: id,
+    //                     url: trackData,
+    //                     title: `Song ${id}`,
+    //                     artist: 'Offline Artist',
+    //                 };
+    //             }
+    //             return trackData;
+    //         });
+
+    //         setDownloadedTracks(tracksArray);
+    //     }
+    // };
+    // useEffect(() => {
+    //     console.log("downloadedTracks", downloadedTracks)
+    //     loadDownloadedSongs();
+    // }, [isFoucs]);
+
+    const handleDownload = async () => {
+        const path = await OfflineManager.downloadTrack(track, (p) => {
+            setProgress(p.toFixed(0));
+        });
+        if (path) setIsDownloaded(true);
+    };
     return (
+
         <>
             <CustomStatusBar
                 backgroundColor={Color.statusColor}
@@ -90,22 +131,26 @@ const MusicDetailsScreen = ({ route }) => {
                         alignItems: 'center',
                         paddingBottom: verticalScale(80)
                     }}>
+
                     <View style={styles.imageContainer}>
                         <CustomImage
                             style={styles.image}
-                            source={{ uri: image_url }}
+                            // source={{ uri: from == 'home' ? activeTrack?.cover_image ? activeTrack?.cover_image : item?.[0]?.cover_image : image_url }}
+                            source={{ uri: image_url ? image_url : `${baseUrl}/storage/${item[0]?.cover_image}` }}
                         />
                     </View>
-                    <View style={styles.actions}>
-                        {/* <TitleWithDescription
-                            style={styles.textContainer}
-                            title={"Miss You"}
-                            titleStyle={styles.text1}
-                            descriptionStyle={styles.text2}
-                            description='oliver tree, robin schulz'
-                        /> */}
 
-                        <LikeButton track={item} style={styles.iconButton2} />
+                    <View style={styles.actions}>
+                        {/* {from == 'home' &&
+                            <TitleWithDescription
+                                style={styles.textContainer}
+                                title={activeTrack?.cover_image ? activeTrack?.title : item?.[0]?.title}
+                                titleStyle={styles.text1}
+                                descriptionStyle={styles.text2}
+                                description={activeTrack?.artist ? activeTrack?.artist : item?.[0]?.artist}
+                            />} */}
+
+                        {/* {from != 'home' && <LikeButton track={item} style={styles.iconButton2} />} */}
                         {/* <ThemeIconButton
                             isGradient={true}
                             gradientColors={Color.themeGradient}
@@ -135,45 +180,58 @@ const MusicDetailsScreen = ({ route }) => {
                             style={styles.logo}
                         />
                         <TitleWithDescription
-                            style={[styles.textContainer, { width: "45%" }]}
-                            title={"Miusic"}
+                            style={[styles.textContainer, { width: "60%" }]}
+                            title={"Music"}
                             titleStyle={styles.text1}
                             descriptionStyle={styles.text2}
-                            description='178,426 likes | 3h 25min'
+                            description=''
                         />
 
-                        <ThemeIconButton
+                        <ShuffleButton iconSize={moderateScale(20, .6)}
+                        />
+                        {/* <ThemeIconButton
                             onPress={() => {
                                 rbRef.current.open()
                                 setIsShuffleClicked('shuffle')
                             }}
                             style={styles.iconBtn}
                             iconSource={require("../Assets/Images/shuffle.png")}
-                        />
+                        /> */}
                         <ThemeIconButton
                             onPress={() => {
-                                rbRef.current.open(),
-                                    setIsShuffleClicked('import')
+                                if (userData?.subscriptions?.length > 0) {
+                                    console.log("🚀 ~ MusicDetailsScreen ~ userSub:")
+                                    // console.log("🚀 ~ MusicDetailsScreen ~ userSub:", userSub.length)
+                                    handleDownload(item[0])
+                                } else {
+                                    console.log("🚀 ~ MusicDetailsScreen ~ no sub :")
+
+                                    rbRef.current.open(),
+                                        setIsShuffleClicked('import')
+                                }
                             }}
                             style={styles.iconBtn}
                             iconSource={require("../Assets/Images/import.png")}
                         />
-                        <ThemeIconButton
+                        {/* <ThemeIconButton
                             onPress={() => {
                                 rb.current.open()
                             }}
                             style={styles.iconBtn}
                             iconName={"dots-three-vertical"}
                             iconType={Entypo}
-                        />
+                        /> */}
+                        {/* <RepeatButton
+                            style={styles.iconBtn}
+                        /> */}
                     </View>
-                    <PlayList trackData={item} />
+                    <PlayList trackData={item} from={'home'} artistData={artisdata} />
                     <RecentlyPlayedSongsList data={recentlyPlayedSongs} isLoading={isLoading} />
                 </ScrollView>
                 <MusicModal rbRef={rb} />
-                <PermiumModal track={item} rbRef={rbRef} from={isShuffleClicked} />
+                <PermiumModal track={item} rbRef={rbRef} from={isShuffleClicked} item={item[0]} />
                 {/* <MinimisedPlayer /> */}
-            </ImageBackground>
+            </ImageBackground >
         </>
 
     )
@@ -201,8 +259,9 @@ const styles = StyleSheet.create({
     actions: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center",
-        gap: scale(10),
+        justifyContent: "space-between",
+        // gap: scale(10),
+        width: windowWidth * 0.89,
         // backgroundColor: 'red'
     },
     textContainer: {
@@ -232,7 +291,7 @@ const styles = StyleSheet.create({
     actions2: {
         flexDirection: "row",
         gap: scale(10),
-
+        // paddingHorizontal: scale(10),
         width: windowWidth * 0.9,
         alignItems: "center",
     }

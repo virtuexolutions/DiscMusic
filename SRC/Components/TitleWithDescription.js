@@ -13,6 +13,7 @@ const TitleWithDescription = ({
     titleStyle,
     onPress,
     disable,
+    numberOfLines,
 }) => {
     return (
         <TouchableOpacity disabled={disable} onPress={onPress} style={[styles.container, style]}>
@@ -25,6 +26,7 @@ const TitleWithDescription = ({
             <CustomText
                 ellipsizeMode={"tail"}
                 style={[styles.text2, descriptionStyle]}
+                numberOfLines={numberOfLines}
                 children={description}
             />
         </TouchableOpacity>

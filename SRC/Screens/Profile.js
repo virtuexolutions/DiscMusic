@@ -26,17 +26,21 @@ import { Post } from '../Axios/AxiosInterceptorFunction';
 import { setFavArtist, setProfileCreated, setUserData } from '../Store/slices/common';
 import ImagePickerModal from '../Components/ImagePickerModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { baseUrl } from '../Config';
 
 
-const Profile = () => {
+const Profile = (props) => {
+  const from = 'settings'
   const token = useSelector(state => state.authReducer.token);
+  const userData = useSelector(state => state.commonReducer.userData);
+  console.log("🚀 ~ Profile ~ userData:", `${baseUrl}/storage/${userData?.profile_image}`)
   const dispatch = useDispatch()
   const [countryCode, setCountryCode] = useState('US'); // For flag
   const [callingCode, setCallingCode] = useState('1'); // For +62
   const [visible, setVisible] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [birthday, setBirthday] = useState('');
+  const [firstName, setFirstName] = useState(from == 'settings' ? userData?.name : '');
+  const [phone, setPhone] = useState(from == 'settings' ? userData?.phone : '');
+  const [birthday, setBirthday] = useState(from == 'settings' ? userData?.dob : '');
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -44,7 +48,8 @@ const Profile = () => {
 
   const [image, setImage] = useState(null);
 
-  const profile = async () => {
+  const profileUpdate = async () => {
+
     const body = {
       name: firstName,
       phone: phone,
@@ -68,7 +73,7 @@ const Profile = () => {
     if (image && Object.keys(image).length > 0) {
       formdata.append('profile_image', image);
     }
-    console.log('first =============== >>>>>>>>>', formdata);
+    // return console.log('first =============== >>>>>>>>>', formdata);
     // return console.log('first 0000000000000000', formdata)
     const url = 'auth/profile';
     setIsLoading(true);
@@ -118,8 +123,10 @@ const Profile = () => {
                   }}
                   source={
                     image
-                      ? { uri: image?.uri }
-                      : require('../Assets/Images/profile.png')
+                      ? { uri: image?.uri } :
+                      userData?.profile_image
+                        ? { uri: `${baseUrl}/storage/${userData?.profile_image}` }
+                        : require('../Assets/Images/profile.png')
                   }
                 />
               </View>
@@ -324,17 +331,17 @@ const Profile = () => {
             <CustomButton
               isGradient
               text={
-                isLoading ? (
+                isLoading ?
                   <ActivityIndicator size={'small'} color={Color.white} />
-                ) : (
-                  'Set Up Profile'
-                )
+                  : from == 'settings' ? 'Update Profile' : 'Set Up Profile'
+
+
               }
               textColor={Color.white}
               width={windowWidth * 0.9}
               height={windowHeight * 0.07}
               onPress={() => {
-                profile();
+                profileUpdate();
                 // navigationService.navigate('TabNavigation');
               }}
               bgColor={Color.lightGrey}

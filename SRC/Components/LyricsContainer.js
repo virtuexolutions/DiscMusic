@@ -1,12 +1,12 @@
 import { StyleSheet, View, ScrollView, Text } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import CustomText from './CustomText'
-import { windowWidth } from '../Utillity/utils'
+import { windowHeight, windowWidth } from '../Utillity/utils'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import Color from '../Assets/Utilities/Color'
 import { useProgress } from 'react-native-track-player'
 
-const LyricsContainer = ({ lyrics, loading, error }) => {
+const LyricsContainer = ({ lyrics, loading, error, style, from, height }) => {
   const { position } = useProgress(250);
   const [parsedLyrics, setParsedLyrics] = useState([]);
   const scrollViewRef = useRef(null);
@@ -98,17 +98,30 @@ const LyricsContainer = ({ lyrics, loading, error }) => {
   }, [activeIndex]);
 
   return (
-    <View style={styles.container}>
-      <CustomText
+    <View style={[styles.container, {
+      height: height ? height : windowHeight * 0.14,
+
+
+      // backgroundColor: 
+      backgroundColor: from === 'playlist' ? 'transparent' : '#191b1dff',
+
+      marginTop: from === 'playlist' ? verticalScale(5) : verticalScale(20),
+    }]}>
+      {from != 'playlist' && <CustomText
         isBold={true}
         children={loading ? "Loading Lyrics..." : error ? "Error Loading Lyrics" : "Show Lyrics"}
         style={styles.heading}
-      />
+      />}
       <ScrollView
         ref={scrollViewRef}
-        contentContainerStyle={styles.textContainer}
+        contentContainerStyle={[styles.textContainer, {
+
+        }]}
         showsVerticalScrollIndicator={false}
-        style={{ height: verticalScale(200) }}
+        style={{
+          // backgroundColor: 'red',
+          height: verticalScale(20)
+        }}
       >
         {parsedLyrics.length > 0 ? (
           parsedLyrics?.map((item, index) => {
@@ -120,7 +133,7 @@ const LyricsContainer = ({ lyrics, loading, error }) => {
                 style={[
                   styles.text,
                   {
-                    color: isActive ? Color.green : Color.lightGrey,
+                    color: isActive ? Color.themeSkyBlue : Color.lightGrey,
                     fontSize: isActive ? moderateScale(15, 0.2) : moderateScale(11, 0.2),
                     lineHeight: verticalScale(22)
                   }
@@ -153,11 +166,9 @@ export default LyricsContainer
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.black,
     width: windowWidth * 0.8,
     alignSelf: "center",
     gap: verticalScale(10),
-    marginTop: verticalScale(20),
     borderRadius: moderateScale(12, 0.2),
     paddingVertical: verticalScale(20),
     paddingHorizontal: scale(10),

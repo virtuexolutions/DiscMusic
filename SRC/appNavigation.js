@@ -39,15 +39,22 @@ import YourLibrary from './Screens/YourLibrary';
 import { windowWidth } from './Utillity/utils';
 import SearchArtist from './Screens/SearchArtist';
 import MusicBarcode from './Components/MusicBarcode';
-import SavedPlaylist from './Screens/SavedPlaylist';
+import CreatePlaylistScreen from './Screens/CreatePlaylistScreen';
 import SearchLocation from './Screens/SearchLocation';
+import PlaylistTrack from './Screens/PlaylistTrack';
+import Search from './Screens/Search';
+import DownloadTrack from './Screens/DownloadTrack';
+import TermsAndCondition from './Screens/TermsAndCondition';
+import PrivacyPolicy from './Screens/PrivacyPolicy';
+import Support from './Screens/Support';
+import AddToPlaylistScreen from './Screens/AddToPlaylistScreen';
 
 const AppNavigator = () => {
   const walkThrough = useSelector(state => state.authReducer.userWalkThrough);
   const token = useSelector(state => state.authReducer.token);
   const isProfileCreated = useSelector(state => state.commonReducer.isProfile);
   const favArtist = useSelector(state => state.commonReducer.favArtist);
-  console.log('favArtist====================== >>>>>>> here from appNavigation', favArtist);
+  // console.log('favArtist====================== >>>>>>> here from appNavigation', favArtist);
 
   const userdata = useSelector(state => state.commonReducer.userData);
 
@@ -55,6 +62,17 @@ const AppNavigator = () => {
   const RootNav = createNativeStackNavigator();
   const RootNavLogged = createNativeStackNavigator();
 
+
+
+  const linking = {
+    prefixes: ['https://disc.cstmpanel.com/'],
+    config: {
+      screens: {
+        track: 'track/details/:id',
+        // HomeScreen: 'HomeScreen/:id'
+      },
+    },
+  }
   const AppNavigatorContainer = () => {
 
     const firstScreen =
@@ -68,7 +86,7 @@ const AppNavigator = () => {
               : 'TabNavigation';
 
     return (
-      <NavigationContainer ref={navigationService.navigationRef}>
+      <NavigationContainer ref={navigationService.navigationRef} linking={linking}>
         <RootNav.Navigator
           // initialRouteName={'Wallet'}
           initialRouteName={firstScreen}
@@ -93,9 +111,20 @@ const AppNavigator = () => {
           />
           <RootNav.Screen name="DetailScreen" component={DetailScreen} />
           <RootNav.Screen name="MusicBarcode" component={MusicBarcode} />
+          <RootNav.Screen name="Search" component={Search} />
+          <RootNav.Screen name="DownloadTrack" component={DownloadTrack} />
+          <RootNav.Screen name="TermsAndCondition" component={TermsAndCondition} />
+          <RootNav.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+          <RootNav.Screen name="Support" component={Support} />
+
+
+
+
 
 
           <RootNav.Screen name="AboutArtist" component={AboutArtist} />
+          <RootNav.Screen name="PlaylistTrack" component={PlaylistTrack} />
+
           <RootNav.Screen name="EventScreen" component={EventScreen} />
           <RootNav.Screen name="HomeScreen" component={HomeScreen} />
           <RootNav.Screen name="DetailedScreen" component={DetailedScreen} />
@@ -107,6 +136,8 @@ const AppNavigator = () => {
           <RootNav.Screen name="VerifyNumber" component={VerifyNumber} />
           <RootNav.Screen name="ResetPassword" component={ResetPassword} />
           <RootNav.Screen name="SearchArtist" component={SearchArtist} />
+          <RootNav.Screen name="AddToPlaylistScreen" component={AddToPlaylistScreen} />
+          {/* <RootNav.Screen name="YourLibrary" component={YourLibrary} /> */}
 
 
 
@@ -120,7 +151,7 @@ const AppNavigator = () => {
           />
           <RootNav.Screen name="Settings" component={Settings} />
           <RootNav.Screen name="ScanScreen" component={ScanScreen} />
-          <RootNav.Screen name="SavedPlaylist" component={SavedPlaylist} />
+          <RootNav.Screen name="CreatePlaylistScreen" component={CreatePlaylistScreen} />
         </RootNav.Navigator>
       </NavigationContainer>
     );

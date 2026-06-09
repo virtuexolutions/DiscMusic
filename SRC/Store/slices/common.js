@@ -47,11 +47,15 @@ const initialState = {
   selectedRole: '',
   location: '',
   isProfile: 0,
-  favArtist: false,
+  favArtist: [],
   likedSongs: [],
   activeSong: {},
   hiddenSongs: [],
   playlists: [],
+  playlist: [],
+  playbackSettings: {},
+  repeatMode: 'off',
+  notificationCount: 0,
 };
 
 const CommonSlice = createSlice({
@@ -90,10 +94,10 @@ const CommonSlice = createSlice({
     },
     setProfileCreated(state, action) {
       state.isProfile = action.payload;
-      // console.log('🚀 ~ action.payload:', action.payload);
     },
     setFavArtist(state, action) {
       state.favArtist = action.payload;
+      console.log("🚀 ~ setFavArtist ~ state.favArtist:", state.favArtist)
     },
     setLikedSongs(state, action) {
       state.likedSongs = action.payload || [];
@@ -112,7 +116,10 @@ const CommonSlice = createSlice({
 
     setAtiveSong(state, action) {
       state.activeSong = action.payload;
-      console.log('state.activeSong==================== >>>>>>>>>>>>>>>>>>>>>>>>', state.activeSong)
+      // console.log('state.activeSong==================== >>>>>>>>>>>>>>>>>>>>>>>>', state.activeSong)
+    },
+    setNotificationCount(state, action) {
+      state.notificationCount = action.Payload;
     },
     toggleHiddenSong(state, action) {
       if (!state.hiddenSongs) state.hiddenSongs = [];
@@ -131,7 +138,40 @@ const CommonSlice = createSlice({
       if (!isAlreadyInPlaylist) {
         state.playlists.push(track);
       }
-    }
+    },
+    setPlaylistTrack(state, action) {
+      if (!state.playlist) state.playlist = [];
+      const exists = state.playlist.find(item => item.id === action.payload.id);
+      if (exists) {
+        console.log("Bro, yeh data toh pehle se hai!");
+        return;
+      }
+      state.playlist.push(action.payload);
+    },
+    setFullPlaylist(state, action) {
+      state.playlist = action.payload || [];
+    },
+    setRemovePlaylistTrack(state, action) {
+      const trackId = action.payload?.id || action.payload;
+      state.playlist = state.playlist.filter(item => item.id !== trackId);
+    },
+
+
+    setRepeatMode(state, action) {
+      state.repeatMode = action.payload; // 'off' | 'queue' | 'track'
+    },
+    setPlaybackSettings: (state, action) => {
+      const { key, value } = action.payload;
+      state.playbackSettings[key] = value;
+    },
+
+    togglePlaybackSetting: (state, action) => {
+      const { key, defaultValue } = action.payload;
+      if (!state.playbackSettings) {
+        state.playbackSettings = {};
+      }
+      state.playbackSettings[key] = !(state.playbackSettings[key] ?? defaultValue);
+    },
   },
 });
 
@@ -153,6 +193,13 @@ export const {
   setAtiveSong,
   toggleHiddenSong,
   addToPlaylist,
+  setRepeatMode,
+  setPlaylistTrack,
+  setFullPlaylist,
+  setRemovePlaylistTrack,
+  setPlaybackSettings,
+  togglePlaybackSetting,
+  setNotificationCount
 } = CommonSlice.actions;
 
 export default CommonSlice.reducer;

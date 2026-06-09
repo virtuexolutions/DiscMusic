@@ -75,7 +75,7 @@ const TrendingView = ({ trackData, from }) => {
               // console.log('itemmmmmm', item);
               return (
                 <View style={styles.inner_view}>
-                  <CustomImage source={{ uri: `${baseUrl}/storage/${item?.cover_image} ` }} style={styles.image} />
+                  <CustomImage source={{ uri: `${baseUrl}/storage/${item?.cover_image}` }} style={styles.image} />
                 </View>
               );
             }}

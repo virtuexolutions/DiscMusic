@@ -15,9 +15,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
 
 import { Icon } from 'native-base';
+import navigationService from '../navigationService';
 
-const PermiumModal = ({ track, setRef, rbRef, from }) => {
-    console.log(from, "itemmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm <<<<<<<<<<<<<<<<<<<<<<<<====================================")
+const PermiumModal = ({ track, setRef, rbRef, from, item }) => {
+    // console.log(item?.cover_image, "itemmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm <<<<<<<<<<<<<<<<<<<<<<<<====================================", track)
     const { toggleLike, isLiked } = useLikeTrack(track);
     // const from = 'download'
 
@@ -56,7 +57,7 @@ const PermiumModal = ({ track, setRef, rbRef, from }) => {
                     </View>
                     {from == 'import' && <View style={styles.image_con}>
                         <CustomImage
-                            source={track?.artwork ? { uri: track.artwork } : track?.cover_image ? { uri: `${baseUrl}/storage/${track.cover_image}` } : require('../Assets/Images/bottom.png')}
+                            source={track?.artwork ? { uri: track.artwork } : item?.cover_image ? { uri: `${baseUrl}/storage/${item.cover_image}` } : require('../Assets/Images/bottom.png')}
                             style={{
                                 height: '100%',
                                 width: '100%',
@@ -66,12 +67,13 @@ const PermiumModal = ({ track, setRef, rbRef, from }) => {
 
 
                     <CustomText
+                        numberOfLines={2}
                         style={{
                             paddingVertical: moderateScale(19, .6),
                             color: '#ffffffff',
                             fontSize: moderateScale(16, 0.6),
                         }}>
-                        {from == 'import' ? `want to download track name song ?` : `want to control how to listen ?`}
+                        {from == 'import' ? `want to download ${item?.title} song ?` : `want to control how to listen ?`}
                     </CustomText>
                     {from != 'import' && <><View>
                         <View style={styles.row_con}>
@@ -122,6 +124,11 @@ const PermiumModal = ({ track, setRef, rbRef, from }) => {
                     </CustomText>}
 
                     <CustomButton
+                        onPress={() => {
+
+                            navigationService.navigate('PremiumScreen')
+                            rbRef.current.close()
+                        }}
                         marginTop={moderateScale(20, .6)}
                         textColor={Color.white}
                         borderRadius={50}
@@ -200,8 +207,8 @@ const styles = StyleSheet.create({
         color: Color.white,
         fontSize: moderateScale(14, 0.6),
     }, DismissText: {
-        marginTop: moderateScale(10, .6),
-        paddingVertical: moderateScale(10, .6),
+        marginTop: moderateScale(5, .6),
+        paddingVertical: moderateScale(5, .6),
         color: '#ffffffff',
         fontSize: moderateScale(16, 0.6),
     },

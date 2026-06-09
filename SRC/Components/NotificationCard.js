@@ -6,21 +6,35 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Color from '../Assets/Utilities/Color';
 import CustomImage from '../Components/CustomImage';
 import CustomText from '../Components/CustomText';
-import { windowHeight, windowWidth } from '../Utillity/utils';
+import { apiHeader, windowHeight, windowWidth } from '../Utillity/utils';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import navigationService from '../navigationService';
+import { baseUrl } from '../Config';
+import { useSelector } from 'react-redux';
+import { Post } from '../Axios/AxiosInterceptorFunction';
 
 const NotificationCard = ({ item }) => {
+  const token = useSelector(state => state.authReducer.token);
+
+  const notificationread = async () => {
+    const url = `auth/notifications/${item?.id}/read`;
+    const response = await Post(url, {}, apiHeader(token));
+    if (response != undefined) {
+      navigationService.navigate('PlaylistScreen', { item: item?.track, from: 'notification' })
+    }
+  }
+
   return (
     <TouchableOpacity
       onPress={() => {
-        navigationService.navigate('RecentlyPlayed');
+        notificationread()
+        // navigationService.navigate('RecentlyPlayed');
       }}
       style={styles.card_con}>
       <View style={styles.card_image}>
         <CustomImage
           style={{ height: '100%', width: '100%' }}
-          source={item.image}
+          source={{ uri: `${baseUrl}/storage/${item?.track?.cover_image}` }}
         />
         <View style={styles.play_circle}>
           <CustomImage
@@ -35,20 +49,11 @@ const NotificationCard = ({ item }) => {
           style={{
             justifyContent: 'center',
             flexDirection: 'row',
-            marginTop: moderateScale(10, 0.6),
             justifyContent: 'space-between',
             width: windowWidth * 0.57,
           }}>
-          <CustomText
-            isBold
-            style={{
-              color: '#7F8489',
-              fontSize: moderateScale(16, 0.6),
-              //   fontWeight: '800',
-            }}>
-            {item?.time}
-          </CustomText>
-          <View
+
+          {/* <View
             style={{
               flexDirection: 'row',
               // marginLeft: moderateScale(10, 0.6),
@@ -71,16 +76,14 @@ const NotificationCard = ({ item }) => {
               size={moderateScale(18, 0.6)}
               color={Color.white}
             />
-          </View>
+          </View> */}
         </View>
-        <CustomText style={styles.title}>{item.title}</CustomText>
+        <CustomText style={styles.title}>{item?.track?.title}</CustomText>
         <CustomText
-          style={{
-            color: '#7F8489',
-            fontSize: moderateScale(16, 0.6),
-            paddingTop: moderateScale(5, 0.6),
-          }}>
-          {item?.artist}
+          style={[styles.title, {
+            fontSize: moderateScale(13, 0.6),
+          }]}>
+          {item?.artist?.name}
         </CustomText>
       </View>
     </TouchableOpacity>
@@ -93,10 +96,10 @@ const styles = StyleSheet.create({
   card_con: {
     flexDirection: 'row',
     backgroundColor: '#282C30',
-    paddingVertical: moderateScale(13, 0.6),
+    paddingVertical: moderateScale(5, 0.6),
     width: windowWidth * 0.93,
     marginTop: moderateScale(15, 0.6),
-    borderRadius: 30,
+    borderRadius: 20,
     paddingHorizontal: moderateScale(10, 0.6),
     shadowColor: '#000',
     shadowOffset: {
@@ -108,9 +111,9 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   card_image: {
-    height: windowHeight * 0.1,
-    width: windowWidth * 0.3,
-    borderRadius: moderateScale(25, 0.6),
+    height: windowHeight * 0.06,
+    width: windowWidth * 0.2,
+    borderRadius: moderateScale(10, 0.6),
     overflow: 'hidden',
     marginRight: moderateScale(10, 0.6),
   },
@@ -129,4 +132,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 8,
   },
+  title: {
+    color: '#7F8489',
+    fontSize: moderateScale(16, 0.6),
+    paddingTop: moderateScale(5, 0.6),
+  }
 });

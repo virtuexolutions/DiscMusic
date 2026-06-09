@@ -48,6 +48,7 @@ const CustomButton = ({
   elevation,
   shadowColor,
   gradientColors,
+  marginRight
   //  style,
   // value
 }) => {
@@ -89,6 +90,9 @@ const CustomButton = ({
         },
         borderWidth && {
           borderWidth: borderWidth,
+        },
+        marginRight && {
+          marginRight: marginRight,
         },
         disabled && {
           backgroundColor: Color.themeLightGray,

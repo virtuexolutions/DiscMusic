@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
@@ -33,7 +35,15 @@
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
+
+
         </intent-filter>
+         <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="disc.cstmpanel.com" />
+      </intent-filter>
 
       </activity>
     </application>

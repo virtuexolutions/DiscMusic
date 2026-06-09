@@ -14,7 +14,8 @@ import { windowHeight, windowWidth } from '../Utillity/utils';
 import { baseUrl } from '../Config';
 
 const AboutArtist = ({ route }) => {
-  const { artistData } = route?.params;
+  const { artistData, data } = route?.params;
+  console.log("🚀 ~ AboutArtist ~ artistData:", artistData, data)
   console.log(JSON.stringify(artistData, null, 2), '------------------ >>>>artistData')
   const [countryCode, setCountryCode] = useState('ID'); // For flag
   const [callingCode, setCallingCode] = useState('62'); // For +62
@@ -81,7 +82,7 @@ const AboutArtist = ({ route }) => {
                   height: '100%',
                   width: '100%',
                 }}
-                source={artistData?.profile_image ? { uri: `${baseUrl}/storage/${artistData?.profile_image}` } : require('../Assets/Images/artist.png')}
+                source={artistData?.artist?.user?.profile_image ? { uri: `${baseUrl}/storage/${artistData?.artist?.user?.profile_image}` } : data?.profile_image ? { uri: `${baseUrl}/storage/${data?.profile_image}` } : require('../Assets/Images/artist.png')}
               />
             </View>
             <View style={styles.text_con}>
@@ -109,18 +110,18 @@ const AboutArtist = ({ route }) => {
                   {
                     // paddingRight: moderateScale(10,.6)
                   },
-                ]}>{artistData?.bio ? artistData?.bio : 'No bio available'}</CustomText>
+                ]}>{artistData?.artist?.bio ? artistData?.artist?.bio : data?.bio ? data?.bio : 'No bio available'}</CustomText>
             </View>
 
             <View style={styles.image_con}>
               <CustomImage
                 style={styles.image}
-                source={artistData?.profile_image ? { uri: `${baseUrl}/storage/${artistData?.profile_image}` } : require('../Assets/Images/artist.png')}
+                source={artistData?.artist?.user?.profile_image ? { uri: `${baseUrl}/storage/${artistData?.artist?.user?.profile_image}` } : data?.profile_image ? { uri: `${baseUrl}/storage/${data?.profile_image}` } : require('../Assets/Images/artist.png')}
               />
             </View>
             <CustomText style={styles.by}>post by</CustomText>
-            <CustomText style={styles.by_value}>{artistData?.name}</CustomText>
-            <View style={styles.row_sec}>
+            <CustomText style={styles.by_value}>{artistData?.artist?.user?.name ? artistData?.artist?.user?.name : data?.name}</CustomText>
+            {/* <View style={styles.row_sec}>
               {socialData?.map(item => {
                 // console.log('l;sld;fa;sdfkljkasdjfklas' ,item)
                 return (
@@ -141,7 +142,7 @@ const AboutArtist = ({ route }) => {
                   </View>
                 );
               })}
-            </View>
+            </View> */}
           </ImageBackground>
         </ScrollView>
       </ImageBackground>
@@ -234,6 +235,7 @@ const styles = ScaledSheet.create({
     color: Color.white,
     fontSize: moderateScale(14, 0.6),
     alignSelf: 'center',
+    paddingBottom: moderateScale(10, .6)
   },
   row_sec: {
     justifyContent: 'center',

@@ -24,8 +24,8 @@ import { useSelector } from 'react-redux';
 import { baseUrl } from '../Config';
 import MusicModal from './MusicModal';
 
-const PlayList = ({ data, trackData, isSearch, isViewAll, title, from }) => {
-
+const PlayList = ({ data, trackData, isSearch, isViewAll, title, from, artistData }) => {
+  console.log("🚀 ~ frommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm PlayList ~ artistData:", artistData)
   const token = useSelector(state => state.authReducer.token);
   const [search, setSearch] = useState('');
   const [trackTitle, setTrackTitle] = useState('');
@@ -92,14 +92,15 @@ const PlayList = ({ data, trackData, isSearch, isViewAll, title, from }) => {
         contentContainerStyle={[styles.contentContainer]}
         keyExtractor={item => item.id}
         renderItem={({ item, index }) => {
-          console.log('item====================== >>>>>>> item from playlist', `${baseUrl}/storage/${item?.cover_image_path}`);
+          // console.log('item====================== >>>>>>> item from playlist', `${baseUrl}/storage/${item?.cover_image}`);
           return (
             <SongListTile
 
               onPress={() => {
                 navigationService.navigate('PlaylistScreen', {
                   item: item,
-                  allTracks: trackData
+                  allTracks: trackData,
+                  artistData: artistData
                 });
               }}
               image={{ uri: `${baseUrl}/storage/${item?.cover_image}` }}

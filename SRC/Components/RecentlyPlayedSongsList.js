@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
-import { windowWidth } from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import CustomText from './CustomText';
 import ArtistCard from './ArtistCard';
 import navigationService from '../navigationService';
@@ -72,6 +72,7 @@ const RecentlyPlayedSongsList = ({ data, isLoading }) => {
             contentContainerStyle={{
               width: windowWidth * 0.9,
 
+              height: windowHeight * 0.38,
             }}
             numColumns={3}
             keyExtractor={item => item.id}
@@ -82,7 +83,7 @@ const RecentlyPlayedSongsList = ({ data, isLoading }) => {
                 <ArtistCard
                   fromrecent={true}
                   onPress={() => {
-                    navigationService.navigate("RecentlyPlayed")
+                    // navigationService.navigate("RecentlyPlayed")
                   }}
                   image={{ uri: `${baseUrl}/storage/${item?.track?.cover_image}` }}
                   title={item?.track?.title}

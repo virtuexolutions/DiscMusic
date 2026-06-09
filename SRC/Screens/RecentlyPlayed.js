@@ -1,5 +1,5 @@
 import { Icon, ScrollView, View } from 'native-base';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, ImageBackground, TouchableOpacity } from 'react-native';
 import { moderateScale, ScaledSheet } from 'react-native-size-matters';
 
@@ -14,8 +14,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Custom } from 'react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom';
 import RecentCard from '../Components/RecentCard';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
+import { Get } from '../Axios/AxiosInterceptorFunction';
+import { useSelector } from 'react-redux';
 
 const RecentlyPlayed = () => {
+  const token = useSelector(state => state?.authReducer?.token)
+
+  const [recentlyPlayedSongs, setRecentlyPlayedSongs] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const rbRef = useRef(null);
   const musicList = [
     {
@@ -32,112 +38,26 @@ const RecentlyPlayed = () => {
       time: '4 day ago',
       image: require('../Assets/Images/bottom.png'),
     },
-    // {
-    //   id: '3',
-    //   title: 'I Ain’t Worried (Versions)',
-    //   artist: 'OneRepublic',
-    //   time: '4 day ago',
-    //   image: require('../Assets/Images/notifi3.png'),
-    // },
-    // {
-    //   id: '4',
-    //   title: "When You're Feeling Blue",
-    //   artist: 'Dylan Dunlap',
-    //   time: '5 day ago',
-    //   image: require('../Assets/Images/notifi4.png'),
-    // },
-    // {
-    //   id: '5',
-    //   title: 'Crush',
-    //   artist: 'Lauren Sanderson',
-    //   time: '5 day ago',
-    //   image: require('../Assets/Images/notifi5.png'),
-    // },
-    // {
-    //   id: '6',
-    //   title: 'Naomi',
-    //   artist: 'Marc Scibilia',
-    //   time: '6 day ago',
-    //   image: require('../Assets/Images/notifi6.png'),
-    // },
-    // {
-    //   id: '7',
-    //   title: 'Destiny',
-    //   artist: 'Hoji',
-    //   time: 'May 5',
-    //   image: require('../Assets/Images/notifi3.png'),
-    // },
-    // {
-    //   id: '8',
-    //   title: 'Flight Risk',
-    //   artist: 'Clxoe',
-    //   time: 'May 5',
-    //   image: require('../Assets/Images/notifi8.png'),
-    // },
-  ];
-  const data = [
-    {
-      id: '3',
-      title: 'miss you',
-      artist: 'e song | oliver tree',
-      time: '4 day ago',
-      image: require('../Assets/Images/recent1.png'),
-    },
-    {
-      id: '4',
-      title: 'don’t remind me i’m minding m...',
-      artist: 'playlist | playlistm7',
-      time: '5 day ago',
-      image: require('../Assets/Images/artist1.png'),
-    },
-    {
-      id: '5',
-      title: 'mega hit mix',
-      artist: 'playlist | discmusic',
-      time: '5 day ago',
-      image: require('../Assets/Images/recent2.png'),
-    },
-    {
-      id: '6',
-      title: 'one kiss (with dua lia)',
-      artist: 'song | calvin harris',
-      time: '6 day ago',
-      image: require('../Assets/Images/recent3.png'),
-    },
-  ];
-  const data2 = [
-    {
-      id: '1',
-      title: 'heather',
-      artist: 'song | conan gray',
-      time: '1 day ago',
-      image: require('../Assets/Images/recent4.png'),
-    },
-    {
-      id: '2',
-      title: 'miss you',
-      artist: 'e song | oliver tree',
-      time: '4 day ago',
-      image: require('../Assets/Images/recent1.png'),
-    },
   ];
 
-  const data3 = [
-    {
-      id: '1',
-      title: 'someone to be around - bo...',
-      artist: 'song | six60',
-      time: '1 day ago',
-      image: require('../Assets/Images/bottom.png'),
-    },
-    {
-      id: '2',
-      title: 'don’t remind me i’m minding m...',
-      artist: 'playlist | playlistm7',
-      time: '4 day ago',
-      image: require('../Assets/Images/artist1.png'),
-    },
-  ];
+
+  const recentlyPlayed = async () => {
+    const url = 'auth/recently-played'
+    setIsLoading(true)
+    const response = await Get(url, token)
+    // return console.log("🚀 ~ recentlyPlayed ~ response:", JSON.stringify(response?.data?.data, null, 2))
+    setIsLoading(false)
+
+    if (response != undefined) {
+      setRecentlyPlayedSongs(response?.data?.data)
+    }
+  };
+
+
+  useEffect(() => {
+    recentlyPlayed()
+  }, [])
+
   return (
     <>
       <CustomStatusBar
@@ -168,12 +88,18 @@ const RecentlyPlayed = () => {
               // backgroundColor :'red',
               paddingBottom: moderateScale(10, 0.6),
             }}
-            data={musicList}
+            data={recentlyPlayedSongs?.recently_played}
             renderItem={({ item, index }) => {
               return <RecentCard item={item} />;
+              <View>
+                <CustomText>{item?.title}</CustomText>
+                <CustomText>{item?.artist}</CustomText>
+                <CustomText>{item?.time}</CustomText>
+                <CustomText>{item?.image}</CustomText>
+              </View>
             }}
           />
-          <CustomText
+          {/* <CustomText
             isBold
             style={[styles.title, { marginTop: moderateScale(20, 0.6) }]}>
             sun,may 14,2003
@@ -220,7 +146,7 @@ const RecentlyPlayed = () => {
             renderItem={({ item, index }) => {
               return <RecentCard item={item} />;
             }}
-          />
+          /> */}
         </ScrollView>
         <MinimisedPlayer />
       </ImageBackground>

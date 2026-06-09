@@ -6,7 +6,7 @@ import { Icon } from 'native-base';
 import Color from '../Assets/Utilities/Color';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
-import { windowWidth } from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 const SongListTile = ({
   showMoreOption = false,
   image,
@@ -15,8 +15,15 @@ const SongListTile = ({
   onPress,
   rbRef,
   from,
-  onMorePress
+  addable,
+  onMorePress,
+  // addFunction
 }) => {
+
+  // console.log(addFunction, "addfunctionaddfunctionaddfunctionadd function")
+  const handleAddSong = async () => {
+    console.log('Pressed');
+  }
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
@@ -34,14 +41,32 @@ const SongListTile = ({
         width: moderateScale(45, 0.6),
         height: moderateScale(45, 0.6),
         top: 10
-        // marginTop: moderateScale(18, .6)
       }} onPress={() => {
         console.log('Pressed');
         rbRef?.current?.open()
         // if (onMorePress) {
         //   onMorePress();
         // }
-      }} name="dots-three-vertical" as={Entypo} color={Color.white} />}
+      }} name="dots-three-vertical" as={Entypo} color={Color.white} />
+      }
+      {addable && <TouchableOpacity
+        // onPress={addFunction}
+        style={{
+          height: windowHeight * 0.017,
+          width: windowHeight * 0.017,
+          borderWidth: 1,
+          borderColor: Color.mediumGray,
+          borderRadius: windowHeight * 0.017 / 2,
+          alignItems: 'center',
+          justifyContent: 'center'
+
+        }}>
+        <Icon style={{
+
+        }} onPress={() => {
+          console.log('Pressed');
+        }} name="plus" as={Entypo} color={Color.white} size={moderateScale(11, 0.2)} />
+      </TouchableOpacity>}
     </TouchableOpacity>
   );
 };

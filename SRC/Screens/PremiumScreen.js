@@ -17,7 +17,7 @@ import MinimisedPlayer from '../Components/MinimisedPlayer';
 
 const PremiumScreen = (props) => {
     const fromModal = props?.route?.params
-    console.log('fromModal====================== >>>>>>> here from PremiumScreen', props);
+    // console.log('fromModal====================== >>>>>>> here from PremiumScreen', props);
     return (
         <>
             <CustomStatusBar

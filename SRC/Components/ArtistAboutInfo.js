@@ -9,7 +9,6 @@ import navigationService from '../navigationService'
 import { baseUrl, imageUrl } from '../Config'
 
 const ArtistAboutInfo = ({ data }) => {
-    // console.log(JSON.stringify(data, null, 2), '------------------ >>>>data')
     return (
         <View style={styles.mainContainer}>
             <CustomText
@@ -24,12 +23,19 @@ const ArtistAboutInfo = ({ data }) => {
 export default ArtistAboutInfo;
 
 function ArtistInfoCard({ data }) {
-    // console.log('............/////////////////////', `${baseUrl}/storage/${data?.profile_image}`)
+console.log("🚀 ~ ArtistInfoCard ~ data:", data)
+
+    const tempData = {
+        bio: data?.bio,
+        name: data?.user?.name,
+        profile_image: data?.user?.profile_image
+    }
+    // console.log("🚀 ~ ViewArtistLibrary ~ tempData:", tempData)
     return (
         <View style={styles.card}>
             <View style={styles.imageContainer}>
                 <CustomImage
-                    source={data?.profile_image ? { uri: `${baseUrl}/storage/${data?.profile_image}` } : require("../Assets/Images/artist10.png")}
+                    source={data?.user?.profile_image ? { uri: `${baseUrl}/storage/${data?.user?.profile_image}` } : require("../Assets/Images/artist10.png")}
                     style={styles.image}
                 />
             </View>
@@ -47,14 +53,15 @@ function ArtistInfoCard({ data }) {
                 <View style={styles.info}>
                     <TitleWithDescription
                         style={styles.textContainer}
-                        title='7,910,613'
+                        title={data?.statistics?.total_followers}
                         titleStyle={styles.text2}
                         descriptionStyle={styles.text3}
-                        description='Monthly Listeners'
+                        description={(typeof data?.bio === 'object' ? data?.bio?.bio : data?.bio) || 'No Bio'}
+                        numberOfLines={2}
                     />
                     <CustomImage
                         onPress={() => {
-                            navigationService.navigate('AboutArtist', { artistData: data })
+                            navigationService.navigate('AboutArtist', { data: tempData })
                         }}
                         source={require("../Assets/Images/arrow-circle-right.png")}
                         style={styles.badge}
@@ -68,7 +75,8 @@ function ArtistInfoCard({ data }) {
 const styles = StyleSheet.create({
     mainContainer: {
         gap: verticalScale(20),
-        marginTop: verticalScale(20),
+        marginVertical: verticalScale(20),
+        // backgroundColor: 'red'
     },
     heading: {
         fontSize: moderateScale(1, 0.2),

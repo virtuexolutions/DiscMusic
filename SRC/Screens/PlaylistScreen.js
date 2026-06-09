@@ -1,7 +1,7 @@
 import { Icon, ScrollView, View } from 'native-base';
 import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, TouchableOpacity } from 'react-native';
-import { moderateScale, ScaledSheet } from 'react-native-size-matters';
+import { ImageBackground, Share, TouchableOpacity } from 'react-native';
+import { moderateScale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import TrackPlayer, { Event, State, usePlaybackState, useActiveTrack } from 'react-native-track-player';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -24,22 +24,42 @@ import { useDispatch } from 'react-redux';
 import MinimizedPlayer from '../Components/MinimizedPlayer';
 import PlayerSliderWithActions from '../Components/playerSliderWithActions';
 import MusicModal from '../Components/MusicModal';
+import PermiumModal from '../Components/PermiumModal';
+import RepeatButton from '../Components/RepeatButton';
+import TrackList from '../Components/Tracklist';
+import LyricsContainer from '../Components/LyricsContainer';
+import ShuffleButton from '../Components/ShuffleButton';
 
 
 const PlaylistScreen = props => {
 
   const data = props?.route?.params?.item;
+  const artistData = props?.route?.params?.artistData;
+  console.log("🚀 ~ PlaylistScreen ~ artistData:", artistData)
+  const from = props?.route?.params?.from;
+
+
+  // console.log("🚀 ~ PlaylistScreen ~ data:", data)
   const allTracks = props?.route?.params?.allTracks;
   const dispatch = useDispatch()
   const rbRef = useRef(null);
+  const RbRef = useRef(null);
+  const TracklistRef = useRef(null);
+
   const playbackState = usePlaybackState();
   const isPlaying = playbackState.state === State.Playing;
   const currentTrack = useActiveTrack();
+  console.log("🚀 ~ PlaylistScreen ~ currentTrack:", currentTrack)
   const artistName = getArtistNameFromTrack(currentTrack);
 
+  const [lyrics, setLyrics] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const TrackObj = data;
+  // console.log("🚀 ~ PlaylistScreen ~ TrackObj:", `${baseUrl}/storage/${TrackObj?.audio_file}`)
   const { toggleLike, loading: likeLoading, isLiked } = useLikeTrack(TrackObj);
   useEffect(() => {
     if (data && allTracks) {
@@ -59,6 +79,64 @@ const PlaylistScreen = props => {
 
     return () => errorListener.remove();
   }, []);
+
+  useEffect(() => {
+    // console.log('data====================== >>>>>>> here from playlist screen', data?.artist?.name, data?.title);
+    const fetchLyrics = async () => {
+      // Input check: agar artist ya song missing ho toh call na karein
+      // if (!data?.artist || !data?.url) return;
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        // console.log('track====================== >>>>>>> here from try ,');
+        const url = `https://lrclib.net/api/get?artist_name=${encodeURIComponent(data?.artist?.name)}&track_name=${encodeURIComponent(data?.title)}`;
+        const response = await fetch(url);
+        // console.log("reeeeeeeeeeeeeeeeeeeeesssssssssssssssssponnnnnnnnnnnse", response)
+
+        if (!response.ok) {
+          throw new Error("Sorry, lyrics are not available at the moment.");
+        }
+
+        const lyricsdata = await response.json();
+        setLyrics(lyricsdata.syncedLyrics || lyricsdata.plainLyrics || "Sorry, lyrics are not available at the moment.");
+      } catch (err) {
+        setError(err.message);
+        setLyrics("");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLyrics();
+
+    // Dependency array mein artist aur song daalna zaroori hai
+  }, [data?.artist?.name, data?.title]);
+
+  const onShare = async () => {
+    console.log('🚀 ~ aaaaaaaaaaaaaaaaaaaaaaaaa onShare ~ data:', data)
+    const shareUrl = `${baseUrl}/track/details/${data?.id}`;
+    try {
+      console.log('🚀 ~ onShare ~ shareUrl:', shareUrl);
+      const result = await Share.share({
+        // message: 'Hello from React Native!',
+        // message: `${baseUrl}/${item?.id}`,
+        message: shareUrl,
+      });
+      if (result.action === Share.sharedAction) {
+        // linking;
+        console.log('here is url which is im sharing to the other', shareUrl);
+
+        console.log('Shared successfully');
+      } else if (result.action === Share.dismissedAction) {
+        console.log('Share dismissed');
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  };
+
   return (
     <>
       <CustomStatusBar
@@ -101,7 +179,7 @@ const PlaylistScreen = props => {
                   height: '100%',
                   width: '100%',
                 }}
-                source={data?.cover_image ? { uri: `${baseUrl}/storage/${data?.cover_image}` } : require('../Assets/Images/playlist_image.png')}
+                source={currentTrack ? { uri: `${baseUrl}/storage/${currentTrack?.cover_image}` } : data?.cover_image ? { uri: `${baseUrl}/storage/${data?.cover_image}` } : require('../Assets/Images/playlist_image.png')}
               />
             </View>
             <View style={styles.text_con}>
@@ -128,14 +206,20 @@ const PlaylistScreen = props => {
             </View>
             <AudioSlider width={windowWidth * 0.9} />
             <View style={styles.player_btn}>
-              <TouchableOpacity style={styles.btn}>
+
+              <ShuffleButton iconSize={moderateScale(20, 0.2)} />
+              {/* <TouchableOpacity
+                onPress={() => {
+                  RbRef.current.open()
+                }}
+                style={styles.btn}>
                 <Icon
                   name="shuffle"
                   as={Entypo}
                   color={Color.white}
                   size={moderateScale(13, 0.6)}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 disabled={true}
                 onPress={() => {
@@ -210,16 +294,26 @@ const PlaylistScreen = props => {
                   size={moderateScale(17, 0.6)}
                 />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.btn}>
+              <RepeatButton
+                onPress={() => {
+                  console.log("repeat mode",);
+                }} style={styles.btn}
+              />
+              {/* <TouchableOpacity
+
+                onPress={() => {
+                  console.log("repeat mode",);
+                }} style={styles.btn}
+                >
                 <Icon
                   name="loop"
                   as={MaterialIcons}
                   color={Color.white}
                   size={moderateScale(13, 0.6)}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
-            <View style={styles.devices_Con}>
+            {/* <View style={styles.devices_Con}>
               <View style={styles.dec1}>
                 <Icon
                   name="mobile"
@@ -256,12 +350,23 @@ const PlaylistScreen = props => {
                   />
                 </View>
               </View>
-            </View>
+            </View> */}
             <View style={styles.lyrics_con}>
               <View style={styles.lyrics_Header}>
-                <TouchableOpacity style={styles.header_btn}>
+                <TouchableOpacity
+                  onPress={
+                    () => {
+                      onShare()
+                      // Share.share({ message: `Listen to ${data?.title || 'this song'} on DiscMusic!` });
+                    }
+                  } style={styles.header_btn}>
                   <View style={styles.header_image}>
                     <CustomImage
+                      onPress={
+                        () => {
+                          onShare()
+                        }
+                      }
                       style={{
                         height: '100%',
                         width: '100%',
@@ -271,7 +376,11 @@ const PlaylistScreen = props => {
                   </View>
                 </TouchableOpacity>
                 <CustomText style={styles.h5}>Lyrics </CustomText>
-                <TouchableOpacity style={styles.header_btn}>
+                <TouchableOpacity
+                  onPress={() => {
+                    TracklistRef?.current.open();
+                  }}
+                  style={styles.header_btn}>
                   <Icon
                     name="filter-sharp"
                     as={Ionicons}
@@ -280,7 +389,8 @@ const PlaylistScreen = props => {
                   />
                 </TouchableOpacity>
               </View>
-              <View style={styles.lyrics}>
+              <LyricsContainer lyrics={lyrics} height={windowHeight * 0.3} from={'playlist'} />
+              {/* <View style={styles.lyrics}>
                 <CustomText style={styles.text2}>
                   {` Don’t remind me. \n i’m minding my own damn business \n don’t try to find me `}
                 </CustomText>
@@ -293,10 +403,10 @@ const PlaylistScreen = props => {
                   }}>
                   {` i’m better left alone than in this \n it doesn’t surprise me \n do you really think that i could care`}
                 </CustomText>
-              </View>
+              </View> */}
             </View>
-            <Card artistData={data} />
-            <Card fromEvent={true} artistData={data} />
+            {from != 'notification' && <Card artistData={data} data={artistData} />}
+            {/* <Card fromEvent={true} artistData={data} /> */}
 
             {/* <View style={styles.lyrics_con}></View> */}
 
@@ -315,6 +425,8 @@ const PlaylistScreen = props => {
               fontSize={moderateScale(12, 0.3)}
             /> */}
             <MusicModal rbRef={rbRef} track={TrackObj} />
+            <PermiumModal rbRef={RbRef} />
+            <TrackList items={allTracks} rbRef={TracklistRef} />
           </View>
         </ScrollView>
       </ImageBackground>
@@ -404,13 +516,13 @@ const styles = ScaledSheet.create({
   },
   lyrics_con: {
     width: windowWidth * 0.9,
-    height: windowWidth * 0.5,
-    marginTop: moderateScale(20, 0.3),
+    height: windowWidth * 0.8,
+    marginTop: moderateScale(30, 0.3),
     borderRadius: moderateScale(20, 0.3),
     marginRight: moderateScale(10, 0.3),
     backgroundColor: '#2c2c2cff',
     // justifyContent: 'center',
-    paddingTop: moderateScale(10, 0.3),
+    paddingTop: moderateScale(15, 0.3),
     // iOS Shadow
     alignItems: 'center',
     shadowColor: '#afafafff',
@@ -455,10 +567,10 @@ const styles = ScaledSheet.create({
   },
   lyrics: {
     backgroundColor: '#191b1dff',
-    height: '72%',
+    // height: '72%',
     borderRadius: moderateScale(20, 0.6),
     width: '100%',
-    paddingVertical: moderateScale(10, 0.6),
+    paddingVertical: moderateScale(15, 0.6),
     paddingHorizontal: moderateScale(10, 0.3),
   },
   text2: {
@@ -504,8 +616,10 @@ const styles = ScaledSheet.create({
   player_btn: {
     marginTop: moderateScale(10, 0.3),
     flexDirection: 'row',
-    width: '100%',
+    width: '95%',
+    // backgroundColor: 'red',
     justifyContent: 'space-between',
+    alignSelf: 'center',
     alignItems: 'center',
   },
 });

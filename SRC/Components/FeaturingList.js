@@ -1,3 +1,4 @@
+
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import CustomImage from './CustomImage';
@@ -8,7 +9,8 @@ import ArtistCard from './ArtistCard';
 import Color from '../Assets/Utilities/Color';
 import { baseUrl } from '../Config';
 
-const FeaturingList = ({ data, onArtistPress }) => {
+const FeaturingList = ({ data, onArtistPress ,setIsSelected}) => {
+  
 
   return (
     <View style={styles.container}>
@@ -32,6 +34,7 @@ const FeaturingList = ({ data, onArtistPress }) => {
               image={{ uri: `${baseUrl}/storage/${item?.profile_image}` }}
               title={item.artist_name}
               key={item.id}
+              setIsSelected={setIsSelected}
               onPress={() => {
                 onArtistPress(item)
               }}

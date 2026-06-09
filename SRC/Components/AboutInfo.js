@@ -9,28 +9,46 @@ import navigationService from '../navigationService';
 const AboutInfo = () => {
   const appInfoList = [
     {
+      key: 'download',
+      title: 'Downloads',
+      description: 'All the stuff you download on discmusic.',
+      type: 'link',
+      onPress: () => { navigationService.navigate('DownloadTrack') }
+    },
+    {
+      key: 'Recently played',
+      title: 'Recently played',
+      description: 'All the stuff you Recent played.',
+      type: 'link',
+      onPress: () => { navigationService.navigate('RecentlyPlayed') }
+    },
+    {
       key: 'version',
       title: 'Version',
       description: '8.8.32.508',
       type: 'text', // no action
     },
-    {
-      key: 'third_party',
-      title: 'Third-party software',
-      description: 'Sweet software that helped us',
-      type: 'link',
-    },
+    // {
+    //   key: 'third_party',
+    //   title: 'Third-party software',
+    //   description: 'Sweet software that helped us',
+    //   type: 'link',
+    // },
     {
       key: 'terms',
-      title: 'Terms and conditions',
+      title: 'Terms & Conditions',
       description: 'All the stuff you need to know.',
       type: 'link',
+      onPress: () => { navigationService.navigate('TermsAndCondition') }
     },
+
     {
       key: 'privacy',
       title: 'Privacy policy',
       description: 'Important for both of us.',
       type: 'link',
+      onPress: () => { navigationService.navigate('PrivacyPolicy') }
+
     },
     {
       key: 'rules',
@@ -43,6 +61,7 @@ const AboutInfo = () => {
       title: 'Support',
       description: 'Get help from us and the community',
       type: 'link',
+      onPress: () => { navigationService.navigate('Support') }
     },
     // {
     //   key: 'reset password',

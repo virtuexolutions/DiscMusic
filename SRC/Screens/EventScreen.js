@@ -12,6 +12,7 @@ import MinimisedPlayer from '../Components/MinimisedPlayer';
 import OtherLocation from '../Components/OtherLocation';
 import { windowHeight, windowWidth } from '../Utillity/utils';
 import navigationService from '../navigationService';
+import Loader from '../Components/Loader';
 
 const EventScreen = (prop) => {
   const { eventId, artist_name } = prop?.route?.params;
@@ -99,14 +100,17 @@ const EventScreen = (prop) => {
             ]}>
             other location
           </CustomText>
-          <FlatList
-            data={events}
-            renderItem={({ item, index }) => {
-              return <OtherLocation ocation item={item} />;
-            }}
-            ListEmptyComponent={<CustomText>No Events</CustomText>}
-            keyExtractor={(item, index) => index.toString()}
-          />
+          {
+            loading ? <Loader animation={true} /> :
+              <FlatList
+                data={events}
+                renderItem={({ item, index }) => {
+                  return <OtherLocation ocation item={item} />;
+                }}
+                ListEmptyComponent={<CustomText>No Events</CustomText>}
+                keyExtractor={(item, index) => index.toString()}
+              />
+          }
 
 
         </ScrollView>

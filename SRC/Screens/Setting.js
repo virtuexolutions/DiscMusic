@@ -32,17 +32,24 @@ import AboutInfo from '../Components/AboutInfo';
 import MinimisedPlayer from '../Components/MinimisedPlayer';
 import navigationService from '../navigationService';
 import { setUserLogoutAuth, setUserToken } from '../Store/slices/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPlaybackSettings, togglePlaybackSetting } from '../Store/slices/common';
 
 const Settings = ({ navigation }) => {
   const dispatch = useDispatch();
+  const userData = useSelector(state => state.commonReducer.userData);
+  // console.log("🚀 ~ Settings ~ userData: ------------------------------------------", userData)
+
+  const playbackSettingsState = useSelector(state => state.commonReducer.playbackSettings) || {};
+  console.log("🚀 ~ Settings ~ playbackSettingsState: ------------------------------------------", playbackSettingsState)
   const [audioQuality, setAudioQuality] = useState(false);
   const playBackSettings = [
     {
       key: 'gapless',
       title: 'Gapless',
       description: 'Allows gapless playback',
-      default: true,
+      default: false,
+
     },
     {
       key: 'automix',
@@ -57,31 +64,31 @@ const Settings = ({ navigation }) => {
       description: 'Turn on to play explicit content is labelled with a tag',
       default: false,
     },
-    {
-      key: 'unplayable',
-      title: 'Show unplayable songs',
-      description: 'Show songs that are unplayable.',
-      default: false,
-    },
-    {
-      key: 'normalize',
-      title: 'Normalize volume',
-      description: 'Set the same volume level for all tracks',
-      default: true,
-    },
-    {
-      key: 'mono',
-      title: 'Mono audio',
-      description: 'Makes the left and right speakers play the same audio.',
-      default: false,
-    },
-    {
-      key: 'broadcast',
-      title: 'Device broadcast status',
-      description:
-        'Allow other apps on your device to see what you are listening to.',
-      default: false,
-    },
+    // {
+    //   key: 'unplayable',
+    //   title: 'Show unplayable songs',
+    //   description: 'Show songs that are unplayable.',
+    //   default: false,
+    // },
+    // {
+    //   key: 'normalize',
+    //   title: 'Normalize volume',
+    //   description: 'Set the same volume level for all tracks',
+    //   default: true,
+    // },
+    // {
+    //   key: 'mono',
+    //   title: 'Mono audio',
+    //   description: 'Makes the left and right speakers play the same audio.',
+    //   default: false,
+    // },
+    // {
+    //   key: 'broadcast',
+    //   title: 'Device broadcast status',
+    //   description:
+    //     'Allow other apps on your device to see what you are listening to.',
+    //   default: false,
+    // },
     {
       key: 'autoplay',
       title: 'Autoplay',
@@ -89,12 +96,12 @@ const Settings = ({ navigation }) => {
         "Enjoy nonstop listening. When your audio ends, we'll play you something similar.",
       default: true,
     },
-    {
-      key: 'canvas',
-      title: 'Canvas',
-      description: 'Display short, looping visuals on tracks.',
-      default: true,
-    },
+    // {
+    //   key: 'canvas',
+    //   title: 'Canvas',
+    //   description: 'Display short, looping visuals on tracks.',
+    //   default: true,
+    // },
   ];
 
   return (
@@ -134,14 +141,14 @@ const Settings = ({ navigation }) => {
             height={windowHeight * 0.05}
             // onPress={() => { setIsVisible(false) }}
             onPress={() => {
-              // navigation.navigate("PremiumScreen")
+              navigation.navigate("PremiumScreen")
             }}
             marginTop={moderateScale(20, 0.3)}
             borderRadius={windowWidth / 2}
             fontSize={moderateScale(16, 0.3)}
           />
           <View style={styles.actions}>
-            <Label style={styles.label} text={'Data Saver'} />
+            {/* <Label style={styles.label} text={'Data Saver'} />
             <ToggleSwitchWithInfo
               title="Audio quality"
               description="sets your audio quality to low (equivalent to 24kbit/s) and disables artist canvases.)"
@@ -149,8 +156,8 @@ const Settings = ({ navigation }) => {
               onToggle={() => {
                 setAudioQuality(prev => !prev);
               }}
-            />
-            <Label style={styles.label} text={'Video Podcasts'} />
+            /> */}
+            {/* <Label style={styles.label} text={'Video Podcasts'} />
             <ToggleSwitchWithInfo
               title="Download audio only"
               description="Save video podcasts as audio only."
@@ -172,22 +179,25 @@ const Settings = ({ navigation }) => {
               text={
                 'Note: video is not streamed when the discmusic app is backgrounded.'
               }
-            />
+            /> */}
             <Label style={styles.label} text={'PlayBack'} />
             {playBackSettings.map((setting, index) => (
               <ToggleSwitchWithInfo
                 key={setting.key}
-                on={setting.default}
+                on={playbackSettingsState[setting.key] ?? setting.default}
                 description={setting.description}
                 title={setting.title}
+                onToggle={() => {
+                  dispatch(togglePlaybackSetting({ key: setting.key, value: !(playbackSettingsState[setting.key] ?? setting.default) }));
+                }}
               />
             ))}
-            <Label style={styles.label} text={'Languages'} />
+            {/* <Label style={styles.label} text={'Languages'} />
             <TitleWithDescription
               title="Languages for music"
               description="Choose your preferred languages for music."
-            />
-            <Label style={styles.label} text={'Devices'} />
+            /> */}
+            {/* <Label style={styles.label} text={'Devices'} />
             <TitleWithDescription
               title="connect to a device"
               description="listen to and control discmusic on your devices."
@@ -199,26 +209,26 @@ const Settings = ({ navigation }) => {
               onToggle={() => {
                 // setAudioQuality(prev => !prev)
               }}
-            />
-            <ToggleSwitchWithInfo
+            /> */}
+            {/* <ToggleSwitchWithInfo
               title="discmusic connect in background"
               description="Allow discmusic connect to keep discmusic running when the app is in background"
-              on={false}
+              on={playbackSettingsState?.discmusicBackground ?? false}
               onToggle={() => {
-                // setAudioQuality(prev => !prev)
+                dispatch(setPlaybackSettings({ key: 'discmusicBackground', value: !(playbackSettingsState?.discmusicBackground ?? false) }));
               }}
-            />
+            /> */}
             <StorageSettings />
             <Label style={styles.label} text="Notifications" />
             <ToggleSwitchWithInfo
               title="Notifications"
-              description="choose which notification to receive."
+              description="turn on to receive notifications."
               on={false}
               onToggle={() => {
                 // setAudioQuality(prev => !prev)
               }}
             />
-            <Label style={styles.label} text="Advertisements" />
+            {/* <Label style={styles.label} text="Advertisements" />
             <ToggleSwitchWithInfo
               title="discmusic ad partner preferences"
               description="Contral how ads are targeted to me based on information gathered from advertising partners."
@@ -226,7 +236,7 @@ const Settings = ({ navigation }) => {
               onToggle={() => {
                 // setAudioQuality(prev => !prev)
               }}
-            />
+            /> */}
             <AboutInfo />
             <Label style={styles.label} text={'Other'} />
             <TouchableOpacity
@@ -243,7 +253,7 @@ const Settings = ({ navigation }) => {
                   );
                 }}
                 title="Log Out"
-                description="You are logged in as suchir"
+                description={`You are logged in as ${userData?.name}`}
               />
             </TouchableOpacity>
           </View>

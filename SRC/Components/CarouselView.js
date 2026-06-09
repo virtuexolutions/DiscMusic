@@ -16,6 +16,7 @@ const SIDE_SIZE = 90;
 const CarouselView = ({
   data
 }) => {
+  console.log("🚀 ~ CarouselView ~ data:", data)
   const navigation = useNavigation();
   return (
     <GestureHandlerRootView>
@@ -23,10 +24,10 @@ const CarouselView = ({
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
-        data={data}
+        data={data?.data}
         contentContainerStyle={{ marginLeft: moderateScale(10, 0.6), marginEnd: moderateScale(10, 0.6) }}
         renderItem={({ index, item }) => {
-          // console.log('------------------ >>>>dataitemitemitem', JSON.stringify(`${baseUrl}/storage/${item?.profile_image}`, null, 2))
+          console.log('------------------ >>>>dataitemitemitem', JSON.stringify(item, null, 2))
           return (
             <TouchableOpacity
               onPress={() => {
@@ -43,7 +44,8 @@ const CarouselView = ({
 
                   // navigation.navigate('MusicPlayerScreen');
                 }}
-                source={{ uri: `${baseUrl}/storage/${item?.profile_image}` }}
+                // source={require('../Assets/Images/artist.png')}
+                source={{ uri: `${baseUrl}/storage/${item?.user?.profile_image}` }}
                 style={{
                   width: '100%',
                   height: '100%',

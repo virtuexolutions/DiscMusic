@@ -6,10 +6,11 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { windowWidth } from '../Utillity/utils'
 import Color from '../Assets/Utilities/Color'
 import { useSelector } from 'react-redux'
+import navigationService from '../navigationService'
 
 const ProfileComponent = () => {
   const userData = useSelector((state) => state.commonReducer.userData);
-  console.log(userData, '============================== >>>>>> userdata');
+  // console.log(userData?.name, '============================== >>>>>> userdata');
   return (
     <View style={styles.container}>
       <View style={styles.circle}>
@@ -33,7 +34,9 @@ const ProfileComponent = () => {
       </View>
       <ThemeIconButton
         arrowRight={true}
-        onPress={() => { }}
+        onPress={() => {
+          navigationService.navigate("Profile", { screen: "ProfileScreen" })
+        }}
       />
     </View>
   )

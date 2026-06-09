@@ -9,18 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 import navigationService from '../navigationService';
 
 const SpotifyArtistCard = ({ artistName, bgColor, imageUri, item }) => {
+    // console.log('item==================== >>>>>>>>>>>>>>>>>>>>>>>>', `${baseUrl}/storage/${item?.user?.profile_image}`)
     const navigation = useNavigation();
-    // const softColors = [
-    //     // background: "#0F172A",     // deep night (like a studio)
-    //     "#1E293B",        // panels / cards
-    //     "#7DD3FC",        // soft sky blue (controls, links)
-    //     "#F9A8D4",      // soft pink (highlights)
-    //     "#C4B5FD",         // dreamy lavender (active states)
-    //     "#86EFAC",      // soft green (playing / success)
-    //     "#0055c550",    // main text
-    //     "#00429eff",  // muted text
-    //     "#334155"          // subtle dividers
-    // ];
+
     const softColors = [
         "#ff384cff", // soft pink
         "#c27e00ff", // peach
@@ -42,7 +33,7 @@ const SpotifyArtistCard = ({ artistName, bgColor, imageUri, item }) => {
         <TouchableOpacity
             onPress={() => {
 
-                navigationService.navigate('MusicDetailsScreen', { item: item?.tracks, image_url: `${baseUrl}/storage/${item?.profile_image}` });
+                navigationService.navigate('MusicDetailsScreen', { item: item?.tracks, image_url: `${baseUrl}/storage/${item?.user?.profile_image}`, artisdata: { name: item?.user?.name, profile_image: item?.user?.profile_image, bio: item?.bio } });
             }}
             style={[styles.container, {
                 backgroundColor: cardColor,
@@ -62,9 +53,9 @@ const SpotifyArtistCard = ({ artistName, bgColor, imageUri, item }) => {
                     <CustomImage
                         onPress={() => {
 
-                            navigationService.navigate('MusicDetailsScreen', { item: item?.tracks, image_url: `${baseUrl}/storage/${item?.profile_image}` });
+                            navigationService.navigate('MusicDetailsScreen', { item: item?.tracks, image_url: `${baseUrl}/storage/${item?.user?.profile_image}` });
                         }}
-                        source={{ uri: `${baseUrl}/storage/${item?.profile_image}` }}
+                        source={{ uri: `${baseUrl}/storage/${item?.user?.profile_image}` }}
                         style={{
                             height: '100%',
                             width: '100%',
@@ -80,7 +71,7 @@ const SpotifyArtistCard = ({ artistName, bgColor, imageUri, item }) => {
             </View>
 
             {/* Card ke neeche ka subtitle */}
-            <CustomText numberOfLines={1} style={styles.subTitle}>This is {item?.name}.</CustomText>
+            <CustomText numberOfLines={1} style={styles.subTitle}>This is {item?.user?.name}.</CustomText>
         </TouchableOpacity >
     );
 };

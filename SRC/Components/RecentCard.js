@@ -16,15 +16,16 @@ import CustomText from '../Components/CustomText';
 import { windowHeight, windowWidth } from '../Utillity/utils';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { baseUrl } from '../Config';
 
 const RecentCard = ({ item }) => {
-  // console.log('🚀 ~==== RecentCard ~ item:', item);
+  console.log('🚀 ~==== RecentCard ~ item:', item?.artist);
   return (
     <View style={styles.card_con}>
       <View style={styles.card_image}>
         <CustomImage
           style={{ height: '100%', width: '100%' }}
-          source={item.image}
+          source={{ uri: `${baseUrl}/storage/${item?.track?.cover_image}` }}
         />
       </View>
 
@@ -40,7 +41,7 @@ const RecentCard = ({ item }) => {
             color: Color.white,
             fontSize: moderateScale(16, 0.6),
           }}>
-          {item?.title}
+          {item?.track?.title}
         </CustomText>
         <CustomText
           numberOfLines={1}
@@ -49,11 +50,11 @@ const RecentCard = ({ item }) => {
             color: '#7F8489',
             fontSize: moderateScale(14, 0.6),
           }}>
-          {item?.artist}
+          {item?.artist?.name}
         </CustomText>
       </View>
 
-      <Icon
+      {/* <Icon
         activeopacity={0.7}
         onPress={() => {
           // console.log('first================= >>>>');
@@ -63,7 +64,7 @@ const RecentCard = ({ item }) => {
         as={Entypo}
         size={moderateScale(18, 0.6)}
         color={Color.white}
-      />
+      /> */}
     </View>
   );
 };
@@ -96,7 +97,6 @@ const styles = StyleSheet.create({
     width: windowWidth * 0.18,
     borderRadius: moderateScale(20, 0.6),
     overflow: 'hidden',
-    backgroundColor: 'red',
     marginRight: moderateScale(10, 0.6),
   },
 

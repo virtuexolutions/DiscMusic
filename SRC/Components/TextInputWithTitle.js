@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -9,14 +9,14 @@ import {
   Platform,
 } from 'react-native';
 
-import {Icon} from 'native-base';
+import { Icon } from 'native-base';
 import Color from '../Assets/Utilities/Color';
-import {useState} from 'react';
-import {moderateScale, scale, ScaledSheet} from 'react-native-size-matters';
+import { useState } from 'react';
+import { moderateScale, scale, ScaledSheet } from 'react-native-size-matters';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import {windowHeight, windowWidth} from '../Utillity/utils';
+import { windowHeight, windowWidth } from '../Utillity/utils';
 import CustomText from './CustomText';
 
 const TextInputWithTitle = props => {
@@ -79,6 +79,10 @@ const TextInputWithTitle = props => {
             borderWidth: 1.5,
             borderColor: Color.lightGrey,
           },
+          props.borderBottomWidth && {
+            borderBottomWidth: 1.5,
+            borderColor: Color.lightGrey,
+          },
           props.marginTop >= 0 && {
             marginTop: props.marginTop,
           },
@@ -86,9 +90,9 @@ const TextInputWithTitle = props => {
             alignItems: props.alignItems,
           },
           props.iconName &&
-            !props.rightIcon && {
-              paddingLeft: moderateScale(40, 0.3),
-            },
+          !props.rightIcon && {
+            paddingLeft: moderateScale(40, 0.3),
+          },
         ]}>
         {props.iconName && (
           <Icon
@@ -128,7 +132,7 @@ const TextInputWithTitle = props => {
                 },
                 Platform.OS === 'android'
                   ? styles.inputBox
-                  : [styles.inputBox, {paddingBottom: 0}],
+                  : [styles.inputBox, { paddingBottom: 0 }],
                 props.color && {
                   color: props?.color ? props?.color : Color.black,
                 },
@@ -176,7 +180,7 @@ const TextInputWithTitle = props => {
                 },
                 Platform.OS === 'android'
                   ? styles.inputBox
-                  : [styles.inputBox, {paddingBottom: 0}],
+                  : [styles.inputBox, { paddingBottom: 0 }],
                 props.numberOfLines > 1 && {
                   textAlignVertical: 'top',
                 },
@@ -194,6 +198,12 @@ const TextInputWithTitle = props => {
                 props.color && {
                   color: props?.color ? props?.color : Color.black,
                 },
+                props.fontSize && {
+                  fontSize: props.fontSize ? props.fontSize : moderateScale(12, 0.3),
+                },
+                props.textAlign && {
+                  textAlign: 'center',
+                }
               ]}
               onChangeText={text => props.setText(text)}
               value={props.value}
@@ -206,8 +216,8 @@ const TextInputWithTitle = props => {
               numberOfLines={props.numberOfLines || 1}
               editable={props.disable ? false : true}
               autoCapitalize="none"
-              // onPressIn={()=>{console.log('fdadsas');}}
-              // textAlignVertical={props.textAlignVertical}
+            // onPressIn={()=>{console.log('fdadsas');}}
+            // textAlignVertical={props.textAlignVertical}
             />
           </TouchableOpacity>
         )}
@@ -230,9 +240,10 @@ const styles = ScaledSheet.create({
   inputBox: {
     paddingLeft: moderateScale(8, 0.6),
     borderRadius: 8,
-    fontSize: moderateScale(12, 0.3),
     textAlign: I18nManager.isRTL ? 'right' : 'left',
     color: Color.black,
+
+    fontSize: moderateScale(12, 0.3),
   },
 });
 export default TextInputWithTitle;

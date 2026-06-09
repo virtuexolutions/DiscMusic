@@ -19,21 +19,10 @@ import { useSelector } from 'react-redux';
 import { Get } from '../Axios/AxiosInterceptorFunction';
 import Loader from '../Components/Loader';
 
-// Sample dataset demonstrating 5 items
-const DATA = [
-    { id: '1', title: 'Trending Now' },
-    { id: '2', title: 'Top Hits' },
-    { id: '3', title: 'New Releases' },
-    { id: '4', title: 'Discover' },
-    { id: '5', title: 'Your Favorites' },
-];
 
 
 
 
-// Modularized Card Component with Animations
-
-// Main Screen Component
 const DetailScreen = ({ route }) => {
     const { item_id, title, item, from } = route.params;
     const token = useSelector(state => state.authReducer.token)
@@ -43,7 +32,7 @@ const DetailScreen = ({ route }) => {
     const [hasMore, setHasMore] = useState(true);
     const [isFetchingMore, setIsFetchingMore] = useState(false);
     const [albumDetail, setAlbumDetail] = useState({})
-    console.log('item_id====================== >>>>>>> here from detail', albumDetail);
+    // console.log('item_id====================== >>>>>>> here from detail', genreList);
 
 
     const getgenredetail = async (pageNumber = 1) => {
@@ -59,7 +48,7 @@ const DetailScreen = ({ route }) => {
         }
 
         const response = await Get(url, token);
-        // console.log('response====================== >>>>>>> response from detail', JSON.stringify(response?.data, null, 2));
+        console.log('response====================== >>>>>>> response from detail', JSON.stringify(response?.data, null, 2));
 
         if (pageNumber === 1) {
             setIsLoading(false);
@@ -67,8 +56,8 @@ const DetailScreen = ({ route }) => {
             setIsFetchingMore(false);
         }
 
-        if (response != undefined && response?.data?.track_list) {
-            const newData = response.data.track_list;
+        if (response != undefined && response?.data?.data) {
+            const newData = response.data.data?.albums;
             if (newData.length > 0) {
                 setGenreList(prev => pageNumber === 1 ? newData : [...prev, ...newData]);
                 setPage(pageNumber);
@@ -88,9 +77,10 @@ const DetailScreen = ({ route }) => {
 
     const getAlbumDetail = async () => {
         const url = `auth/album/${item?.album?.id}`
+        console.log("🚀 ~aaaaaaaaaaaaaaaaaaaaaaa getAlbumDetail ~ url:", url)
         setIsLoading(true)
         const response = await Get(url, token)
-        console.log(response?.data, 'album detail===================>>>>')
+        return console.log(response?.data, 'album detail===================>>>>')
         setIsLoading(false)
         if (response != undefined) {
             setAlbumDetail(response?.data?.album_list)
@@ -98,11 +88,12 @@ const DetailScreen = ({ route }) => {
     }
 
     useEffect(() => {
-        if (from == 'viewAblum') {
-            getAlbumDetail()
-        } else {
-            getgenredetail(1)
-        }
+        // if (from == 'viewAblum') {
+        //     console.log("🚀 ~ useEffect ~ item:", item)
+        // getAlbumDetail()
+        // } else {
+        getgenredetail(1)
+        // }
     }, [])
 
     return (
@@ -142,10 +133,10 @@ const DetailScreen = ({ route }) => {
                         title={"Your Favorites"}
                         DATA={DATA}
                     /> */}
-                    {from == 'viewAblum' && isLoading ? <Loader animation={true} /> : <AnimatedCard item={albumDetail} />}
+                    {/* {from == 'viewAblum' && isLoading ? <Loader animation={true} /> : <AnimatedCard item={albumDetail} />} */}
 
                     {isLoading ? <Loader animation={true} /> : <FlatList
-                        data={genreList}
+                        data={from == 'viewAblum' ? albumDetail : genreList}
                         numColumns={2}
                         keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
                         showsVerticalScrollIndicator={false}

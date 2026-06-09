@@ -20,7 +20,7 @@ import TitleWithDescription from './TitleWithDescription';
 const MinimisedPlayer = ({ style, data }) => {
 
   const activeSong = useSelector(state => state.commonReducer.activeSong)
-  console.log("activeSong", activeSong);
+  // console.log("activeSong", activeSong);
 
 
   const track = useActiveTrack();
